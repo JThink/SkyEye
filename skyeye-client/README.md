@@ -143,3 +143,4 @@ LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "信联", 100, Eve
 LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "百付", 100, EventLog.MONITOR_STATUS_SUCCESS, "我是mock third 成功日志").toString());
 LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "百付", 100, EventLog.MONITOR_STATUS_FAILED, "我是mock third 失败日志").toString());
 ```
+
