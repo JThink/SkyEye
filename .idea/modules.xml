@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SkyEye.iml" filepath="$PROJECT_DIR$/.idea/modules/SkyEye.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/skyeye-base.iml" filepath="$PROJECT_DIR$/.idea/modules/skyeye-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/skyeye-base_main.iml" filepath="$PROJECT_DIR$/.idea/modules/skyeye-base_main.iml" group="skyeye-base" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/skyeye-base_test.iml" filepath="$PROJECT_DIR$/.idea/modules/skyeye-base_test.iml" group="skyeye-base" />
+    </modules>
+  </component>
+</project>
