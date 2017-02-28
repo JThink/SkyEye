@@ -1,4 +1,4 @@
-package com.jthink.skyeye.base.test.log.event;
+package com.jthink.skyeye.base.log.event;
 
 
 import com.jthink.skyeye.base.constant.EventType;
