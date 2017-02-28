@@ -20,8 +20,8 @@ compile ("monitor-center:pugna:0.0.1") {
 ``` xml
 <property name="APP_NAME" value="your-app-name" />
 <!-- kafka appender -->
-<appender name="kafkaAppender" class="com.unionpaysmart.pugna.kafka.logback.KafkaAppender">
-  <encoder class="com.unionpaysmart.pugna.kafka.logback.encoder.KafkaLayoutEncoder">
+<appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.logback.KafkaAppender">
+  <encoder class="com.jthink.skyeye.client.kafka.logback.encoder.KafkaLayoutEncoder">
     <layout class="ch.qos.logback.classic.PatternLayout">
       <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
     </layout>
@@ -29,7 +29,7 @@ compile ("monitor-center:pugna:0.0.1") {
   <topic>${kafka.topic}</topic>
   <zkServers>${zookeeper.servers}</zkServers>
   <mail>${mail}</mail>
-  <keyBuilder class="com.unionpaysmart.pugna.kafka.partitioner.AppHostKeyBuilder" />
+  <keyBuilder class="com.jthink.skyeye.client.kafka.partitioner.AppHostKeyBuilder" />
 
   <config>bootstrap.servers=${kafka.bootstrap.servers}</config>
   <config>acks=0</config>
@@ -51,7 +51,7 @@ compile ("monitor-center:pugna:0.0.1") {
 在log4j.xml中加入一个kafkaAppender
 
 ``` xml
-<appender name="kafkaAppender" class="com.unionpaysmart.pugna.kafka.log4j.KafkaAppender">
+<appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.log4j.KafkaAppender">
   <param name="topic" value="${kafka.topic}"/>
   <param name="zkServers" value="${zookeeper.servers}"/>
   <param name="app" value="apollo-generater"/>
