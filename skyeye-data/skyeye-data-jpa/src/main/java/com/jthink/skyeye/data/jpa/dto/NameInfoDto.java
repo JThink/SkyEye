@@ -1,11 +1,12 @@
 package com.jthink.skyeye.data.jpa.dto;
 
 /**
- * 项目名:　 monitor-center
- * 包名: 　　com.jthink.skyeye.data.jpa.dto
- * 创建日期: 16-12-7 上午10:18
- * Copyright (c) 2016, 银联智惠 All Rights Reserved.
- * 创建者: 　yuxiaof
+ * JThink@JThink
+ *
+ * @author JThink
+ * @version 0.0.1
+ * @desc name info dto
+ * @date 2016-11-17 09:17:19
  */
 public class NameInfoDto {
 
