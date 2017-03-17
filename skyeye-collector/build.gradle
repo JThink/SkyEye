@@ -5,8 +5,8 @@ apply plugin: 'spring-boot'
 apply plugin: 'application'
 
 group = 'skyeye'
-applicationName = 'skyeye-monitor'
-version = '0.0.1'
+applicationName = 'skyeye-collector'
+version = '0.2.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -22,38 +22,49 @@ repositories {
 
 ext {
   logbackVersion = '1.1.6'
-  zookeeperVersion = '3.4.6'
-  curatorVersion = '2.11.0'
-  baseVersion = '0.0.1'
+  kafkaVersion = '0.10.0.1'
+  esVersion = '2.3.3'
+  traceVersion = '0.0.1'
   dataVersion = '0.0.1'
-  jacksonVersion = '1.9.13'
   zkclientVersion = '0.9.1-up'
+  hadoopVersion = '2.6.0-cdh5.4.0'
 }
 
 dependencies {
-  compile "skyeye:skyeye-base:$baseVersion"
+  compile "skyeye:skyeye-trace:$traceVersion"
   compile "skyeye:skyeye-data-jpa:$dataVersion"
   compile "skyeye:skyeye-data-rabbitmq:$dataVersion"
+  compile "skyeye:skyeye-data-hbase:$dataVersion"
   compile ("org.springframework.boot:spring-boot-starter") {
     exclude group: 'ch.qos.logback', module: 'logback-classic'
     exclude group: 'ch.qos.logback', module: 'logback-core'
   }
 
-  compile("org.apache.commons:commons-dbcp2:2.1.1")
-  compile("mysql:mysql-connector-java:5.1.39")
+  compile "org.apache.kafka:kafka-clients:$kafkaVersion"
 
   compile "ch.qos.logback:logback-classic:$logbackVersion"
   compile "ch.qos.logback:logback-core:$logbackVersion"
 
-  compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
+  compile "org.elasticsearch:elasticsearch:$esVersion"
 
-  compile "org.codehaus.jackson:jackson-core-asl:$jacksonVersion"
-  compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
+  compile "org.springframework.boot:spring-boot-starter-redis"
 
-  compile ("org.apache.curator:curator-recipes:$curatorVersion") {
-    exclude group: 'org.apache.zookeeper', module: 'zookeeper'
-  }
   compile "com.101tec:zkclient:$zkclientVersion"
+
+  compile "commons-lang:commons-lang:2.6"
+
+  compile ("org.apache.hadoop:hadoop-common:$hadoopVersion") {
+    exclude group: 'tomcat', module: 'jasper-runtime'
+    exclude group: 'tomcat', module: 'jasper-compiler'
+  }
+
+  compile ("org.apache.hadoop:hadoop-hdfs:$hadoopVersion") {
+    exclude group: 'tomcat', module: 'jasper-runtime'
+    exclude group: 'tomcat', module: 'jasper-compiler'
+  }
+
+  compile ("org.apache.commons:commons-dbcp2:2.1.1")
+  compile ("mysql:mysql-connector-java:5.1.39")
 
   testCompile "org.springframework.boot:spring-boot-starter-test"
 }
@@ -64,7 +75,7 @@ configurations {
   compile.exclude group: "org.springframework", module: "spring-web"
 }
 
-mainClassName = 'com.jthink.skyeye.monitor.launcher.Launcher'
+mainClassName = 'com.jthink.skyeye.collector.launcher.Launcher'
 
 buildscript {
   ext {
