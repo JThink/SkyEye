@@ -1,0 +1,58 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+group = 'skyeye'
+version = '0.0.1'
+
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+compileJava.options.encoding = 'UTF-8'
+buildDir = 'target'
+
+ext {
+  mavenPublicUrl = 'http://192.168.88.8:8081/nexus/content/repositories/public'
+  mavenReleaseUrl = 'http://192.168.88.8:8081/nexus/content/repositories/releases'
+  mavenSnapshotUrl = "http://192.168.88.8:8081/nexus/content/repositories/snapshots"
+  baseVersion = '0.0.1'
+  dataVersion = '0.0.1'
+  slf4jVersion = '1.7.21'
+  fastJsonVersion = '1.2.28'
+}
+
+repositories {
+  mavenLocal()
+  maven { url mavenPublicUrl }
+  maven { url mavenReleaseUrl }
+  maven { url mavenSnapshotUrl }
+  mavenCentral()
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+artifacts {
+  archives sourcesJar
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(url: mavenReleaseUrl) {
+        authentication(userName: 'admin', password: 'admin123')
+      }
+      snapshotRepository(url: mavenSnapshotUrl) {
+        authentication(userName: 'admin', password: 'admin123')
+      }
+    }
+  }
+}
+
+dependencies {
+  compile "org.slf4j:slf4j-api:$slf4jVersion"
+  compile "skyeye:skyeye-base:$baseVersion"
+  compile "skyeye:skyeye-data-http:$dataVersion"
+  compile "com.alibaba:fastjson:$fastJsonVersion"
+}
