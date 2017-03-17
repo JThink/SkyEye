@@ -11,7 +11,7 @@ import com.jthink.skyeye.base.dto.EventLog;
  *
  * @author JThink
  * @version 0.0.1
- * @desc consumer测试
+ * @desc 日志事件相关测试
  * @date 2016-08-24 20:23:16
  */
 public class EventLogTest {

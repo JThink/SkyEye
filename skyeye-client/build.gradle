@@ -1,0 +1,62 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+group = 'skyeye'
+version = '0.0.1'
+
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+compileJava.options.encoding = 'UTF-8'
+buildDir = 'target'
+
+ext {
+  mavenPublicUrl = 'http://192.168.88.8:8081/nexus/content/repositories/public'
+  mavenReleaseUrl = 'http://192.168.88.8:8081/nexus/content/repositories/releases'
+  mavenSnapshotUrl = "http://192.168.88.8:8081/nexus/content/repositories/snapshots"
+  kafkaVersion = '0.10.0.1'
+  logbackVersion = '1.1.6'
+  log4jVersion = '1.2.17'
+  zookeeperVersion = '3.4.6'
+  zkclientVersion = '0.9.1-up'
+  baseVersion = '0.0.1'
+}
+
+repositories {
+  mavenLocal()
+  maven { url mavenPublicUrl }
+  maven { url mavenReleaseUrl }
+  maven { url mavenSnapshotUrl }
+  mavenCentral()
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+artifacts {
+  archives sourcesJar
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(url: mavenReleaseUrl) {
+        authentication(userName: 'admin', password: 'admin123')
+      }
+      snapshotRepository(url: mavenSnapshotUrl) {
+        authentication(userName: 'admin', password: 'admin123')
+      }
+    }
+  }
+}
+
+dependencies {
+  compile "skyeye:skyeye-base:$baseVersion"
+  compile "org.apache.kafka:kafka-clients:$kafkaVersion"
+  compile "ch.qos.logback:logback-classic:$logbackVersion"
+  compile "log4j:log4j:$log4jVersion"
+  compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
+  compile "com.101tec:zkclient:$zkclientVersion"
+}
