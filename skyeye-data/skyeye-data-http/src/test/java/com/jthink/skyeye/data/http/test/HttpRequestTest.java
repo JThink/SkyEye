@@ -1,7 +1,5 @@
 package com.jthink.skyeye.data.http.test;
 
-import com.jthink.skyeye.data.http.HttpRequest;
-
 /**
  * JThink@JThink
  *
@@ -13,7 +11,7 @@ import com.jthink.skyeye.data.http.HttpRequest;
 public class HttpRequestTest {
 
     public static void main(String[] args) {
-        System.out.println(HttpRequest.get("http://api.map.baidu.com/geocoder/v2/?output=json&ak=20089d4833c1db58e8642708f9281ab1&address=", "上海市浦东新区"));
+
     }
 }
 

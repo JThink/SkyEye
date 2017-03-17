@@ -11,7 +11,7 @@
 # 使用方式
 ## 加入依赖
 ``` xml
-compile "monitor-center:brood-hbase:0.1.0"
+compile "skyeye:skyeye-data-hbase:0.0.1"
 ```
 ## 在application.properties中指定hbase的quorum
 ``` xml

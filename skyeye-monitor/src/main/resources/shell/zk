@@ -1,0 +1,3 @@
+create /up_monitor null
+create /up_monitor/scroll null
+create /up_monitor/query null
