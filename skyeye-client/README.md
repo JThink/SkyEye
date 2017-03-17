@@ -54,7 +54,7 @@ compile ("monitor-center:pugna:0.0.1") {
 <appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.log4j.KafkaAppender">
   <param name="topic" value="${kafka.topic}"/>
   <param name="zkServers" value="${zookeeper.servers}"/>
-  <param name="app" value="apollo-generater"/>
+  <param name="app" value="${app.name}"/>
   <param name="mail" value="${mail}"/>
   <param name="bootstrapServers" value="${kafka.bootstrap.servers}"/>
   <param name="acks" value="0"/>

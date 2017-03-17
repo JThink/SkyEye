@@ -2,7 +2,6 @@ package com.jthink.skyeye.base.dto;
 
 
 import com.jthink.skyeye.base.constant.Constants;
-import com.jthink.skyeye.base.constant.EventType;
 
 import java.util.Date;
 
@@ -78,11 +77,11 @@ public class LogDto {
 
     @Override
     public String toString() {
-        // 2016-10-11 19:35:29.636 [pool-5-thread-1] INFO  com.unionpaysmart.footprint.sync.task.ScheduledTask[42]: reload cache139
+        // 2016-10-11 19:35:29.636 [pool-5-thread-1] INFO com.unionpaysmart.footprint.sync.task.ScheduledTask[42]: reload cache139
         StringBuffer sb = new StringBuffer();
         sb.append(this.day).append(Constants.SPACE).append(this.time).append(Constants.SPACE).append(this.nanoTime)
                 .append(Constants.SPACE).append(Constants.LEFT_MIDDLE_BRAC).append(this.thread).append(Constants.RIGHT_MIDDLE_BRAC)
-                .append(Constants.SPACE).append(this.level).append(Constants.SPACE).append(Constants.SPACE).append(this.pack)
+                .append(Constants.SPACE).append(this.level).append(Constants.SPACE).append(this.pack)
                 .append(Constants.POINT).append(this.clazz).append(Constants.LEFT_MIDDLE_BRAC).append(this.line)
                 .append(Constants.RIGHT_MIDDLE_BRAC).append(Constants.COLON).append(Constants.SPACE).append(this.messageMax);
 
