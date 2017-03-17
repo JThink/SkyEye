@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+compileJava.options.encoding = 'UTF-8'
+buildDir = 'target'
+
+ext {
+  httpclientVersion = '4.5.2'
+}
+
+dependencies {
+  compile "org.apache.httpcomponents:httpclient:$httpclientVersion"
+
+  testCompile "junit:junit:4.12"
+}
