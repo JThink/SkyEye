@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <!-- 输出日志到控制台 ConsoleAppender -->
+  <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+    <param name="Threshold" value="info"></param>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %p [%t] %37c %x: %m%n"></param>
+    </layout>
+  </appender>
+
+  <!-- debug -->
+  <appender name="dailyBebugFile" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="Threshold" value="debug"></param>
+    <param name="Append" value="true"></param>
+    <param name="File" value="logs/debug/teemo_debug.log"></param>
+    <param name="DatePattern" value="'.'yyyy-MM-dd"></param>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %p [%t] %37c %x: %m%n"></param>
+    </layout>
+  </appender>
+
+  <!-- info -->
+  <appender name="dailyInfoFile" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="Threshold" value="info"></param>
+    <param name="Append" value="true"></param>
+    <param name="File" value="logs/info/teemo_info.log"></param>
+    <param name="DatePattern" value="'.'yyyy-MM-dd"></param>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %p [%t] %37c %x: %m%n"></param>
+    </layout>
+  </appender>
+
+  <!-- error -->
+  <appender name="dailyErrorFile" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="Threshold" value="error"></param>
+    <param name="Append" value="true"></param>
+    <param name="File" value="logs/error/teemo_error.log"></param>
+    <param name="DatePattern" value="'.'yyyy-MM-dd"></param>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %p [%t] %37c %x: %m%n"></param>
+    </layout>
+  </appender>
+
+  <root>
+    <priority value="info" />
+    <appender-ref ref="stdout" />
+    <appender-ref ref="dailyInfoFile" />
+    <appender-ref ref="dailyErrorFile" />
+  </root>
+</log4j:configuration>
