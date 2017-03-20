@@ -3,14 +3,15 @@
 - 自定义一些log框架的appender，包含logback和log4j
 - 向注册中心注册应用
 - 应用埋点进行监控报警
+- rpc trace数据产生器
 
 # 使用方式
 ## logback
 ### 依赖
-gradle或者pom中加入pugna的依赖
+gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile ("monitor-center:pugna:0.0.1") {
+compile ("skyeye:skyeye-client:0.0.1") {
   exclude group: 'log4j', module: 'log4j'
 }
 ```
@@ -40,10 +41,10 @@ compile ("monitor-center:pugna:0.0.1") {
 ```
 ## log4j
 ### 依赖
-gradle或者pom中加入pugna的依赖
+gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile ("monitor-center:pugna:0.0.1") {
+compile ("skyeye:skyeye-client:0.0.1") {
   exclude group: 'ch.qos.logback', module: 'logback-classic'
 }
 ```
@@ -107,6 +108,8 @@ compile ("com.alibaba:dubbo:2.8.4-up-1") {
  invoke_interface  | api调用日志
  middleware_opt  | 中间件操作日志(目前仅支持hbase和mongo)
  job_execute  | job执行日志
+ rpc_trace  | rpc trace跟踪日志
+ custom_log  | 自定义埋点日志
  thirdparty_call  | 第三方系统调用日志
 ### 正常日志
 
@@ -138,9 +141,9 @@ LOGGER.info(EventLog.buildEventLog(EventType.job_execute, "application_147770543
 
 ```
 // 参数依次为EventType(事件类型)、第三方名称、操作耗时、成功还是失败、具体自定义的日志内容
-LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "信联", 100, EventLog.MONITOR_STATUS_FAILED, "我是mock third 失败日志").toString());
-LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "信联", 100, EventLog.MONITOR_STATUS_SUCCESS, "我是mock third 成功日志").toString());
-LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "百付", 100, EventLog.MONITOR_STATUS_SUCCESS, "我是mock third 成功日志").toString());
-LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "百付", 100, EventLog.MONITOR_STATUS_FAILED, "我是mock third 失败日志").toString());
+LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "xx1", 100, EventLog.MONITOR_STATUS_FAILED, "我是mock third 失败日志").toString());
+LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "xx1", 100, EventLog.MONITOR_STATUS_SUCCESS, "我是mock third 成功日志").toString());
+LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "xx2", 100, EventLog.MONITOR_STATUS_SUCCESS, "我是mock third 成功日志").toString());
+LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "xx2", 100, EventLog.MONITOR_STATUS_FAILED, "我是mock third 失败日志").toString());
 ```
 
