@@ -12,7 +12,3 @@
 - monitor: 监控中心，监听zookeeper注册中心中相应的节点变化进行监控报警
 - rabbitmq: 监控报警缓冲队列
 - alert: 具体报警手段，包括邮件和微信
-
-## es字段
-![](column.png)
-
