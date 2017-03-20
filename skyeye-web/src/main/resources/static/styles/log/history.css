@@ -1,0 +1,46 @@
+.log-history-row {
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.log-history-row-content .filter {
+  background-color: #fff;
+  border-bottom: 1px solid #e7e7e7;
+  padding: 10px 15px;
+  height: 53px;
+}
+
+.log-history-row .filter .item {
+  margin-left: 10px;
+}
+
+.log-history-row-content .result {
+  margin-top: 30px;
+}
+
+.log-history-row-content .log-content-panel {
+    background-color: #542E4A;
+    border-bottom: 1px solid #e7e7e7;
+    padding: 10px 15px;
+    /* min-height: 400px; */
+    /* max-width: 1600px; */
+    word-break: break-all;
+    height: 500px;
+    overflow-y: auto;
+}
+
+.log-history-row-content .log-content  ul {
+  padding: 0;
+}
+.log-history-row-content .log-content  ul li {
+  list-style: none;
+  padding: 0;
+}
+
+.log-history-row-content .log-content ul p {
+  margin: 0;
+  text-indent: 0;
+  font-size: 15px;
+  color: #fff;
+  font-family: ubuntu;
+}

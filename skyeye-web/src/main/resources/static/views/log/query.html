@@ -1,0 +1,61 @@
+<div class="row log-query-row">
+  <div class="log-query-row-content">
+  <div class="log-query-table">
+      <header class="clearfix">
+        <h3 class="block-title pull-left">
+          <span>字段说明</span>
+        </h3>
+        <div class="pull-right show">
+          <button class="btn btn-primary pull-right btn-show" ng-click="showColumn()">{{btnShowText}}</button>
+        </div>
+      </header>
+      <div class="panel panel-default panel-table">
+        <table class="table" id="log-query-table">
+          <thead>
+            <tr>
+              <td>字段</td>
+              <td>类型</td>
+              <td>含义</td>
+              <td>示例</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="c in columns">
+              <td ng-bind="c.column"></td>
+              <td ng-bind="c.type"></td>
+              <td ng-bind="c.mean"></td>
+              <td ng-bind="c.example"></td>
+            </tr>
+          </table>
+       </div>
+    </div>
+    <div class="sql-desc">
+      <header class="clearfix">
+        <h4 class="block-title pull-left">
+          <span>请输入sql（从where之后开始）: </span>
+        </h4>
+        <div class="pull-right query">
+          <button class="btn btn-primary pull-right btn-query" ng-click="query()">查询</button>
+        </div>
+      </header>
+      <textarea class="form-control" rows="4" ng-model="sql"></textarea>
+    </div>
+    
+    <div class="sql result">
+      <h4 class="block-title pull-left">
+        <span>查询结果: &nbsp;</span>
+        <span class="result hidden">共{{total}}条记录, 当前显示{{current}}条</span>
+        <span class="error hidden">{{queryError}}</span>
+      </h4>
+    </div>
+    <div class="log-content-panel">
+      <div class="log-content">
+        <ul class="log">
+          <li ng-repeat="log in logs">
+            <p ng-repeat="item in log.log.split('\n')">{{item.replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;')}}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+.home-row {
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.home-row-content {
+  background: #fff;
+}
+
+p {
+  text-indent: 2em;
+  font-size: 36px;
+}

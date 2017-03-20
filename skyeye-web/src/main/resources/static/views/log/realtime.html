@@ -1,0 +1,40 @@
+<div class="row log-realtime-row">
+  <div class="log-realtime-row-content">
+    <div class="filter">
+      <h3 class="block-title pull-left">
+        <span>条件过滤</span>
+      </h3>
+      <div class="pull-left item">
+        <select class="form-control log-realtime-host-selector" ng-model="selectedHost" ng-options="host as host for host in hosts" ng-change="hostChange()">
+        </select>
+      </div>
+      <div class="pull-left item">
+        <select class="form-control log-realtime-app-selector" ng-model="selectedApp" ng-options="app as app for app in apps" ng-change="appChange()">
+        </select>
+      </div>
+      <div class="pull-left item">
+        <input type="text" class="form-control" ng-model="keyword" placeholder="请输入关键字" />
+      </div>
+      <div class="pull-left item apply">
+        <button class="btn btn-primary pull-right btn-apply" ng-click="apply()">应用</button>
+      </div>
+      <div class="pull-left item time-filters">
+        <button class="btn time-mode-default pull-right time-filter" data-filter="30000">
+          <span>30 sec</span>
+        </button>
+        <button class="btn time-mode-default pull-right time-filter" data-filter="5000">
+          <span>5 sec</span>
+        </button>
+        <button class="btn time-mode-selected pull-right time-filter current-time-filter" data-filter="1000">
+          <span>1 sec</span>
+        </button>
+      </div>
+    </div>
+    <div class="log-content-panel">
+      <div class="log-content">
+        <ul class="log">
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

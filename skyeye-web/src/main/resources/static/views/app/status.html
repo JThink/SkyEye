@@ -1,0 +1,48 @@
+<div class="row app-status-row">
+  <div class="app-status-row-content">
+    <div class="app-status-table">
+      <header class="clearfix">
+        <h3 class="block-title pull-left">
+          <span>App状态列表</span>
+        </h3>
+        <div class="pull-right">
+          <button class="btn btn-primary pull-right btn-reverse" ng-click="reverse()">查询反转</button>
+        </div>
+        <div class="col-lg-2">
+          <select class="form-control app-status-host-selector" ng-model="selectedHost" ng-options="host for host in hosts" ng-change="hostChange()">
+            <option value="">请选择{{firstSelect}}</option>
+          </select>
+        </div>
+        <div class="col-lg-2">
+          <select class="form-control app-status-app-selector" ng-model="selectedApp" ng-options="app for app in apps" ng-change="appChange()">
+            <option value="">请选择{{secondSelect}}</option>
+          </select>
+        </div>
+      </header>
+      <div class="panel panel-default panel-table">
+        <table class="table" id="app-status-table">
+          <thead>
+            <tr>
+              <td>主机</td>
+              <td>应用</td>
+              <td>部署位置</td>
+              <td>日志收集状态</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="appInfo in appInfos">
+              <td ng-bind="appInfo.host"></td>
+              <td ng-bind="appInfo.app"></td>
+              <td ng-bind="appInfo.deploy"></td>
+              <td ng-bind="appInfo.status"></td>
+            </tr>
+          </table>
+          <div class="no-data-div"></div>
+          <pagination ng-change="pageChanged()" total-items="totalItems"
+            ng-model="currentPage" max-size="maxSize" items-per-page="pageSize"
+            class="pagination-sm pull-right pagination hidden"
+            boundary-links="true"></pagination>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="row statistics-api-row">
+  <div class="statistics-api-row-content" id="realtimeControlForm">
+    <div class="filter">
+      <h3 class="block-title pull-left">
+        <span>实时API请求统计</span>
+      </h3>
+      <div class="pull-left item">
+        <select class="form-control" name="uniqueName" ng-model="realtimeUniqueName"
+                ng-options="x.id as x.name for x in uniqueNames"
+                ng-change="realtimeChart.update()">
+        </select>
+      </div>
+    </div>
+    <div class="panel-body api-content-panel">
+      <div id="realtimeChart" class="row">
+      </div>
+    </div>
+  </div>
+
+<div class="statistics-api-row-content offline" id="offlineControlForm">
+    <div class="filter">
+      <h3 class="block-title pull-left">
+        <span>历史API请求统计</span>
+      </h3>
+      <div class="pull-left item">
+        <select class="form-control" name="uniqueName" ng-model="offlineUniqueName"
+            ng-options="x.id as x.name for x in uniqueNames"
+            ng-change="offlineChart.update()">
+        </select>
+      </div>
+      <div class="pull-left item input-group">
+        <input type="text" class="form-control" name="begin" id="offlineBegin"
+              ng-click="dateRange($event, 'begin')" ng-change="offlineChart.update()"
+              datepicker-popup ng-model="beginDate" min-date="minDate" max-date="yesterday" is-open="begin" />
+        <span class="input-group-btn">
+           <button type="button" ng-click="dateRange($event, 'dateOpened')" class="btn btn-default">
+              <i class="glyphicon glyphicon-calendar"></i>
+           </button>
+        </span>
+      </div>
+      <div class="pull-left item input-group">
+        <input type="text" class="form-control" name="end" id="offlineEnd"
+              ng-click="dateRange($event, 'end')"  ng-change="offlineChart.update()"
+              datepicker-popup ng-model="endDate" min-date="beginDate" max-date="today" is-open="end"/>
+        <span class="input-group-btn">
+           <button type="button" ng-click="dateRange($event, 'dateOpened')" class="btn btn-default">
+              <i class="glyphicon glyphicon-calendar"></i>
+           </button>
+        </span>
+      </div>
+      <div class="pull-left item time-filters">
+          <button class="btn time-mode-default scope-filter pull-right" scope="month">
+            <span>月</span>
+          </button>
+          <button class="btn time-mode-default scope-filter pull-right" scope="week" >
+            <span>周</span>
+          </button>
+          <button class="btn time-mode-default scope-filter pull-right time-mode-selected" scope="day" >
+            <span>天</span>
+          </button>
+          <input name="scope" id="offlineScope" type="hidden" value="day"/>
+      </div>
+    </div>
+    <div class="panel-body api-content-panel">
+      <div id="offlineChart" class="row">
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+.log-query-row {
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.log-query-row-content .btn-show {
+  margin-left: 20px;
+}
+
+.log-query-row-content .sql-desc {
+  background-color: #fff;
+  border-bottom: 1px solid #e7e7e7;
+  padding: 10px 15px;
+  margin-top: 10px;
+}
+
+.log-query-row-content .sql-desc textarea {
+  resize: none;
+  width: 100%;
+}
+
+.log-query-row-content .sql {
+  background-color: #fff;
+  border-bottom: 1px solid #e7e7e7;
+  padding: 10px 15px;
+  height: 53px;
+}
+
+.log-query-row-content .result {
+  margin-top: 30px;
+}
+
+.log-query-row-content .log-content-panel {
+    background-color: #542E4A;
+    border-bottom: 1px solid #e7e7e7;
+    padding: 10px 15px;
+    /* min-height: 400px; */
+    /* max-width: 1600px; */
+    word-break: break-all;
+    height: 500px;
+    overflow-y: auto;
+}
+
+.log-query-row-content .log-content  ul {
+  padding: 0;
+}
+.log-query-row-content .log-content  ul li {
+  list-style: none;
+  padding: 0;
+}
+
+.log-query-row-content .log-content ul p {
+  margin: 0;
+  text-indent: 0;
+  font-size: 15px;
+  color: #fff;
+  font-family: ubuntu;
+}

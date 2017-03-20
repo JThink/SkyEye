@@ -1,0 +1,59 @@
+<div class="row log-history-row">
+  <div class="log-history-row-content">
+    <div class="filter">
+      <h3 class="block-title pull-left">
+        <span>条件筛选</span>
+      </h3>
+      <div class="pull-left item">
+        <select class="form-control log-history-host-selector" ng-model="selectedHost" ng-options="host as host for host in hosts" ng-change="hostChange()">
+        </select>
+      </div>
+      <div class="pull-left item">
+        <select class="form-control log-history-app-selector" ng-model="selectedApp" ng-options="app as app for app in apps">
+        </select>
+      </div>
+      <div class="pull-left item input-group">
+        <input type="text" datepicker-popup ng-model="date" id="date" is-open="dateOpened" close-text="Close" class="form-control" ng-click="dateRange($event, 'dateOpened')" ng-change="dateChange()"/>
+        <span class="input-group-btn">
+           <button type="button" ng-click="dateRange($event, 'dateOpened')" class="btn btn-default">
+              <i class="glyphicon glyphicon-calendar"></i>
+           </button>
+        </span>
+      </div>
+      <div class="pull-left item">
+        <select class="form-control log-history-opt-selector" ng-model="selectedOpt" ng-options="opt as opt for opt in opts">
+        </select>
+      </div>
+      <div class="pull-left item">
+        <input type="text" class="form-control" ng-model="time" placeholder="示例:19:55:38.338" />
+      </div>
+      <div class="pull-left item">
+        <select class="form-control log-history-level-selector" ng-model="selectedLevel" ng-options="level as level for level in levels">
+        </select>
+      </div>
+      <div class="pull-left item">
+        <select class="form-control log-history-type-selector" ng-model="selectedType" ng-options="type as type for type in types">
+        </select>
+      </div>
+      <div class="pull-right query">
+        <button class="btn btn-primary pull-right btn-query" ng-click="query()">查询</button>
+      </div>
+    </div>
+    <div class="filter result">
+      <h4 class="block-title pull-left">
+        <span>查询结果: &nbsp;</span>
+        <span class="result hidden">共{{total}}条记录, 当前显示{{current}}条</span>
+        <span class="error hidden">{{queryError}}</span>
+      </h4>
+    </div>
+    <div class="log-content-panel">
+      <div class="log-content">
+        <ul class="log">
+          <li ng-repeat="log in logs">
+            <p ng-repeat="item in log.log.split('\n')">{{item.replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;')}}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
