@@ -12,3 +12,72 @@
 - monitor: 监控中心，监听zookeeper注册中心中相应的节点变化进行监控报警
 - rabbitmq: 监控报警缓冲队列
 - alert: 具体报警手段，包括邮件和微信
+# 部署步骤
+修改每个项目中gradle文件的私服地址等其他相关信息
+修改每个项目中的properties文件中的配置项（配置文件外部化和内部化都需要修改）
+## skyeye-base
+
+``` shell
+cd skyeye-base
+gradle clean install uploadArchives
+```
+## skyeye-client
+
+``` shell
+cd skyeye-client
+gradle clean install uploadArchives
+```
+## skyeye-data
+
+``` shell
+cd skyeye-data
+gradle clean install uploadArchives
+```
+## skyeye-trace
+
+``` shell
+cd skyeye-trace
+gradle clean install uploadArchives
+```
+## skyeye-alarm
+
+``` shell
+cd skyeye-alarm
+gradle clean distZip -x test
+cd target/distributions
+unzip skyeye-alarm-x.x.x.zip(替换相应的x为自己的版本)
+```
+## skyeye-collector
+
+根据对接系统的个数和产生日志的量进行部署，最好部署3个节点（每个节点消费3个partition的数据）
+``` shell
+cd skyeye-collector
+gradle clean distZip -x test
+cd target/distributions
+unzip skyeye-collector-x.x.x.zip(替换相应的x为自己的版本)
+
+cd skyeye-collector-x.x.x
+nohup bin/skyeye-collector &
+```
+## skyeye-monitor
+
+``` shell
+cd skyeye-monitor
+gradle clean distZip -x test
+cd target/distributions
+unzip skyeye-monitor-x.x.x.zip(替换相应的x为自己的版本)
+
+cd skyeye-monitor-x.x.x
+nohup bin/skyeye-monitor &
+```
+## skyeye-web
+
+``` shell
+cd skyeye-web
+gradle clean distZip -x test
+cd target/distributions
+unzip skyeye-web-x.x.x.zip(替换相应的x为自己的版本)
+
+cd skyeye-web-x.x.x
+nohup bin/skyeye-web &
+```
