@@ -7,7 +7,8 @@
 - 监控数据采集: 对监控数据建立索引存入es
 - rpc trace数据采集: 采集rpc 跟踪的span数据并存入hbase
 # 中间件介绍
-- elasticsearch字段
+## elasticsearch
+- app-log的字段
 ![](column.png)
 ## kafka
 - partition: 9个partition，项目部署3个节点，每个节点消费3个（利用kafka消费组的机制进行rebalance）
