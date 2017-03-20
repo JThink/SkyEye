@@ -42,6 +42,6 @@ public class Application {
         builder.application().setListeners(listeners);
         builder.run(args);
 
-        LOGGER.info("zues start successfully");
+        LOGGER.info("web start successfully");
     }
 }

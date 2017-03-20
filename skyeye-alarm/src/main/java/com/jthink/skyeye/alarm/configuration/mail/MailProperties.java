@@ -1,6 +1,6 @@
 package com.jthink.skyeye.alarm.configuration.mail;
 
-import com.unionpaysmart.shaker.constant.Constants;
+import com.jthink.skyeye.base.constant.Constants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Arrays;

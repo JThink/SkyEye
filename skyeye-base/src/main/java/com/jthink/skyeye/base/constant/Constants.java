@@ -118,8 +118,8 @@ public class Constants {
     public static final String EMPTY_STR = "";
 
     // mail
-    public static final String MONITOR_APP_ALERT = "【app】银联智惠监控中心";
-    public static final String MONITOR_MAIL_SUBJECT = "[monitor-center]-bane app alert";
+    public static final String MONITOR_APP_ALERT = "【app】SkyEye监控中心";
+    public static final String MONITOR_MAIL_SUBJECT = "[SkyEye]-alarm app alert";
     public static final String MONITOR_MAIL_INFO_EXEC = "execute";
     public static final String MONITOR_MAIL_INFO_CALL = "call";
     public static final String MONITOR_MAIL_INFO_REQUEST = "request";

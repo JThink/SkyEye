@@ -42,7 +42,7 @@ public class Launcher {
         }
         builder.application().setListeners(listeners);
         builder.run(args);
-        LOGGER.info("bane start successfully");
+        LOGGER.info("alarm start successfully");
 
         // 优雅停止项目
         Runtime.getRuntime().addShutdownHook(new Thread() {

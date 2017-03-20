@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 group = 'skyeye'
 applicationName = 'skyeye-collector'
-version = '0.2.0'
+version = '0.0.1'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7

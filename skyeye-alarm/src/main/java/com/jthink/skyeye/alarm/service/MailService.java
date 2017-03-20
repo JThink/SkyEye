@@ -1,9 +1,9 @@
 package com.jthink.skyeye.alarm.service;
 
 import com.jthink.skyeye.alarm.configuration.mail.MailProperties;
-import com.unionpaysmart.shaker.constant.Constants;
-import com.unionpaysmart.shaker.dto.FileDto;
-import com.unionpaysmart.shaker.dto.MailDto;
+import com.jthink.skyeye.base.constant.Constants;
+import com.jthink.skyeye.base.dto.FileDto;
+import com.jthink.skyeye.base.dto.MailDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -77,7 +77,7 @@ public class LogDto {
 
     @Override
     public String toString() {
-        // 2016-10-11 19:35:29.636 [pool-5-thread-1] INFO com.unionpaysmart.footprint.sync.task.ScheduledTask[42]: reload cache139
+        // 2016-10-11 19:35:29.636 [pool-5-thread-1] INFO com.xxx.xxx.xxx.xxx.xxxx[42]: xxx xxx
         StringBuffer sb = new StringBuffer();
         sb.append(this.day).append(Constants.SPACE).append(this.time).append(Constants.SPACE).append(this.nanoTime)
                 .append(Constants.SPACE).append(Constants.LEFT_MIDDLE_BRAC).append(this.thread).append(Constants.RIGHT_MIDDLE_BRAC)

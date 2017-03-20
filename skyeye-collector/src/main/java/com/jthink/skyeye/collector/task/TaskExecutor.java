@@ -25,7 +25,7 @@ public class TaskExecutor {
     private Task collectTask;
     @Autowired
     private Task backupTask;
-
+    @Autowired
     private Task rpcTraceTask;
 
     private List<Task> tasks = null;

@@ -71,7 +71,7 @@ configurations {
   compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
 }
 
-mainClassName = 'com.unionpaysmart.zues.application.Application'
+mainClassName = 'com.jthink.skyeye.web.application.Application'
 
 buildscript {
   ext {

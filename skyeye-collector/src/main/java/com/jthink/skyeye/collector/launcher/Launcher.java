@@ -46,7 +46,7 @@ public class Launcher {
         }
         builder.application().setListeners(listeners);
         ConfigurableApplicationContext context = builder.run(args);
-        LOGGER.info("medusa start successfully");
+        LOGGER.info("collector start successfully");
 
         KafkaConsumer kafkaConsumerApp = (KafkaConsumer<byte[], String>) context.getBean("kafkaConsumerApp");
         KafkaConsumer kafkaConsumerEvent = (KafkaConsumer<byte[], String>) context.getBean("kafkaConsumerEvent");

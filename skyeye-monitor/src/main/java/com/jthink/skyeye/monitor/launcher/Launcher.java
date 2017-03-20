@@ -42,7 +42,7 @@ public class Launcher {
         }
         builder.application().setListeners(listeners);
         builder.run(args);
-        LOGGER.info("jugg start successfully");
+        LOGGER.info("monitor start successfully");
 
         // 优雅停止项目
         Runtime.getRuntime().addShutdownHook(new Thread() {

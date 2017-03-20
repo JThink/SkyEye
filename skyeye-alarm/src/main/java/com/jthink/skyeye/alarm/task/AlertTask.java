@@ -1,8 +1,8 @@
 package com.jthink.skyeye.alarm.task;
 
 import com.jthink.skyeye.alarm.service.MailService;
-import com.unionpaysmart.brood.rabbitmq.service.RabbitmqService;
-import com.unionpaysmart.shaker.dto.MailDto;
+import com.jthink.skyeye.base.dto.MailDto;
+import com.jthink.skyeye.data.rabbitmq.service.RabbitmqService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
