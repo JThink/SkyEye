@@ -84,11 +84,13 @@ compile "ch.qos.logback:logback-core:1.1.6"
 ### log4j
 由于log4j本身的appender比较复杂难写，所以在稳定性和性能上没有logback支持得好，应用能使用logback请尽量使用logback
 ### 中间件
-如果项目中有使用到zkClient、dubbo，统一使用我们公司自己打包的版本，以防日志收集出错或者异常（PS：zk必须为3.4.6版本，尽量使用gradle进行打包部署）
+如果项目中有使用到zkClient、，统一使用自己打包的版本，以防日志收集出错或者异常（PS：zk必须为3.4.6版本，尽量使用gradle进行打包部署）
+### rpc trace
+使用自己打包的dubbox（https://github.com/JThink/dubbox/tree/skyeye-trace），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
 compile "com.101tec:zkclient:0.9.1-up"
-compile ("com.alibaba:dubbo:2.8.4-up-1") {
+compile ("com.alibaba:dubbo:2.8.4-skyeye-trace") {
   exclude group: 'org.springframework', module: 'spring'
 }
 ```
