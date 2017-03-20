@@ -38,10 +38,10 @@ public class CacheService implements InitializingBean {
     private StringRedisTemplate redisTemplate;
     private SetOperations<String, String> setOps;
 
-    private static final String CONFIG_PREFIX = "upsmart_monitor_medusa";
-    private static final String API_NAME_PREFIX = "upsmart_monitor_medusa_api_name";
-    private static final String ACCOUNT_NAME_PREFIX = "upsmart_monitor_medusa_account_name";
-    private static final String THIRD_NAME_PREFIX = "upsmart_monitor_medusa_third_name";
+    private static final String CONFIG_PREFIX = "jthink_monitor_medusa";
+    private static final String API_NAME_PREFIX = "jthink_monitor_medusa_api_name";
+    private static final String ACCOUNT_NAME_PREFIX = "jthink_monitor_medusa_account_name";
+    private static final String THIRD_NAME_PREFIX = "jthink_monitor_medusa_third_name";
     private static final Map<String, String> mapping = new HashMap<String, String>() {
         {
             put(NameInfoType.API.symbol(), API_NAME_PREFIX);
