@@ -81,3 +81,5 @@ unzip skyeye-web-x.x.x.zip(替换相应的x为自己的版本)
 cd skyeye-web-x.x.x
 nohup bin/skyeye-web &
 ```
+
+交流QQ: 516028058
