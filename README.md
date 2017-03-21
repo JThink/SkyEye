@@ -82,5 +82,5 @@ cd skyeye-web-x.x.x
 nohup bin/skyeye-web &
 ```
 
-交流QQ: 396999864
+交流QQ: 624054633
 Email: leviqian@sina.com
