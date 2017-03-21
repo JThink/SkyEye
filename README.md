@@ -82,6 +82,6 @@ cd skyeye-web-x.x.x
 nohup bin/skyeye-web &
 ```
 # 交流方式
-QQ群: 624054633
-Email: leviqian@sina.com
-blog: http://blog.csdn.net/jthink_
+1. QQ群: 624054633
+2. Email: leviqian@sina.com
+3. blog: http://blog.csdn.net/jthink_
