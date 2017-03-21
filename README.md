@@ -82,4 +82,4 @@ cd skyeye-web-x.x.x
 nohup bin/skyeye-web &
 ```
 
-交流QQ: 516028058
+交流QQ: 396999864
