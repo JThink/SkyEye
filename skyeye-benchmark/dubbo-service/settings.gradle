@@ -1,0 +1,2 @@
+rootProject.name = 'dubbo-service'
+include 'dubbo-service-client', 'dubbo-service-a', 'dubbo-service-b', 'dubbo-service-c', 'dubbo-service-d', 'dubbo-service-e'
