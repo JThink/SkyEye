@@ -201,4 +201,7 @@ public class Constants {
     public static final String LOG_LEVEL_ERROR = "ERROR";
     public static final String LOG_LEVEL_WARNING = "WARNING";
 
+    // rpc 服务注册中心相关
+    public static final String ZK_REGISTRY_ROOT_PATH = "registry";
+
 }

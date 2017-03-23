@@ -18,6 +18,8 @@ ext {
   dataVersion = '0.0.1'
   slf4jVersion = '1.7.21'
   fastJsonVersion = '1.2.28'
+  zookeeperVersion = '3.4.6'
+  zkclientVersion = '0.9.1-up'
 }
 
 repositories {
@@ -55,4 +57,6 @@ dependencies {
   compile "skyeye:skyeye-base:$baseVersion"
   compile "skyeye:skyeye-data-http:$dataVersion"
   compile "com.alibaba:fastjson:$fastJsonVersion"
+  compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
+  compile "com.101tec:zkclient:$zkclientVersion"
 }

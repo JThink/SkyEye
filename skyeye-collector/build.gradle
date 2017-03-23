@@ -28,10 +28,10 @@ ext {
   dataVersion = '0.0.1'
   zkclientVersion = '0.9.1-up'
   hadoopVersion = '2.6.0-cdh5.4.0'
+  fastJsonVersion = '1.2.28'
 }
 
 dependencies {
-  compile "skyeye:skyeye-trace:$traceVersion"
   compile "skyeye:skyeye-data-jpa:$dataVersion"
   compile "skyeye:skyeye-data-rabbitmq:$dataVersion"
   compile "skyeye:skyeye-data-hbase:$dataVersion"
@@ -65,6 +65,8 @@ dependencies {
 
   compile ("org.apache.commons:commons-dbcp2:2.1.1")
   compile ("mysql:mysql-connector-java:5.1.39")
+
+  compile "com.alibaba:fastjson:$fastJsonVersion"
 
   testCompile "org.springframework.boot:spring-boot-starter-test"
 }
