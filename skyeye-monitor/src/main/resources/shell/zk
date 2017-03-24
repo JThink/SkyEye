@@ -1,3 +1,8 @@
-create /up_monitor null
-create /up_monitor/scroll null
-create /up_monitor/query null
+create /skyeye null
+create /skyeye/monitor null
+create /skyeye/monitor/scroll null
+create /skyeye/monitor/query null
+create /skyeye/registry null
+create /skyeye/registry/service null
+create /skyeye/registry/id null
+create /skyeye/seq null

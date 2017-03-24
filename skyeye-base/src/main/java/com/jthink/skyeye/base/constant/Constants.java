@@ -111,8 +111,8 @@ public class Constants {
     public static final String THIRD = "third";
 
     // zk节点
-    public static final String ROOT_PATH_EPHEMERAL = "/up_monitor/scroll";
-    public static final String ROOT_PATH_PERSISTENT = "/up_monitor/query";
+    public static final String ROOT_PATH_EPHEMERAL = "/skyeye/monitor/scroll";
+    public static final String ROOT_PATH_PERSISTENT = "/skyeye/monitor/query";
     public static final String APPENDER_INIT_DATA = "appender_init_data";
 
     public static final String EMPTY_STR = "";
@@ -202,6 +202,8 @@ public class Constants {
     public static final String LOG_LEVEL_WARNING = "WARNING";
 
     // rpc 服务注册中心相关
-    public static final String ZK_REGISTRY_ROOT_PATH = "registry";
+    public static final String ZK_REGISTRY_SERVICE_ROOT_PATH = "/skyeye/registry/service";
+    public static final String ZK_REGISTRY_ID_ROOT_PATH = "/skyeye/registry/id";
+    public static final String ZK_REGISTRY_SEQ = "/skyeye/seq";
 
 }
