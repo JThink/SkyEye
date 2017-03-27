@@ -127,8 +127,8 @@ public class Tracer {
      * 构造EndPoint
      * @return
      */
-    public EndPoint buildEndPoint(String ip, Integer port, String serviceName) {
-        return new EndPoint(ip, port, serviceName);
+    public EndPoint buildEndPoint(String ip, Integer port) {
+        return new EndPoint(ip, port);
     }
 
     /**

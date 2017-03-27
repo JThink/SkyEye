@@ -10,6 +10,10 @@ package com.jthink.skyeye.trace.generater;
  */
 public class UniqueIdGen implements IdGen {
 
+    /**
+     * 利用twitter的snowflake（做了些微修改）算法来实现
+     * @return
+     */
     @Override
     public String nextId() {
         return null;

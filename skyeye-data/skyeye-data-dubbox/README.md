@@ -8,7 +8,7 @@ gradle clean install uploadArchives
 # 使用方式
 ## 依赖
 ```shell
-compile "jthink:spring-boot-starter-dubbox:0.0.1"
+compile "skyeye:skyeye-data-dubbox:0.0.1"
 ```
 ## 集成
 在spring-boot项目的application.properties文件中加入相关的配置项，并赋予正确的值

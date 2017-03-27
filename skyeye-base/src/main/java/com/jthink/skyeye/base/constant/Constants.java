@@ -92,7 +92,7 @@ public class Constants {
     public static final String SAMPLE = "isSample";
     public static final String EXCEPTION = "exception";
     public static final String DUBBO_EXCEPTION = "dubbo.exception";
-    public static final String DUBBO_TIMEPUTEXCEPTION = "dubbo.timeoutexception";
+    public static final String DUBBO_TIMEOUTEXCEPTION = "dubbo.timeoutexception";
 
     // hdfs相关
     public final static String PROTOCOL = "hdfs";
@@ -206,4 +206,7 @@ public class Constants {
     public static final String ZK_REGISTRY_ID_ROOT_PATH = "/skyeye/registry/id";
     public static final String ZK_REGISTRY_SEQ = "/skyeye/seq";
 
+    public static final String RPC_TYPE_NONE = "none";
+    public static final String RPC_TYPE_DUBBO = "dubbo";
+    public static final String RPC_TYPE_THRIFT = "thrift";
 }

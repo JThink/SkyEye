@@ -5,6 +5,7 @@ import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.hook.DelayingShutdownHook;
 import ch.qos.logback.core.status.ErrorStatus;
+import com.jthink.skyeye.base.constant.RpcType;
 import com.jthink.skyeye.client.constant.KafkaConfig;
 import com.jthink.skyeye.client.constant.NodeMode;
 import com.jthink.skyeye.client.kafka.LazySingletonProducer;
@@ -15,6 +16,9 @@ import com.jthink.skyeye.client.register.ZkRegister;
 import com.jthink.skyeye.client.util.SysUtil;
 import com.jthink.skyeye.base.util.StringUtil;
 import com.jthink.skyeye.base.constant.Constants;
+import com.jthink.skyeye.trace.dto.RegisterDto;
+import com.jthink.skyeye.trace.registry.Registry;
+import com.jthink.skyeye.trace.registry.ZookeeperRegistry;
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -47,6 +51,8 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
     private String zkServers;
     // 接受报警邮件的接收方
     private String mail;
+    // 标记是否为rpc服务, 取值为RpcType.java
+    private String rpc;
     // KafkaProducer类的配置
     private Map<String, Object> config = new HashMap<String, Object>();
     // key生成器
@@ -96,6 +102,24 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
         this.zkRegister.getClient().createPersistent(Constants.ROOT_PATH_EPHEMERAL + Constants.SLASH + this.app, true);
         this.zkRegister.create(Constants.SLASH + this.app + Constants.SLASH + this.host, NodeMode.EPHEMERAL,
                 Constants.APPENDER_INIT_DATA + Constants.SEMICOLON + SysUtil.userDir);
+
+        // rpc trace注册中心
+        if (this.rpc.equals(RpcType.dubbo.symbol())) {
+            this.register(this.app, this.host, this.zkRegister.getClient());
+        }
+    }
+
+    /**
+     * 进行rpc trace注册
+     * @param app
+     * @param host
+     * @param zkClient
+     */
+    private void register(String app, String host, ZkClient zkClient) {
+        RegisterDto dto = new RegisterDto(app, host, zkClient);
+        Registry registry = new ZookeeperRegistry();
+        String id = registry.register(dto);
+        // TODO: 对id进行设值
     }
 
     @Override
@@ -197,6 +221,12 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
             flag = false;
         }
 
+        if (StringUtil.isBlank(this.rpc) || !this.checkRpcType(this.rpc)) {
+            // rpc未设置或者rpc值不对
+            addError("rpc is not set or value not right, appender: " + name);
+            flag = false;
+        }
+
         if (null == this.keyBuilder) {
             // key生成器为设置
             addError("key builder is not set, appender: " + name);
@@ -209,6 +239,20 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
             flag = false;
         }
         return flag;
+    }
+
+    /**
+     * 监察rpc type是否正确
+     * @param rpcType
+     * @return
+     */
+    private boolean checkRpcType(String rpcType) {
+        try {
+            RpcType.valueOf(rpcType);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
@@ -300,5 +344,13 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getRpc() {
+        return rpc;
+    }
+
+    public void setRpc(String rpc) {
+        this.rpc = rpc;
     }
 }

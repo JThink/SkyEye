@@ -1,5 +1,6 @@
 package com.jthink.skyeye.client.kafka.log4j;
 
+import com.jthink.skyeye.base.constant.RpcType;
 import com.jthink.skyeye.client.constant.KafkaConfig;
 import com.jthink.skyeye.client.constant.NodeMode;
 import com.jthink.skyeye.client.kafka.LazySingletonProducer;
@@ -8,6 +9,9 @@ import com.jthink.skyeye.client.register.ZkRegister;
 import com.jthink.skyeye.client.util.SysUtil;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.util.StringUtil;
+import com.jthink.skyeye.trace.dto.RegisterDto;
+import com.jthink.skyeye.trace.registry.Registry;
+import com.jthink.skyeye.trace.registry.ZookeeperRegistry;
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
@@ -43,6 +47,8 @@ public class KafkaAppender extends AppenderSkeleton {
     private String zkServers;
     // 接受报警邮件的接收方
     private String mail;
+    // 标记是否为rpc服务, 取值为RpcType.java
+    private String rpc;
     // KafkaProducer类的配置
     private Map<String, Object> config = new HashMap<String, Object>();
     // zk注册器
@@ -213,6 +219,13 @@ public class KafkaAppender extends AppenderSkeleton {
                 return;
             }
 
+            if (StringUtil.isBlank(this.rpc) || !this.checkRpcType(this.rpc)) {
+                // rpc未设置或者rpc值不对
+                LogLog.error("rpc is not set or value not right, appender: " + name);
+                closed = true;
+                return;
+            }
+
             new Thread() {
                 @Override
                 public void run() {
@@ -226,6 +239,11 @@ public class KafkaAppender extends AppenderSkeleton {
                     zkRegister.getClient().createPersistent(Constants.ROOT_PATH_EPHEMERAL + Constants.SLASH + app, true);
                     zkRegister.create(Constants.SLASH + app + Constants.SLASH + host, NodeMode.EPHEMERAL,
                             Constants.APPENDER_INIT_DATA + Constants.SEMICOLON + SysUtil.userDir);
+
+                    // rpc trace注册中心
+                    if (rpc.equals(RpcType.dubbo.symbol())) {
+                        register(app, host, zkRegister.getClient());
+                    }
                 }
             }.start();
 
@@ -246,6 +264,33 @@ public class KafkaAppender extends AppenderSkeleton {
             }
 
             LazySingletonProducer.getInstance(this.config);
+        }
+    }
+
+    /**
+     * 进行rpc trace注册
+     * @param app
+     * @param host
+     * @param zkClient
+     */
+    private void register(String app, String host, ZkClient zkClient) {
+        RegisterDto dto = new RegisterDto(app, host, zkClient);
+        Registry registry = new ZookeeperRegistry();
+        String id = registry.register(dto);
+        // TODO: 对id进行设值
+    }
+
+    /**
+     * 监察rpc type是否正确
+     * @param rpcType
+     * @return
+     */
+    private boolean checkRpcType(String rpcType) {
+        try {
+            RpcType.valueOf(rpcType);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -368,5 +413,13 @@ public class KafkaAppender extends AppenderSkeleton {
 
     public void setMaxBlockMs(String maxBlockMs) {
         this.maxBlockMs = maxBlockMs;
+    }
+
+    public String getRpc() {
+        return rpc;
+    }
+
+    public void setRpc(String rpc) {
+        this.rpc = rpc;
     }
 }

@@ -27,7 +27,7 @@ public class ZookeeperRegistry implements Registry {
         String app = registerDto.getApp();
 
         // 向注册中心注册
-        ZkClient zkClient = new ZkClient(registerDto.getZkServers(), 60000, 5000);
+        ZkClient zkClient = registerDto.getZkClient();
         zkClient.createPersistent(Constants.ZK_REGISTRY_SERVICE_ROOT_PATH + Constants.SLASH + app, true);
         IdGen idGen = new IncrementIdGen(zkClient, registerDto);
         String id = idGen.nextId();
@@ -36,11 +36,4 @@ public class ZookeeperRegistry implements Registry {
         return id;
     }
 
-    public static void main(String[] args) {
-        RegisterDto dto = new RegisterDto();
-        dto.setHost("qianjc-pc").setZkServers("riot01:2181,riot02:2181,riot03:2181").setApp("app2");
-
-        ZookeeperRegistry zookeeperRegistry = new ZookeeperRegistry();
-        System.out.println(zookeeperRegistry.register(dto));
-    }
 }

@@ -16,26 +16,14 @@ public class EndPoint implements Serializable {
     private String ip;
     // rpc服务启动的端口
     private Integer port;
-    // rpc服务名字
-    private String serviceName;
 
     public EndPoint() {
 
     }
 
-    public EndPoint(String ip, Integer port, String serviceName) {
+    public EndPoint(String ip, Integer port) {
         this.ip = ip;
         this.port = port;
-        this.serviceName = serviceName;
-    }
-
-    @Override
-    public String toString() {
-        return "EndPoint{" +
-                "ip='" + ip + '\'' +
-                ", port=" + port +
-                ", serviceName='" + serviceName + '\'' +
-                '}';
     }
 
     @Override
@@ -46,16 +34,13 @@ public class EndPoint implements Serializable {
         EndPoint endPoint = (EndPoint) o;
 
         if (ip != null ? !ip.equals(endPoint.ip) : endPoint.ip != null) return false;
-        if (port != null ? !port.equals(endPoint.port) : endPoint.port != null) return false;
-        return serviceName != null ? serviceName.equals(endPoint.serviceName) : endPoint.serviceName == null;
-
+        return port != null ? port.equals(endPoint.port) : endPoint.port == null;
     }
 
     @Override
     public int hashCode() {
         int result = ip != null ? ip.hashCode() : 0;
         result = 31 * result + (port != null ? port.hashCode() : 0);
-        result = 31 * result + (serviceName != null ? serviceName.hashCode() : 0);
         return result;
     }
 
@@ -63,23 +48,17 @@ public class EndPoint implements Serializable {
         return ip;
     }
 
-    public void setIp(String ip) {
+    public EndPoint setIp(String ip) {
         this.ip = ip;
+        return this;
     }
 
     public Integer getPort() {
         return port;
     }
 
-    public void setPort(Integer port) {
+    public EndPoint setPort(Integer port) {
         this.port = port;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+        return this;
     }
 }

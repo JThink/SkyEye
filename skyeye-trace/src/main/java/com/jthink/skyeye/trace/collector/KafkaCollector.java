@@ -34,7 +34,6 @@ public class KafkaCollector implements Collector {
         EndPoint endPoint = new EndPoint();
         endPoint.setIp("192.168.87.128");
         endPoint.setPort(1245);
-        endPoint.setServiceName("test service");
         Annotation annotation = new Annotation();
         annotation.setValue("annv");
         annotation.setTimestamp(56565464L);

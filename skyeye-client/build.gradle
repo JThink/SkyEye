@@ -20,6 +20,7 @@ ext {
   zookeeperVersion = '3.4.6'
   zkclientVersion = '0.9.1-up'
   baseVersion = '0.0.1'
+  traceVersion = '0.0.1'
 }
 
 repositories {
@@ -54,6 +55,7 @@ uploadArchives {
 
 dependencies {
   compile "skyeye:skyeye-base:$baseVersion"
+  compile "skyeye:skyeye-trace:$traceVersion"
   compile "org.apache.kafka:kafka-clients:$kafkaVersion"
   compile "ch.qos.logback:logback-classic:$logbackVersion"
   compile "log4j:log4j:$log4jVersion"

@@ -29,20 +29,23 @@ public class HbaseStore implements Store {
     public Map<String, List<Put>> store(String spanJson) {
         // 将span的json字符串转换成Span对象
         Span span = JSON.parseObject(spanJson, Span.class);
-        // 区分出所有的annotation
-        Map<String, Annotation> annotationMap = this.distinguishAnnotation(span.getAnnotations());
-        Put spanPut = this.storeSpan(span, spanJson, annotationMap);
-        Put tracePut = this.storeTrace(span, annotationMap);
-        List<Put> annotationPuts = this.storeAnnotation(span, annotationMap);
-
         // 将所有的Put返回到上游
         Map<String, List<Put>> puts = new HashMap<String, List<Put>>();
-        puts.put(Constants.TABLE_TRACE, Lists.newArrayList(spanPut));
-        if (null != tracePut) {
-            puts.put(Constants.TABLE_TIME_CONSUME, Lists.newArrayList(tracePut));
-        }
-        if (null != annotationPuts) {
-            puts.put(Constants.TABLE_ANNOTATION, annotationPuts);
+        if (span.getSample()) {
+            // 区分出所有的annotation
+            Map<String, Annotation> annotationMap = this.distinguishAnnotation(span.getAnnotations());
+            Put spanPut = this.storeSpan(span, spanJson, annotationMap);
+            Put tracePut = this.storeTrace(span, annotationMap);
+            List<Put> annotationPuts = this.storeAnnotation(span, annotationMap);
+
+            puts.put(Constants.TABLE_TRACE, Lists.newArrayList(spanPut));
+            if (null != tracePut) {
+                puts.put(Constants.TABLE_TIME_CONSUME, Lists.newArrayList(tracePut));
+            }
+            if (null != annotationPuts) {
+                puts.put(Constants.TABLE_ANNOTATION, annotationPuts);
+            }
+
         }
         return puts;
     }

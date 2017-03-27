@@ -13,7 +13,7 @@ import com.jthink.skyeye.base.constant.Constants;
 public enum ExceptionType {
 
     EXCEPTION(Constants.DUBBO_EXCEPTION, Constants.EXCEPTION),
-    TIMEOUTEXCEPTION(Constants.DUBBO_TIMEPUTEXCEPTION, Constants.EXCEPTION);
+    TIMEOUTEXCEPTION(Constants.DUBBO_TIMEOUTEXCEPTION, Constants.EXCEPTION);
 
     private String symbol;
 

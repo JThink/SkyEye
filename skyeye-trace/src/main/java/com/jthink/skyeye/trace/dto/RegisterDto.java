@@ -1,5 +1,7 @@
 package com.jthink.skyeye.trace.dto;
 
+import org.I0Itec.zkclient.ZkClient;
+
 /**
  * JThink@JThink
  *
@@ -14,16 +16,16 @@ public class RegisterDto {
 
     private String host;
 
-    private String zkServers;
+    private ZkClient zkClient;
 
     public RegisterDto() {
 
     }
 
-    public RegisterDto(String app, String host, String zkServers) {
+    public RegisterDto(String app, String host, ZkClient zkClient) {
         this.app = app;
         this.host = host;
-        this.zkServers = zkServers;
+        this.zkClient = zkClient;
     }
 
     public String getApp() {
@@ -44,12 +46,12 @@ public class RegisterDto {
         return this;
     }
 
-    public String getZkServers() {
-        return zkServers;
+    public ZkClient getZkClient() {
+        return zkClient;
     }
 
-    public RegisterDto setZkServers(String zkServers) {
-        this.zkServers = zkServers;
+    public RegisterDto setZkClient(ZkClient zkClient) {
+        this.zkClient = zkClient;
         return this;
     }
 }

@@ -57,6 +57,7 @@
       </layout>
     </encoder>
     <topic>app-log</topic>
+    <rpc>dubbo</rpc>
     <zkServers>riot01:2181,riot02:2181,riot03:2181</zkServers>
     <mail>xxx@xxx.com</mail>
     <keyBuilder class="com.jthink.skyeye.client.kafka.partitioner.AppHostKeyBuilder" />
