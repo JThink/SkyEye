@@ -55,7 +55,6 @@ uploadArchives {
 dependencies {
   compile "org.slf4j:slf4j-api:$slf4jVersion"
   compile "skyeye:skyeye-base:$baseVersion"
-  compile "skyeye:skyeye-data-http:$dataVersion"
   compile "com.alibaba:fastjson:$fastJsonVersion"
   compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
   compile "com.101tec:zkclient:$zkclientVersion"

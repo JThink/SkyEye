@@ -15,6 +15,9 @@ import org.apache.zookeeper.data.Stat;
  */
 public class IncrementIdGen implements IdGen {
 
+    // 为某台机器上的某个项目分配的serviceId（注意区分Span中的serviceId）
+    private static String serviceId = null;
+
     // zk client
     private ZkClient zkClient;
     // register info
@@ -42,6 +45,23 @@ public class IncrementIdGen implements IdGen {
             this.zkClient.writeData(path, id);
             return id;
         }
+    }
+
+    /**
+     * 获取ID
+     * @return
+     */
+    public static String getId() {
+        return serviceId;
+    }
+
+    /**
+     * 对ID赋值
+     * @param id
+     * @return
+     */
+    public static void setId(String id) {
+        serviceId = id;
     }
 
     public IncrementIdGen() {

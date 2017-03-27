@@ -17,6 +17,7 @@ import com.jthink.skyeye.client.util.SysUtil;
 import com.jthink.skyeye.base.util.StringUtil;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.trace.dto.RegisterDto;
+import com.jthink.skyeye.trace.generater.IncrementIdGen;
 import com.jthink.skyeye.trace.registry.Registry;
 import com.jthink.skyeye.trace.registry.ZookeeperRegistry;
 import org.I0Itec.zkclient.ZkClient;
@@ -118,8 +119,7 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
     private void register(String app, String host, ZkClient zkClient) {
         RegisterDto dto = new RegisterDto(app, host, zkClient);
         Registry registry = new ZookeeperRegistry();
-        String id = registry.register(dto);
-        // TODO: 对id进行设值
+        IncrementIdGen.setId(registry.register(dto));
     }
 
     @Override

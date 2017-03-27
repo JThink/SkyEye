@@ -1,10 +1,11 @@
 package com.jthink.skyeye.trace.trace;
 
-import com.jthink.skyeye.data.http.HttpRequest;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.dapper.*;
 import com.jthink.skyeye.trace.collector.Collector;
 import com.jthink.skyeye.trace.collector.KafkaCollector;
+import com.jthink.skyeye.trace.generater.IdGen;
+import com.jthink.skyeye.trace.generater.UniqueIdGen;
 import com.jthink.skyeye.trace.sampler.PercentageSampler;
 import com.jthink.skyeye.trace.sampler.Sampler;
 import org.slf4j.Logger;
@@ -31,11 +32,12 @@ public class Tracer {
     // 采样器实例
     private Sampler sampler = new PercentageSampler();
 
+    // 分布式全局唯一ID生成器实例
+    // TODO: 具体实现和属性赋值
+    private IdGen idGen = new UniqueIdGen();
+
     // 收集器实例
     private Collector collector = new KafkaCollector();
-
-    private static final String SPAN_GENERATER_URL = "http://localhost:8889/id/span";
-    private static final String TRACE_GENERATER_URL = "http://localhost:8889/id/trace";
 
     // 保证单例
     private Tracer() {
@@ -112,14 +114,6 @@ public class Tracer {
         span.setName(name);
         span.setServiceId(serviceId);
         span.setSample(s);
-//        if (s) {//应用名写入
-//            BinaryAnnotation appname = new BinaryAnnotation();
-//            appname.setKey("dubbo.applicationName");
-//            appname.setValue(transfer.appName().getBytes());
-//            appname.setType("string");
-//            appname.setHost(endpoint);
-//            span.addBinaryAnnotation(appname);
-//        }
         return span;
     }
 
@@ -136,7 +130,7 @@ public class Tracer {
      * @return
      */
     public String generateSpanId() {
-        return HttpRequest.get(SPAN_GENERATER_URL, Constants.EMPTY_STR);
+        return this.idGen.nextId();
     }
 
     /**
@@ -144,7 +138,7 @@ public class Tracer {
      * @return
      */
     public String generateTraceId() {
-        return HttpRequest.get(TRACE_GENERATER_URL, Constants.EMPTY_STR);
+        return this.idGen.nextId();
     }
 
     /**
