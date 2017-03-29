@@ -18,8 +18,6 @@ public class IncrementIdGen implements IdGen {
     // 为某台机器上的某个项目分配的serviceId（注意区分Span中的serviceId）
     private static String serviceId = null;
 
-    // zk client
-    private ZkClient zkClient;
     // register info
     private RegisterDto registerDto;
 
@@ -31,18 +29,19 @@ public class IncrementIdGen implements IdGen {
     public String nextId() {
         String app = this.registerDto.getApp();
         String host = this.registerDto.getHost();
+        ZkClient zkClient = this.registerDto.getZkClient();
         String path = Constants.ZK_REGISTRY_ID_ROOT_PATH + Constants.SLASH + app + Constants.SLASH + host;
-        if (this.zkClient.exists(path)) {
+        if (zkClient.exists(path)) {
             // 如果已经有该节点，表示已经为当前的host上部署的该app分配的编号（应对某个服务重启之后编号不变的问题），直接获取该id，而无需生成
-            return this.zkClient.readData(Constants.ZK_REGISTRY_ID_ROOT_PATH + Constants.SLASH + app + Constants.SLASH + host);
+            return zkClient.readData(Constants.ZK_REGISTRY_ID_ROOT_PATH + Constants.SLASH + app + Constants.SLASH + host);
         } else {
             // 节点不存在，那么需要生成id，利用zk节点的版本号每写一次就自增的机制来实现
             Stat stat = zkClient.writeDataReturnStat(Constants.ZK_REGISTRY_SEQ, new byte[0], -1);
             // 生成id
             String id = String.valueOf(stat.getVersion());
             // 将数据写入节点
-            this.zkClient.createPersistent(path, true);
-            this.zkClient.writeData(path, id);
+            zkClient.createPersistent(path, true);
+            zkClient.writeData(path, id);
             return id;
         }
     }
@@ -68,18 +67,8 @@ public class IncrementIdGen implements IdGen {
 
     }
 
-    public IncrementIdGen(ZkClient zkClient, RegisterDto registerDto) {
-        this.zkClient = zkClient;
+    public IncrementIdGen(RegisterDto registerDto) {
         this.registerDto = registerDto;
-    }
-
-    public ZkClient getZkClient() {
-        return zkClient;
-    }
-
-    public IncrementIdGen setZkClient(ZkClient zkClient) {
-        this.zkClient = zkClient;
-        return this;
     }
 
     public RegisterDto getRegisterDto() {

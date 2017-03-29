@@ -1,4 +1,4 @@
-package com.jthink.skyeye.monitor.test.curator;
+package com.jthink.skyeye.monitor.test;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
@@ -10,7 +10,6 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * JThink@JThink

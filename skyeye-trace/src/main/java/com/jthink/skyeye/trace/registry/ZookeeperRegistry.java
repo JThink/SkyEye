@@ -29,7 +29,7 @@ public class ZookeeperRegistry implements Registry {
         // 向注册中心注册
         ZkClient zkClient = registerDto.getZkClient();
         zkClient.createPersistent(Constants.ZK_REGISTRY_SERVICE_ROOT_PATH + Constants.SLASH + app, true);
-        IdGen idGen = new IncrementIdGen(zkClient, registerDto);
+        IdGen idGen = new IncrementIdGen(registerDto);
         String id = idGen.nextId();
         zkClient.createEphemeral(Constants.ZK_REGISTRY_SERVICE_ROOT_PATH + Constants.SLASH + app + Constants.SLASH + host, id);
 

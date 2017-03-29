@@ -1,11 +1,9 @@
 package com.jthink.skyeye.trace.trace;
 
-import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.dapper.*;
 import com.jthink.skyeye.trace.collector.Collector;
 import com.jthink.skyeye.trace.collector.KafkaCollector;
 import com.jthink.skyeye.trace.generater.IdGen;
-import com.jthink.skyeye.trace.generater.UniqueIdGen;
 import com.jthink.skyeye.trace.sampler.PercentageSampler;
 import com.jthink.skyeye.trace.sampler.Sampler;
 import org.slf4j.Logger;
@@ -33,8 +31,7 @@ public class Tracer {
     private Sampler sampler = new PercentageSampler();
 
     // 分布式全局唯一ID生成器实例
-    // TODO: 具体实现和属性赋值
-    private IdGen idGen = new UniqueIdGen();
+    private IdGen idGen = null;
 
     // 收集器实例
     private Collector collector = new KafkaCollector();
@@ -172,7 +169,6 @@ public class Tracer {
     public void serverSend(Span span, EndPoint endPoint, long start) {
         Annotation annotation = this.buildAnnotation(endPoint, start, AnnotationType.SS);
         span.addAnnotation(annotation);
-        // TODO: 向kafka进行发送
         this.collector.collect(span);
         LOGGER.info("SS, " + span.toString());
     }
@@ -186,7 +182,6 @@ public class Tracer {
     public void clientReceive(Span span, EndPoint endPoint, long end) {
         Annotation annotation = this.buildAnnotation(endPoint, end, AnnotationType.CR);
         span.addAnnotation(annotation);
-        // TODO: 向kafka进行发送
         this.collector.collect(span);
         LOGGER.info("CR, " + span.toString());
     }
@@ -215,5 +210,13 @@ public class Tracer {
         if (span != null) {
             span.addBinaryAnnotation(annotation);
         }
+    }
+
+    public IdGen getIdGen() {
+        return idGen;
+    }
+
+    public void setIdGen(IdGen idGen) {
+        this.idGen = idGen;
     }
 }
