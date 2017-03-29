@@ -58,7 +58,7 @@ public class UniqueIdGen implements IdGen {
      * 生成唯一id的具体实现
      * @return
      */
-    public synchronized long genUniqueId() {
+    private synchronized long genUniqueId() {
         long current = System.currentTimeMillis();
 
         if (current < lastTimestamp) {
