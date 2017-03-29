@@ -45,7 +45,8 @@ public interface Store {
     /**
      * 存储所有的信息
      * @param spanJson
+     * @param span
      * @return
      */
-    Map<String, List<Put>> store(String spanJson);
+    Map<String, List<Put>> store(String spanJson, Span span);
 }

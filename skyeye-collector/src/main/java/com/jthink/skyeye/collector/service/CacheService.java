@@ -1,9 +1,11 @@
 package com.jthink.skyeye.collector.service;
 
 import com.jthink.skyeye.data.jpa.domain.NameInfo;
+import com.jthink.skyeye.data.jpa.domain.ServiceInfo;
 import com.jthink.skyeye.data.jpa.repository.NameInfoRepository;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.constant.NameInfoType;
+import com.jthink.skyeye.data.jpa.repository.ServiceInfoRepository;
 import org.apache.commons.lang.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,20 +35,26 @@ public class CacheService implements InitializingBean {
 
     @Autowired
     private NameInfoRepository nameInfoRepository;
+    @Autowired
+    private ServiceInfoRepository serviceInfoRepository;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
     private SetOperations<String, String> setOps;
 
-    private static final String CONFIG_PREFIX = "jthink_monitor_medusa";
-    private static final String API_NAME_PREFIX = "jthink_monitor_medusa_api_name";
-    private static final String ACCOUNT_NAME_PREFIX = "jthink_monitor_medusa_account_name";
-    private static final String THIRD_NAME_PREFIX = "jthink_monitor_medusa_third_name";
+    private static final String CONFIG_PREFIX = "jthink_monitor_collector";
+    private static final String API_NAME_PREFIX = "jthink_monitor_collector_api_name";
+    private static final String ACCOUNT_NAME_PREFIX = "jthink_monitor_collector_account_name";
+    private static final String THIRD_NAME_PREFIX = "jthink_monitor_collector_third_name";
+    private static final String SERVICE_INFO_PREFIX = "jthink_monitor_collector_service_info";
+    public static final String SERVICE_INFO_TYPE = "service";
+
     private static final Map<String, String> mapping = new HashMap<String, String>() {
         {
             put(NameInfoType.API.symbol(), API_NAME_PREFIX);
             put(NameInfoType.ACCOUNT.symbol(), ACCOUNT_NAME_PREFIX);
             put(NameInfoType.THIRD.symbol(), THIRD_NAME_PREFIX);
+            put(SERVICE_INFO_TYPE, SERVICE_INFO_PREFIX);
         }
     };
 
@@ -56,6 +64,14 @@ public class CacheService implements InitializingBean {
      */
     public void save(NameInfo nameInfo) {
         this.nameInfoRepository.save(nameInfo);
+    }
+
+    /**
+     * 保存
+     * @param serviceInfo
+     */
+    public void save(ServiceInfo serviceInfo) {
+        this.serviceInfoRepository.save(serviceInfo);
     }
 
     /**
@@ -91,6 +107,13 @@ public class CacheService implements InitializingBean {
         for (Iterator<NameInfo> it = nameInfos.iterator(); it.hasNext();) {
             NameInfo nameInfo = it.next();
             this.setOps.add(mapping.get(nameInfo.getNameInfoPK().getType()), nameInfo.getNameInfoPK().getName());
+        }
+
+        Iterable<ServiceInfo> serviceInfos = this.serviceInfoRepository.findAll();
+
+        for (Iterator<ServiceInfo> it = serviceInfos.iterator(); it.hasNext();) {
+            ServiceInfo serviceInfo = it.next();
+            this.setOps.add(SERVICE_INFO_PREFIX, serviceInfo.getId());
         }
 
         sw.stop();

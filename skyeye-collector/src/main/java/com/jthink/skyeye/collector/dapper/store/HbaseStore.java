@@ -26,9 +26,7 @@ public class HbaseStore implements Store {
     private static final Logger LOGGER = LoggerFactory.getLogger(HbaseStore.class);
 
     @Override
-    public Map<String, List<Put>> store(String spanJson) {
-        // 将span的json字符串转换成Span对象
-        Span span = JSON.parseObject(spanJson, Span.class);
+    public Map<String, List<Put>> store(String spanJson, Span span) {
         // 将所有的Put返回到上游
         Map<String, List<Put>> puts = new HashMap<String, List<Put>>();
         if (span.getSample()) {

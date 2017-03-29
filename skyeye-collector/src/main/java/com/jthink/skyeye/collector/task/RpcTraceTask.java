@@ -1,5 +1,8 @@
 package com.jthink.skyeye.collector.task;
 
+import com.alibaba.fastjson.JSON;
+import com.jthink.skyeye.base.dapper.Span;
+import com.jthink.skyeye.collector.service.CacheService;
 import com.jthink.skyeye.data.hbase.api.HbaseTemplate;
 import com.jthink.skyeye.collector.callback.KafkaOffsetCommitCallback;
 import com.jthink.skyeye.collector.configuration.kafka.KafkaProperties;
@@ -9,6 +12,8 @@ import com.jthink.skyeye.base.constant.EventType;
 import com.jthink.skyeye.base.dto.EventLog;
 import com.jthink.skyeye.base.dto.LogDto;
 import com.jthink.skyeye.base.dto.RpcTraceLog;
+import com.jthink.skyeye.data.jpa.domain.ServiceInfo;
+import com.jthink.skyeye.data.jpa.pk.ServiceInfoPK;
 import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -49,6 +54,8 @@ public class RpcTraceTask implements Task {
     private Store hbaseStore;
     @Autowired
     private HbaseTemplate hbaseTemplate;
+    @Autowired
+    private CacheService cacheService;
 
     public static Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<TopicPartition, OffsetAndMetadata>();
     private Thread thread;
@@ -78,7 +85,24 @@ public class RpcTraceTask implements Task {
                             if (type.equals(EventType.invoke_interface.symbol())) {
                                 // 如果是rpc trace日志
                                 RpcTraceLog log = RpcTraceLog.parseRpcTraceLog(logValue);
-                                Map<String, List<Put>> puts = this.hbaseStore.store(log.getLog());
+                                String logContent = log.getLog();
+                                // 将span的json字符串转换成Span对象
+                                Span span = JSON.parseObject(logContent, Span.class);
+
+                                // 采集iface和method
+                                String serviceId = span.getServiceId();
+                                ServiceInfo serviceInfo = this.buildServiceInfo(serviceId);
+                                if (null != serviceInfo) {
+                                    if (!this.cacheService.isExists(CacheService.SERVICE_INFO_TYPE, serviceInfo.getId())) {
+                                        // 如果api不存在
+                                        LOGGER.info("从rpc trace中采集到service, 为: {}", serviceId);
+                                        this.cacheService.save(serviceInfo);
+                                        this.cacheService.add(CacheService.SERVICE_INFO_TYPE, serviceInfo.getId());
+                                    }
+                                }
+
+                                // 存储进入hbase
+                                Map<String, List<Put>> puts = this.hbaseStore.store(logContent, span);
                                 if (puts.containsKey(Constants.TABLE_TRACE)) {
                                     spanPuts.addAll(puts.get(Constants.TABLE_TRACE));
                                 }
@@ -126,6 +150,23 @@ public class RpcTraceTask implements Task {
             LOGGER.info("finally commit the offset");
             // 不需要主动调kafkaConsumer.close(), spring bean容器会调用
         }
+    }
+
+    /**
+     * 构造ServiceInfo
+     * @param serviceId
+     * @return
+     */
+    private ServiceInfo buildServiceInfo(String serviceId) {
+        String[] detail = serviceId.split(Constants.UNDER_LINE);
+        if (detail.length == 3) {
+            ServiceInfoPK serviceInfoPK = new ServiceInfoPK();
+            serviceInfoPK.setIface(detail[1]).setMethod(detail[2]);
+            ServiceInfo serviceInfo = new ServiceInfo();
+            return serviceInfo.setServiceInfoPK(serviceInfoPK).setId(detail[1] + Constants.UNDER_LINE + detail[2])
+                    .setFrom(detail[0]);
+        }
+        return null;
     }
 
     /**

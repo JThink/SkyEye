@@ -27,3 +27,16 @@ CREATE TABLE `name_info` (
   `app` varchar(255) NOT NULL,
   PRIMARY KEY (`name`, `type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `service_info`
+--
+
+DROP TABLE IF EXISTS `service_info`;
+CREATE TABLE `service_info` (
+  `iface` varchar(255) NOT NULL,
+  `method` varchar(255) NOT NULL,
+  `id` varchar(255) NOT NULL,
+  `from` varchar(255) NOT NULL,
+  PRIMARY KEY (`iface`, `method`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

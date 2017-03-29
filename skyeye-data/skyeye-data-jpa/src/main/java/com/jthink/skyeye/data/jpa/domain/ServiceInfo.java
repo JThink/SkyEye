@@ -1,5 +1,8 @@
 package com.jthink.skyeye.data.jpa.domain;
 
+import com.jthink.skyeye.data.jpa.pk.ServiceInfoPK;
+import org.springframework.data.annotation.Id;
+
 import javax.persistence.Column;
 
 /**
@@ -12,37 +15,39 @@ import javax.persistence.Column;
  */
 public class ServiceInfo {
 
-    // 服务的接口名
-    @Column(name = "iface", nullable = false)
-    private String iface;
-    // 服务的方法名
-    @Column(name = "method", nullable = false)
-    private String method;
-    // 为该服务分配的id, 每个iface作为一个service，同一个iface有1或多个method
+    @Id
+    private ServiceInfoPK serviceInfoPK;
+    // 为该服务分配的id, 每个iface作为一个service，同一个iface有1或多个method, 该id设置为serviceId（即，iface_method）
     @Column(name = "id", nullable = false)
     private String id;
+    // 从zk分配的哪个服务采集而来
+    @Column(name = "from", nullable = false)
+    private String from;
 
-    public String getIface() {
-        return iface;
+    public ServiceInfoPK getServiceInfoPK() {
+        return serviceInfoPK;
     }
 
-    public void setIface(String iface) {
-        this.iface = iface;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
+    public ServiceInfo setServiceInfoPK(ServiceInfoPK serviceInfoPK) {
+        this.serviceInfoPK = serviceInfoPK;
+        return this;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public ServiceInfo setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public ServiceInfo setFrom(String from) {
+        this.from = from;
+        return this;
     }
 }
