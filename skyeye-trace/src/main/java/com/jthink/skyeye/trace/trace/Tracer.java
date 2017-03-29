@@ -104,11 +104,16 @@ public class Tracer {
     public Span newSpan(String name, String serviceId) {
         boolean s = this.sampler.isCollect();
         Span span = new Span();
-        span.setTraceId(s ? this.generateTraceId() : null);
-        span.setId(s ? this.generateSpanId() : null);
+        String traceId = this.generateTraceId();
+        String spanId = this.generateSpanId();
+        span.setTraceId(s ? traceId : null);
+        span.setId(s ? spanId : null);
         span.setName(name);
         span.setServiceId(serviceId);
         span.setSample(s);
+        if (traceId.equals("-1") || spanId.equals("-1")) {
+            span.setSample(false);
+        }
         return span;
     }
 
