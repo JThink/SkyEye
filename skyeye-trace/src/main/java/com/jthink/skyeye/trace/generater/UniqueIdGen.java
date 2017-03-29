@@ -37,7 +37,26 @@ public class UniqueIdGen implements IdGen {
     // 当前毫秒生成的序列
     private long sequence = 0L;
 
-    public UniqueIdGen(long appHostId) {
+    // 单例
+    private static volatile UniqueIdGen idGen = null;
+
+    /**
+     * 实例化
+     * @param appHostId
+     * @return
+     */
+    public static UniqueIdGen getInstance(long appHostId) {
+        if (idGen == null) {
+            synchronized(UniqueIdGen.class) {
+                if (idGen == null) {
+                    idGen = new UniqueIdGen(appHostId);
+                }
+            }
+        }
+        return idGen;
+    }
+
+    private UniqueIdGen(long appHostId) {
         if (appHostId > MAX_APP_HOST_ID) {
             // zk分配的serviceId过大(基本小规模的公司不会出现这样的问题)
             throw new IllegalArgumentException(String.format("app host Id wrong: %d ", appHostId));

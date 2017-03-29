@@ -3,7 +3,8 @@ package com.jthink.skyeye.trace.trace;
 import com.jthink.skyeye.base.dapper.*;
 import com.jthink.skyeye.trace.collector.Collector;
 import com.jthink.skyeye.trace.collector.KafkaCollector;
-import com.jthink.skyeye.trace.generater.IdGen;
+import com.jthink.skyeye.trace.generater.IncrementIdGen;
+import com.jthink.skyeye.trace.generater.UniqueIdGen;
 import com.jthink.skyeye.trace.sampler.PercentageSampler;
 import com.jthink.skyeye.trace.sampler.Sampler;
 import org.slf4j.Logger;
@@ -29,9 +30,6 @@ public class Tracer {
 
     // 采样器实例
     private Sampler sampler = new PercentageSampler();
-
-    // 分布式全局唯一ID生成器实例
-    private IdGen idGen = null;
 
     // 收集器实例
     private Collector collector = new KafkaCollector();
@@ -127,7 +125,7 @@ public class Tracer {
      * @return
      */
     public String generateSpanId() {
-        return this.idGen.nextId();
+        return UniqueIdGen.getInstance(Long.parseLong(IncrementIdGen.getId())).nextId();
     }
 
     /**
@@ -135,7 +133,7 @@ public class Tracer {
      * @return
      */
     public String generateTraceId() {
-        return this.idGen.nextId();
+        return UniqueIdGen.getInstance(Long.parseLong(IncrementIdGen.getId())).nextId();
     }
 
     /**
@@ -212,11 +210,4 @@ public class Tracer {
         }
     }
 
-    public IdGen getIdGen() {
-        return idGen;
-    }
-
-    public void setIdGen(IdGen idGen) {
-        this.idGen = idGen;
-    }
 }
