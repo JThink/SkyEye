@@ -15,7 +15,7 @@ public enum EventType {
     middleware_opt(Constants.EVENT_TYPE_MIDDLEWARE_OPT, "中间件操作"),
     job_execute(Constants.EVENT_TYPE_JOB_EXECUTE, "job执行状态"),
     custom_log(Constants.EVENT_TYPE_CUSTOM_LOG, "自定义埋点日志"),
-    rpc_trace(Constants.EVENT_TYPE_THIRDPARTY_CALL, "rpc trace跟踪日志"),
+    rpc_trace(Constants.EVENT_TYPE_RPC_TRACE, "rpc trace跟踪日志"),
     thirdparty_call(Constants.EVENT_TYPE_THIRDPARTY_CALL, "第三方系统调用");
 
     private String symbol;

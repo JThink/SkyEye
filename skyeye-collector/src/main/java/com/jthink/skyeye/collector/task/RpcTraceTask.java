@@ -82,7 +82,7 @@ public class RpcTraceTask implements Task {
                         if (logDto != null) {
                             String logValue = logDto.getMessageMax();
                             String type = EventLog.parseEventType(logValue).symbol();
-                            if (type.equals(EventType.invoke_interface.symbol())) {
+                            if (type.equals(EventType.rpc_trace.symbol())) {
                                 // 如果是rpc trace日志
                                 RpcTraceLog log = RpcTraceLog.parseRpcTraceLog(logValue);
                                 String logContent = log.getLog();
@@ -93,11 +93,11 @@ public class RpcTraceTask implements Task {
                                 String serviceId = span.getServiceId();
                                 ServiceInfo serviceInfo = this.buildServiceInfo(serviceId);
                                 if (null != serviceInfo) {
-                                    if (!this.cacheService.isExists(CacheService.SERVICE_INFO_TYPE, serviceInfo.getId())) {
+                                    if (!this.cacheService.isExists(CacheService.SERVICE_INFO_TYPE, serviceInfo.getSid())) {
                                         // 如果api不存在
                                         LOGGER.info("从rpc trace中采集到service, 为: {}", serviceId);
                                         this.cacheService.save(serviceInfo);
-                                        this.cacheService.add(CacheService.SERVICE_INFO_TYPE, serviceInfo.getId());
+                                        this.cacheService.add(CacheService.SERVICE_INFO_TYPE, serviceInfo.getSid());
                                     }
                                 }
 
@@ -163,8 +163,8 @@ public class RpcTraceTask implements Task {
             ServiceInfoPK serviceInfoPK = new ServiceInfoPK();
             serviceInfoPK.setIface(detail[1]).setMethod(detail[2]);
             ServiceInfo serviceInfo = new ServiceInfo();
-            return serviceInfo.setServiceInfoPK(serviceInfoPK).setId(detail[1] + Constants.UNDER_LINE + detail[2])
-                    .setFrom(detail[0]);
+            return serviceInfo.setServiceInfoPK(serviceInfoPK).setSid(detail[1] + Constants.UNDER_LINE + detail[2])
+                    .setSfrom(detail[0]);
         }
         return null;
     }

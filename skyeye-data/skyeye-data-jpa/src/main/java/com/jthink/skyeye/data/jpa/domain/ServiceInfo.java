@@ -22,11 +22,11 @@ public class ServiceInfo {
     @Id
     private ServiceInfoPK serviceInfoPK;
     // 为该服务分配的id, 每个iface作为一个service，同一个iface有1或多个method, 该id设置为serviceId（即，iface_method）
-    @Column(name = "id", nullable = false)
-    private String id;
+    @Column(name = "sid", nullable = false)
+    private String sid;
     // 从zk分配的哪个服务采集而来
-    @Column(name = "from", nullable = false)
-    private String from;
+    @Column(name = "sfrom", nullable = false)
+    private String sfrom;
 
     public ServiceInfoPK getServiceInfoPK() {
         return serviceInfoPK;
@@ -37,21 +37,21 @@ public class ServiceInfo {
         return this;
     }
 
-    public String getId() {
-        return id;
+    public String getSid() {
+        return sid;
     }
 
-    public ServiceInfo setId(String id) {
-        this.id = id;
+    public ServiceInfo setSid(String sid) {
+        this.sid = sid;
         return this;
     }
 
-    public String getFrom() {
-        return from;
+    public String getSfrom() {
+        return sfrom;
     }
 
-    public ServiceInfo setFrom(String from) {
-        this.from = from;
+    public ServiceInfo setSfrom(String sfrom) {
+        this.sfrom = sfrom;
         return this;
     }
 }

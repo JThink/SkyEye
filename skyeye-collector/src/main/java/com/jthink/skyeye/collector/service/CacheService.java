@@ -113,7 +113,7 @@ public class CacheService implements InitializingBean {
 
         for (Iterator<ServiceInfo> it = serviceInfos.iterator(); it.hasNext();) {
             ServiceInfo serviceInfo = it.next();
-            this.setOps.add(SERVICE_INFO_PREFIX, serviceInfo.getId());
+            this.setOps.add(SERVICE_INFO_PREFIX, serviceInfo.getSid());
         }
 
         sw.stop();

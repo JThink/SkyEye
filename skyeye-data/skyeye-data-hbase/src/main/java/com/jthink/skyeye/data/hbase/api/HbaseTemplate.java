@@ -162,7 +162,6 @@ public class HbaseTemplate implements HbaseOperations {
             mutator = this.getConnection().getBufferedMutator(mutatorParams.writeBufferSize(3 * 1024 * 1024));
             action.doInMutator(mutator);
         } catch (Throwable throwable) {
-            sw.stop();
             status = EventLog.MONITOR_STATUS_FAILED;
             throw new HbaseSystemException(throwable);
         } finally {
