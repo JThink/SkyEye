@@ -1,6 +1,5 @@
 package com.jthink.skyeye.collector.dapper.store;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.dapper.*;
@@ -96,7 +95,7 @@ public class HbaseStore implements Store {
             long consumeTime = crAnnotation.getTimestamp() - csAnnotation.getTimestamp();
             String rowKey = span.getServiceId() + Constants.UNDER_LINE + csAnnotation.getTimestamp();
             Put put = new Put(Bytes.toBytes(rowKey));
-            put.addColumn(Bytes.toBytes(Constants.TABLE_TRACE_COLUMN_FAMILY), Bytes.toBytes(span.getTraceId()),
+            put.addColumn(Bytes.toBytes(Constants.TABLE_TIME_CONSUME_COLUMN_FAMILY), Bytes.toBytes(span.getTraceId()),
                     Bytes.toBytes(consumeTime));
             return put;
         }

@@ -159,12 +159,11 @@ public class RpcTraceTask implements Task {
      */
     private ServiceInfo buildServiceInfo(String serviceId) {
         String[] detail = serviceId.split(Constants.UNDER_LINE);
-        if (detail.length == 3) {
+        if (detail.length == 2) {
             ServiceInfoPK serviceInfoPK = new ServiceInfoPK();
-            serviceInfoPK.setIface(detail[1]).setMethod(detail[2]);
+            serviceInfoPK.setIface(detail[0]).setMethod(detail[1]);
             ServiceInfo serviceInfo = new ServiceInfo();
-            return serviceInfo.setServiceInfoPK(serviceInfoPK).setSid(detail[1] + Constants.UNDER_LINE + detail[2])
-                    .setSfrom(detail[0]);
+            return serviceInfo.setServiceInfoPK(serviceInfoPK).setSid(serviceId);
         }
         return null;
     }

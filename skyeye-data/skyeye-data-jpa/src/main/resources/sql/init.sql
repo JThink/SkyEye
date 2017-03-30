@@ -37,6 +37,5 @@ CREATE TABLE `service_info` (
   `iface` varchar(255) NOT NULL,
   `method` varchar(255) NOT NULL,
   `sid` varchar(255) NOT NULL,
-  `sfrom` varchar(255) NOT NULL,
   PRIMARY KEY (`iface`, `method`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
