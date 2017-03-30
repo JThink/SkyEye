@@ -1,9 +1,11 @@
 package com.jthink.skyeye.data.jpa.domain;
 
 import com.jthink.skyeye.data.jpa.pk.ServiceInfoPK;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * JThink@JThink
@@ -13,6 +15,8 @@ import javax.persistence.Column;
  * @desc rpc服务注册表
  * @date 2017-02-23 15:42:31
  */
+@Entity
+@Table(name = "service_info")
 public class ServiceInfo {
 
     @Id
