@@ -119,11 +119,11 @@ public class HbaseStore implements Store {
             List<Put> puts = new ArrayList<Put>();
             // 如果有自定义异常
             for (BinaryAnnotation annotation : annotations) {
-                String rowkey = span.getServiceId() + Constants.UNDER_LINE + annotation.getType()
+                String rowKey = span.getServiceId() + Constants.UNDER_LINE + annotation.getType()
                         + Constants.UNDER_LINE + this.getBinaryAnnotationTimestamp(annotationMap);
-                Put put = new Put(Bytes.toBytes(rowkey));
+                Put put = new Put(Bytes.toBytes(rowKey));
                 put.addColumn(Bytes.toBytes(Constants.TABLE_ANNOTATION_COLUMN_FAMILY), Bytes.toBytes(span.getTraceId()),
-                        Bytes.toBytes(annotation.getValue()));
+                        Bytes.toBytes(annotation.getValue() == null ? annotation.getType() : annotation.getValue()));
                 puts.add(put);
             }
             return puts;

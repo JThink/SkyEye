@@ -1,0 +1,28 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'application'
+
+dependencies {
+  compile project(":dubbo-service-client")
+  compile "skyeye:skyeye-data-http:$dataVersion"
+}
+
+configurations {
+  compile.exclude group: "log4j", module: "log4j"
+  compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
+
+buildscript {
+  repositories {
+    mavenLocal()
+    maven { url mavenPublicUrl }
+    mavenCentral()
+  }
+}
+
+startScripts {
+  doLast {
+    unixScript.text = unixScript.text.replaceAll("lib/(.*)\n", "lib/\\*")
+  }
+}
