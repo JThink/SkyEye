@@ -16,7 +16,18 @@ import java.util.concurrent.Executors;
 public class Launcher {
 
     public static void main(String[] args) {
-        ExecutorService executorService = Executors.newFixedThreadPool(1);
-        executorService.execute(new RpcCaller("trace/trace"));
+        ExecutorService executorService = Executors.newFixedThreadPool(12);
+        executorService.execute(new RpcCaller("trace/trace/1"));
+        executorService.execute(new RpcCaller("trace/trace/1"));
+        executorService.execute(new RpcCaller("trace/trace/2"));
+        executorService.execute(new RpcCaller("trace/trace/2"));
+        executorService.execute(new RpcCaller("trace/trace/3"));
+        executorService.execute(new RpcCaller("trace/trace/3"));
+        executorService.execute(new RpcCaller("trace/trace/4"));
+        executorService.execute(new RpcCaller("trace/trace/4"));
+        executorService.execute(new RpcCaller("trace/trace/5"));
+        executorService.execute(new RpcCaller("trace/trace/5"));
+        executorService.execute(new RpcCaller("trace/trace/6"));
+        executorService.execute(new RpcCaller("trace/trace/6"));
     }
 }
