@@ -1,4 +1,4 @@
-package com.jthink.skyeye.statistics.model.value.statistic
+package com.jthink.skyeye.statistics.model.value.rpc
 
 import com.jthink.skyeye.statistics.model.value.Value
 
