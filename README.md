@@ -94,7 +94,7 @@ mvn clean install deploy -Dmaven.test.skip=true
 | 软件名           | 版本             | 备注                                       |
 | :------------ | -------------- | ---------------------------------------- |
 | mysql         | 5.5+           |                                          |
-| elasticsearch | 2.3.3          | 未测试5.x版本（开发的时候最新版本只有2.3.x），需要假设sql引擎，见:[elasticsearch-sql](https://github.com/NLPchina/elasticsearch-sql/)，需要安装IK分词并启动，见：[es ik分词](http://blog.csdn.net/jthink_/article/details/51878738) |
+| elasticsearch | 2.3.3          | 未测试5.x版本（开发的时候最新版本只有2.3.x），需要假设sql引擎，见: [elasticsearch-sql](https://github.com/NLPchina/elasticsearch-sql/)，需要安装IK分词并启动，见: [es ik分词](http://blog.csdn.net/jthink_/article/details/51878738) |
 | kafka         | 0.10.0.1       | 如果spark的版本较低，那么需要将kafka的日志的格式降低，具体在kafka的配置项加入：log.message.format.version=0.8.2，该项按需配置 |
 | jdk           | 1.7+           |                                          |
 | zookeeper     | 3.4.6          |                                          |
