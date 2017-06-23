@@ -53,11 +53,11 @@ gradle clean install uploadArchives
 
 ### skyeye-data-dubbox
 
-该项目主要是自定义的spring-boot的dubbox starter，为spring-boot相关的项目使用dubbox提供简易的方式并集成spring-boot的auto configuration，见我的另一个开源项目：https://github.com/JThink/spring-boot-starter-dubbox
+该项目主要是自定义的spring-boot的dubbox starter，为spring-boot相关的项目使用dubbox提供简易的方式并集成spring-boot的auto configuration，见我的另一个开源项目：[spring-boot-starter-dubbox](https://github.com/JThink/spring-boot-starter-dubbox)
 
 ### skyeye-data-hbase
 
-该项目主要是自定义的spring-boot的hbase starter，为hbase的query和更新等操作提供简易的api并集成spring-boot的auto configuration，见我的另一个开源项目：https://github.com/JThink/spring-boot-starter-hbase
+该项目主要是自定义的spring-boot的hbase starter，为hbase的query和更新等操作提供简易的api并集成spring-boot的auto configuration，见我的另一个开源项目：[spring-boot-starter-hbase](https://github.com/JThink/spring-boot-starter-hbase)
 
 ### skyeye-data-http
 
@@ -77,7 +77,7 @@ gradle clean install uploadArchives
 
 ### dubbox
 
-由于使用dubbox，为了能够采集到dubbox里面的rpc数据，需要修改dubbox的源码，见：https://github.com/JThink/dubbox/tree/skyeye-trace，该项目主要实现了rpc跟踪的具体实现，需要单独打包。
+由于使用dubbox，为了能够采集到dubbox里面的rpc数据，需要修改dubbox的源码，见我修改的dubbox项目：[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace)，该项目主要实现了rpc跟踪的具体实现，需要单独打包。
 
 ```shell
 git clone https://github.com/JThink/dubbox.git
@@ -94,7 +94,7 @@ mvn clean install deploy -Dmaven.test.skip=true
 | 软件名           | 版本             | 备注                                       |
 | :------------ | -------------- | ---------------------------------------- |
 | mysql         | 5.5+           |                                          |
-| elasticsearch | 2.3.3          | 未测试5.x版本（开发的时候最新版本只有2.3.x），需要假设sql引擎，见:https://github.com/NLPchina/elasticsearch-sql/，需要安装IK分词并启动，见：http://blog.csdn.net/jthink_/article/details/51878738 |
+| elasticsearch | 2.3.3          | 未测试5.x版本（开发的时候最新版本只有2.3.x），需要假设sql引擎，见:[elasticsearch-sql](https://github.com/NLPchina/elasticsearch-sql/)，需要安装IK分词并启动，见：[es ik分词](http://blog.csdn.net/jthink_/article/details/51878738) |
 | kafka         | 0.10.0.1       | 如果spark的版本较低，那么需要将kafka的日志的格式降低，具体在kafka的配置项加入：log.message.format.version=0.8.2，该项按需配置 |
 | jdk           | 1.7+           |                                          |
 | zookeeper     | 3.4.6          |                                          |
@@ -137,7 +137,7 @@ bash start.sh event-log http://192.168.xx.xx:9200,http://192.168.xx.xx:9200,....
 
 注意点：如果es版本为5.x，那么需要修改skyeye-collector/src/main/resources/shell/es/app-log/create-index.py的49和50行为下面内容：
 'messageSmart': { 'type': 'text', 'analyzer': 'ik_smart', 'search_analyzer': 'ik_smart', 'include_in_all': 'true', 'boost': 8},
-                    'messageMax': { 'type': 'text', 'analyzer': 'ik_max_word', 'search_analyzer': 'ik_max_word', 'include_in_all': 'true', 'boost': 8}
+'messageMax': { 'type': 'text', 'analyzer': 'ik_max_word', 'search_analyzer': 'ik_max_word', 'include_in_all': 'true', 'boost': 8}
 ```
 
 ### kafka
@@ -467,7 +467,7 @@ compile ("skyeye:skyeye-client:0.0.1") {
 ## 注意点
 ## logback
 - 目前公司很多项目采用的是spring-boot，版本为1.3.6.RELEASE，该版本自带logback版本为1.1.7，该版本结合kafka有bug，需要降低一个版本
-- logback bug: http://jira.qos.ch/browse/LOGBACK-1158, 1.1.8版本会fix
+- logback bug: [logback bug](http://jira.qos.ch/browse/LOGBACK-1158), 1.1.8版本会fix
 - 示例：
 
 ``` shell
@@ -483,7 +483,7 @@ compile "ch.qos.logback:logback-core:1.1.6"
 ### 中间件
 如果项目中有使用到zkClient、，统一使用自己打包的版本，以防日志收集出错或者异常（PS：zk必须为3.4.6版本，尽量使用gradle进行打包部署）
 ### rpc trace
-使用自己打包的dubbox（https://github.com/JThink/dubbox/tree/skyeye-trace），在soa中间件dubbox中封装了rpc的跟踪
+使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace)），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
 compile "com.101tec:zkclient:0.9.1-up"
