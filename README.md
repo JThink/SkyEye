@@ -134,6 +134,10 @@ cd app-log
 bash start.sh app-log http://192.168.xx.xx:9200,http://192.168.xx.xx:9200,......
 cd event-log
 bash start.sh event-log http://192.168.xx.xx:9200,http://192.168.xx.xx:9200,......
+
+注意点：如果es版本为5.x，那么需要修改skyeye-collector/src/main/resources/shell/es/app-log/create-index.py的49和50行为下面内容：
+'messageSmart': { 'type': 'text', 'analyzer': 'ik_smart', 'search_analyzer': 'ik_smart', 'include_in_all': 'true', 'boost': 8},
+                    'messageMax': { 'type': 'text', 'analyzer': 'ik_max_word', 'search_analyzer': 'ik_max_word', 'include_in_all': 'true', 'boost': 8}
 ```
 
 ### kafka
