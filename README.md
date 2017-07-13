@@ -413,7 +413,7 @@ compile ("skyeye:skyeye-client:0.0.1") {
 }
 ```
 ### 配置
-在logback.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下：
+在logback.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
 
 ``` xml
 <property name="APP_NAME" value="your-app-name" />
@@ -425,6 +425,7 @@ compile ("skyeye:skyeye-client:0.0.1") {
     </layout>
   </encoder>
   <topic>${kafka.topic}</topic>
+  <rpc>none</rpc>
   <zkServers>${zookeeper.servers}</zkServers>
   <mail>${mail}</mail>
   <keyBuilder class="com.jthink.skyeye.client.kafka.partitioner.AppHostKeyBuilder" />
@@ -446,7 +447,7 @@ compile ("skyeye:skyeye-client:0.0.1") {
 }
 ```
 ### 配置
-在log4j.xml中加入一个kafkaAppender
+在log4j.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
 
 ``` xml
 <appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.log4j.KafkaAppender">
@@ -454,6 +455,7 @@ compile ("skyeye:skyeye-client:0.0.1") {
   <param name="zkServers" value="${zookeeper.servers}"/>
   <param name="app" value="${app.name}"/>
   <param name="mail" value="${mail}"/>
+  <param name="rpc" value="dubbo" />
   <param name="bootstrapServers" value="${kafka.bootstrap.servers}"/>
   <param name="acks" value="0"/>
   <param name="maxBlockMs" value="5000"/>
