@@ -1,7 +1,7 @@
 /**
  * require js lib
  *
- * @author JThink
+ * @author qianjc
  */
 var basePath = './libs/', min = '.min';
 require.config({
@@ -34,7 +34,8 @@ require.config({
     'echarts-theme-macarons': basePath + 'echarts/theme/macarons',
     'echarts-theme-roma': basePath + 'echarts/theme/roma',
     'echarts-theme-shine': basePath + 'echarts/theme/shine',
-    'echarts-theme-walden': basePath + 'echarts/theme/walden'
+    'echarts-theme-walden': basePath + 'echarts/theme/walden',
+    'jedate': basePath + 'jedate/jquery.jedate' + min
   },
   shim: {
     underscore: {
@@ -122,8 +123,8 @@ require.config({
       ],
       exports: 'angular.mock'
     },
-    echarts:{
-       exports: 'echarts'
+    echarts: {
+      exports: 'echarts'
     },
     'echarts-theme-chalk': {
       exports: 'echarts-theme-chalk'
@@ -142,6 +143,12 @@ require.config({
     },
     'echarts-theme-walden': {
       exports: 'echarts-theme-walden'
+    },
+    jedate: {
+      deps: [
+        'jquery'
+      ],
+      exports: 'jedate'
     }
   },
   priority: [
@@ -175,6 +182,7 @@ require([
   'echarts-theme-roma',
   'echarts-theme-shine',
   'echarts-theme-walden',
+  'jedate',
   'controllers/platformController',
   'controllers/homeController',
   'controllers/log/historyController',
@@ -183,10 +191,12 @@ require([
   'controllers/app/deployController',
   'controllers/app/statusController',
   'controllers/statistics/apiController',
-  'controllers/statistics/thirdController'
-], function(angular, app) {
+  'controllers/statistics/thirdController',
+  'controllers/rpctrace/traceController',
+  'controllers/rpctrace/chainController'
+], function (angular, app) {
   'use strict';
-  angular.element().ready(function() {
+  angular.element().ready(function () {
     angular.bootstrap(document, [app.name]);
   });
 });

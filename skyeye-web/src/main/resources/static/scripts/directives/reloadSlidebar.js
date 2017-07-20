@@ -1,7 +1,7 @@
 /**
  * reload slidebar directives
  *
- * @author JThink
+ * @author qianjc
  */
 define(['directives/directives'], function(directives) {
   directives.directive('reloadslidebar', function($rootScope) {
