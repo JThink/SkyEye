@@ -1,7 +1,7 @@
 /**
  * the app status controller
  *
- * @author JThink
+ * @author qianjc
  */
 define(['controllers/controllers', 'common/util','common/constant', 'services/dataService'], function(controllers, util, constant) {
   'use strict';

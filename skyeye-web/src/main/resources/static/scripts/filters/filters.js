@@ -1,7 +1,7 @@
 /**
  * the filters module
  * 
- * @author JThink
+ * @author qianjc
  */
 define(['angular'], function(angular) {
   'use strict';

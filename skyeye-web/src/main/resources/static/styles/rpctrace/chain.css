@@ -1,0 +1,421 @@
+.main .container-fluid {
+  overflow: hidden;
+}
+
+.trace-chain.row {
+  margin-left: 2%;
+  margin-right: 2%;
+  padding-bottom: 30px;
+  font-family: 'Glyphicons Halflings', "Ubuntu", serif;
+  /*overflow-x: hidden;*/
+  /*overflow-y: visible;*/
+}
+.row.trace-chain.ng-scope {
+  /*overflow-x: hidden;*/
+  /*overflow-y: visible;*/
+  overflow: hidden;
+}
+
+.trace-chain .input-group {
+  width: 88px;
+}
+.trace-chain .filter {
+  background: #FFF none repeat scroll 0 0;
+  border-bottom: 1px solid #E7E7E7;
+  padding: 10px 15px;
+  height: 53px;
+}
+
+.trace-chain .chain-content-panel {
+  background-color: #FFF;
+  border-bottom: 1px solid #E7E7E7;
+  padding: 10px 15px 30px 15px;
+  min-height: 500px;
+  overflow-x: visible;
+}
+
+.trace-chain .form-group label {
+  font-size: 14px;
+  padding-bottom: 3px;
+}
+
+.trace-chain-panel {
+  margin-left: 0;
+  margin-right: 0;
+  overflow-x: visible;
+}
+
+.trace-chain-panel .trace-chain-panel-title {
+  /*border: #cccccc solid 1px;*/
+  /*border-radius: 3px;*/
+  min-height: 40px;
+  width: 100%;
+  background-color: #EEE;
+}
+
+.trace-chain-panel-body {
+  padding-top: 10px;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.trace-chain-panel-detail {
+  width: 100%;
+}
+
+.trace-chain-item {
+  width: 100%;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap;
+  height: 25px;
+  max-height: 25px;
+}
+
+.trace-chain-item > div:first-child {
+  width: 15%;
+  display: inline-block;
+  float: left;
+  height: 25px;
+  /*border: #000 solid 1px;*/
+  overflow: hidden;
+  /*padding: 2px 0 0 5px;*/
+}
+
+.scale-plate {
+  width: 85%;
+  max-width: 85%;
+  height: 25px;
+  max-height: 25px;
+  overflow: visible;
+  display: inline-block;
+  float: left;
+  white-space: nowrap;
+}
+
+.scale-plate > div {
+  width: 20%;
+  overflow: visible;
+  float: left;
+  display: inline-block;
+  white-space: nowrap;
+  height: 25px;
+  font-size: 12px;
+}
+
+.trace-chain-item[level] {
+  overflow: visible;
+}
+
+.node-0 {
+  position: relative;
+  left: -5px;
+  float: left;
+}
+
+.node-1 {
+  position: relative;
+  left: -12px;
+  float: left;
+}
+
+.node-2 {
+  position: relative;
+  left: -12px;
+  float: left;
+}
+
+.node-3 {
+  position: relative;
+  left: -12px;
+  float: left;
+}
+
+.node-4 {
+  position: relative;
+  left: -12px;
+  float: left;
+}
+
+.node-5 {
+  position: relative;
+  left: -10px;
+  float: right;
+}
+
+.trace-chain-item > .title {
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+.trace-chain-item > .title > div > span {
+  position: relative;
+  padding: 0 3px 5px 3px;
+  margin-right: 5px;
+  float: left;
+  display: block;
+  white-space: nowrap;
+  color: #CCC;
+  background-color: #FFF;
+  cursor: pointer;
+}
+
+.trace-chain-item > .title > i {
+  position: relative;
+  top: -1px;
+  padding: 7px 3px 5px 3px;
+  margin-right: 5px;
+  float: left;
+  display: block;
+  white-space: nowrap;
+  color: #CCC;
+  background-color: #FFF;
+  cursor: pointer;
+}
+
+.trace-chain-item > .title > * {
+  float: left;
+  display: block;
+  white-space: nowrap;
+}
+
+.trace-chain-item > .title > div {
+  width: 100%;
+  height: 23px;
+  margin-top: 1px;
+  line-height: 23px;
+  cursor: default;
+}
+
+.trace-chain-item *::selection {
+  /*background: none;*/
+}
+
+.scale-plate.plate > div > div {
+  margin-top: 3px;
+  line-height: 20px;
+}
+
+.trace-chain-item[level] > .title > div {
+  color: #FFF;
+  /*background-color: #00A2E8;*/
+  background-color: #0084B4;
+}
+
+.trace-chain-item[level] > .scale-plate > div {
+  margin-top: 12px;
+  height: 2px;
+  border-left: 1px #000000 solid;
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+}
+
+.trace-chain-item[level] > .scale-plate > div:last-child {
+  border-right: 1px #000000 solid;
+}
+
+.trace-chain-item[level] > .scale {
+  margin: 1px 0 1px 0;
+  height: 23px;
+  width: 85%;
+  display: inline-block;
+  left: -85%;
+  position: relative;
+}
+
+.trace-chain-item[level] > .scale:hover {
+  background-color: #EAEAEA;
+}
+
+.trace-chain-item[level] > .scale.anchor {
+  background-color: #EAEAEA;
+}
+
+.trace-chain-item[level] > .scale:hover > .line {
+  margin-top: 1px;
+  height: 21px;
+  /*box-shadow: 0px 0px 1px 1px aqua;*/
+  box-shadow: 0 0 1px 1px #00A2E8;
+}
+
+.trace-chain-item[level] > .scale.anchor > .line {
+  margin-top: 1px;
+  height: 21px;
+  /*box-shadow: 0px 0px 1px 1px aqua;*/
+  box-shadow: 0 0 1px 1px #00A2E8;
+}
+
+.trace-chain-item[level] > .scale.anchor > .line.anchor {
+  margin-top: 1px;
+  height: 21px;
+  /*box-shadow: 0px 0px 1px 1px aqua;*/
+  box-shadow: 0 0 1px 1px #00A2E8;
+}
+
+.line:hover + .float-detail {
+  display: block;
+  z-index: 100;
+}
+
+.scale.anchor .float-detail {
+  display: block;
+  z-index: 100;
+}
+
+.line.anchor + .float-detail {
+  display: block;
+  z-index: 100;
+}
+
+.float-detail.anchor {
+  display: block;
+  z-index: 100;
+}
+
+.trace-chain-item[level] > .scale > .line {
+  /*background-color: #1F4E78;*/
+  /*background-color: #2F75B5;*/
+  /*background-color: #9BC2E6;*/
+  /*background-color: #BDD7EE;*/
+  /*background-color: #DDEBF7;*/
+  /*background-color: #1F4E78;*/
+  height: 23px;
+  position: relative;
+  display: inline-block;
+  border: none;
+  color: #333333;
+  opacity: 1;
+  padding-left: 5px;
+}
+
+.trace-chain-item[level='2'] > .title {
+  padding-left: 18px;
+}
+
+.trace-chain-item[level='3'] > .title {
+  padding-left: 36px;
+}
+
+.trace-chain-item[level='4'] > .title {
+  padding-left: 54px;
+}
+
+.trace-chain-item[level='5'] > .title {
+  padding-left: 72px;
+}
+
+.trace-chain-item[level='6'] > .title {
+  padding-left: 90px;
+}
+
+.trace-chain-item[level='1'] > .scale > .line {
+  background-color: #ECF4FA;
+}
+
+.trace-chain-item[level='2'] > .scale > .line {
+  background-color: #D9E9F4;
+}
+
+.trace-chain-item[level='3'] > .scale > .line {
+  background-color: #B3D3E8;
+}
+
+.trace-chain-item[level='4'] > .scale > .line {
+  background-color: #8DBDDD;
+}
+
+.trace-chain-item[level='5'] > .scale > .line {
+  background-color: #67A7D1;
+}
+
+.trace-chain-item[level='6'] > .scale > .line {
+  background-color: #4292C6;
+}
+
+.float-detail {
+  display: none;
+  position: absolute;
+  width: 560px;
+  min-height: 50px;
+  background-color: #428BCA;
+  color: #FFF;
+  font-size: 14px;
+  padding: 0 10px 10px 10px;
+  margin: -2px 0 0 0;
+  left: 1px;
+  /*border-radius: 5px;*/
+  /*box-shadow: 2px 2px 3px #AAA;*/
+  box-shadow: 0 0 1px 1px #CCC;
+}
+
+.float-detail > table {
+  width: 100%;
+  float: left;
+}
+
+.float-detail td:nth-child(1) {
+  width: 70px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.float-detail td:nth-child(3) {
+  width: 70px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+startTime {
+  display: none;
+}
+
+.pagination a {
+  cursor: pointer;
+  color: #337ab7;
+}
+
+.pagination a::selection {
+  color: #337ab7;
+  background-color: #FFF;
+}
+
+.pagination {
+  float: right;
+
+}
+
+.trace-chain-panel .pagination > li.disabled > a:hover {
+  cursor: default;
+}
+
+.jedatebox p {
+  text-indent: 0;
+}
+
+#startTime {
+  width: 97px;
+}
+
+#endTime {
+  width: 97px;
+}
+
+.form-control.input-right[type='text'] {
+  border-radius: 0 4px 4px 0;
+  width: 80px;
+  display: inline-block;
+  float: left;
+}
+
+.input-group-btn > btn.btn-default {
+  display: inline-block;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.control-label {
+  padding-bottom: 3px;
+}

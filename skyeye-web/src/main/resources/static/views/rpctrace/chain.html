@@ -1,0 +1,256 @@
+<link href="/styles/libs/jedate/jedate.css" rel="stylesheet">
+<div class="row trace-chain">
+  <div class="filter">
+    <h3 class="block-title pull-left">
+      <span></span>
+    </h3>
+    <div class="pull-left item">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="ifaceSelect"></label>
+          <select class="form-control" id="ifaceSelect" ng-model="ifaceSelect" ng-change="ifaceChange()"
+                  ng-options="x for x in ifaces" ng-init="ifaceSelect=ifaces[0]">
+            <option value="" disabled>选择服务</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="methodSelect"></label>
+          <select class="form-control" id="methodSelect" ng-model="methodSelect" ng-change="methodChange()"
+                  ng-options="x for x in methods" ng-init="methodSelect=methods[0]">
+            <option value="" disabled>选择方法</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="methodSelect"></label>
+          <select class="form-control" id="" ng-model="typeSelect" ng-change="methodChange()">
+            <option value="">全部数据</option>
+            <option value="dubbo.exception">dubbo异常</option>
+            <option value="dubbo.timeoutexception">超时</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="startTime">　时间范围</label>
+        </div>
+        <div class="form-group input-group">
+          <input type="text" class="form-control" name="startTime" id="startTime"
+                 ng-click="dateRange($event, 'startTimeOpened')"
+                 ng-change="search()"
+                 datepicker-popup ng-model="startTime" min-date="minDate" max-date="today"
+                 is-open="startTimeOpened" close-text="Close"
+          />
+        </div>
+        <div class="form-group" style="margin-left: -13px">
+          <button type="button" ng-click="dateRange($event, 'startTimeOpened')" class="btn btn-default">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </button>
+        </div>
+        <div class="form-group" style="margin-left: -13px">
+          <input type="text" class="form-control input-right" ng-change="search()" ng-model="startTimeHMS"/>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="endTime">至</label>
+        </div>
+        <div class="form-group input-group ">
+          <input type="text" class="form-control" name="endTime" id="endTime"
+                 ng-click="dateRange($event, 'endTimeOpened')"
+                 ng-change="search()"
+                 datepicker-popup ng-model="endTime" min-date="minDate" max-date="today"
+                 is-open="endTimeOpened" close-text="Close"/>
+        </div>
+        <div class="form-group" style="margin-left: -13px">
+          <button type="button" ng-click="dateRange($event, 'endTimeOpened')" class="btn btn-default">
+            <i class="glyphicon glyphicon-calendar"></i>
+          </button>
+        </div>
+        <div class="form-group" style="margin-left: -13px">
+          <input type="text" class="form-control input-right" ng-change="search()" ng-model="endTimeHMS"/>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="panel-body chain-content-panel">
+    <div class="trace-chain-panel">
+      <div class="trace-chain-panel-title"></div>
+      <div class="trace-chain-panel-body">
+        <div class="trace-chain-panel-detail">
+          <div class="trace-chain-item">
+            <div class="title">
+              <div>Service</div>
+            </div>
+            <div class="scale-plate plate">
+              <div>
+                <div class="node node-0">0</div>
+              </div>
+              <div>
+                <div class="node node-1">20ms</div>
+              </div>
+              <div>
+                <div class="node node-2">40ms</div>
+              </div>
+              <div>
+                <div class="node node-3">60ms</div>
+              </div>
+              <div>
+                <div class="node node-4">80ms</div>
+                <div class="node node-5">100ms</div>
+              </div>
+            </div>
+          </div>
+          <!--
+          <div class="trace-chain-item" level="1">
+            <div class="title">
+              <div><span><i class="glyphicon glyphicon-chevron-right"></i></span> AAAAA</div>
+            </div>
+            <div class="scale-plate">
+              <div>
+                <div class="node-0"></div>
+              </div>
+              <div>
+                <div class="node-1"></div>
+              </div>
+              <div>
+                <div class="node-2"></div>
+              </div>
+              <div>
+                <div class="node-3"></div>
+              </div>
+              <div>
+                <div class="node-4"></div>
+                <div class="node-5"></div>
+              </div>
+            </div>
+            <div class="scale">
+              <div class="line" style="left: 0;width: 52%"></div>
+            </div>
+          </div>
+          <div class="trace-chain-item" level="2">
+            <div class="title">
+              <div><span><i class="glyphicon glyphicon-chevron-down"></i></span> BBBBB</div>
+            </div>
+            <div class="scale-plate">
+              <div>
+                <div class="node-0"></div>
+              </div>
+              <div>
+                <div class="node-1"></div>
+              </div>
+              <div>
+                <div class="node-2"></div>
+              </div>
+              <div>
+                <div class="node-3"></div>
+              </div>
+              <div>
+                <div class="node-4"></div>
+                <div class="node-5"></div>
+              </div>
+            </div>
+            <div class="scale">
+              <div class="line" style="left: 20%;width: 47%">
+              </div>
+              <div class="float-detail">明细BBBBBBBBBBBBBBBBBB<br/>CCCCCCC</div>
+            </div>
+          </div>
+          <div class="trace-chain-item" level="3">
+            <div class="title">
+              <div><span><i class="glyphicon glyphicon-chevron-right"></i></span> CCCCC</div>
+            </div>
+            <div class="scale-plate">
+              <div>
+                <div class="node-0"></div>
+              </div>
+              <div>
+                <div class="node-1"></div>
+              </div>
+              <div>
+                <div class="node-2"></div>
+              </div>
+              <div>
+                <div class="node-3"></div>
+              </div>
+              <div>
+                <div class="node-4"></div>
+                <div class="node-5"></div>
+              </div>
+            </div>
+            <div class="scale">
+              <div class="line" style="left: 30%;width: 58%"></div>
+            </div>
+          </div>
+          <div class="trace-chain-item" level="4">
+            <div class="title">
+              <div><i class="glyphicon glyphicon-minus"></i> DDDDD</div>
+            </div>
+            <div class="scale-plate">
+              <div>
+                <div class="node-0"></div>
+              </div>
+              <div>
+                <div class="node-1"></div>
+              </div>
+              <div>
+                <div class="node-2"></div>
+              </div>
+              <div>
+                <div class="node-3"></div>
+              </div>
+              <div>
+                <div class="node-4"></div>
+                <div class="node-5"></div>
+              </div>
+            </div>
+            <div class="scale">
+              <div class="line" style="left: 50%;width: 32%"></div>
+            </div>
+          </div>
+          <div class="trace-chain-item" level="5">
+            <div class="title">
+              <div><i class="glyphicon glyphicon-chevron-right"></i> EEEEEE</div>
+            </div>
+            <div class="scale-plate">
+              <div>
+                <div class="node-0"></div>
+              </div>
+              <div>
+                <div class="node-1"></div>
+              </div>
+              <div>
+                <div class="node-2"></div>
+              </div>
+              <div>
+                <div class="node-3"></div>
+              </div>
+              <div>
+                <div class="node-4"></div>
+                <div class="node-5"></div>
+              </div>
+            </div>
+            <div class="scale">
+              <div class="line" style="left: 68%;width: 28%"></div>
+            </div>
+          </div>
+          -->
+        </div>
+
+
+        <nav aria-label="Page navigation">
+          <ul class="pagination" id="chainPagination">
+            <li class="disabled">
+              <a aria-label="Previous">
+                <span>&laquo;</span>
+              </a>
+            </li>
+            <li class="active"><a>1</a></li>
+            <li class='disabled'>
+              <a aria-label="Next">
+                <span>&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+
+</div>
