@@ -39,6 +39,14 @@ define(['angular', 'controllers/controllers', 'services/services', 'filters/filt
       url: '/statistics/third',
       templateUrl : 'views/statistics/third.html',
       controller : 'ThirdController'
+    }).state('rpctrace-trace', {
+        url: '/rpctrace/trace',
+        templateUrl: 'views/rpctrace/trace.html',
+        controller: 'TraceController'
+    }).state('rpctrace-chain', {
+        url: '/rpctrace/chain',
+        templateUrl: 'views/rpctrace/chain.html',
+        controller: 'ChainController'
     });
   }]).run(['$rootScope', '$location', '$state', function($rootScope, $location, $state) {
     // change for debug

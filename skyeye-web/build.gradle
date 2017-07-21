@@ -37,6 +37,7 @@ dependencies {
   compile "skyeye:skyeye-base:$baseVersion"
   compile "skyeye:skyeye-data-jpa:$dataVersion"
   compile "skyeye:skyeye-data-http:$dataVersion"
+  compile "skyeye:skyeye-data-hbase:$dataVersion"
   compile "skyeye:skyeye-data-rabbitmq:$dataVersion"
   compile ("org.springframework.boot:spring-boot-starter") {
     exclude group: 'ch.qos.logback', module: 'logback-classic'

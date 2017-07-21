@@ -1,7 +1,7 @@
 /**
  * chartUtil js
  *
- * @author xxx
+ * @author Aiur
  */
 define(['jquery', 'echarts', 'common/util', 'underscore'], function ($, echarts, util, _) {
 

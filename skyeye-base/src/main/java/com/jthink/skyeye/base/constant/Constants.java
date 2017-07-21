@@ -209,4 +209,15 @@ public class Constants {
     public static final String RPC_TYPE_NONE = "none";
     public static final String RPC_TYPE_DUBBO = "dubbo";
     public static final String RPC_TYPE_THRIFT = "thrift";
+
+    // rpc trace 统计指标相关
+    public static final String TRACE_SUCCESS = "success";
+    public static final String TRACE_FAIL = "fail";
+    public static final String TRACE_MAX = "max";
+    public static final String TRACE_MIN = "min";
+    public static final String TRACE_AVERAGE = "average";
+    public static final String TRACE_TOTAL = "total";
+    public static final String TRACE_TYPE = "type";
+    public static final String TRACE_TABLE_NAME = "rpctrace";
+
 }
