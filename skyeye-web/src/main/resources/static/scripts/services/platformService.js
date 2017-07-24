@@ -65,8 +65,23 @@ define(['services/services', 'services/dataService'], function(services, dataSer
           }]
         };
 
+        var rpctrace = {
+          key: 'rpctrace',
+          name: 'Rpc追踪',
+          icon: 'icon-rpctrace',
+          sub: [{
+            // key: 'trace',
+            // name: '服务调用统计',
+            // href: 'rpctrace-trace'
+          // }, {
+            key: 'chain',
+            name: '跟踪链信息',
+            href: 'rpctrace-chain'
+          }]
+        };
+
         return {
-          menu: [home, log, app, statistics]
+          menu: [home, log, app, statistics, rpctrace]
         }
       }
     };
