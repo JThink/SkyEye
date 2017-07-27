@@ -8,7 +8,7 @@ compileJava.options.encoding = 'UTF-8'
 buildDir = 'target'
 
 ext {
-  springBootVersion = '1.3.6.RELEASE'
+  springBootVersion = '1.5.4.RELEASE'
   springVersion = '4.2.7.RELEASE'
   dubboVersion = '2.8.4-skyeye-trace'
   slf4jVersion = '1.7.21'

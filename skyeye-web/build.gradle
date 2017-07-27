@@ -76,7 +76,7 @@ mainClassName = 'com.jthink.skyeye.web.application.Application'
 
 buildscript {
   ext {
-    springBootVersion = '1.3.6.RELEASE'
+    springBootVersion = '1.5.4.RELEASE'
   }
 
   repositories {
