@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 group = 'skyeye'
-version = '0.0.1'
+version = '1.0.0'
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'

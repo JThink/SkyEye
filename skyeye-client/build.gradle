@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 group = 'skyeye'
-version = '0.0.1'
+version = '1.0.0'
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
@@ -19,8 +19,8 @@ ext {
   log4jVersion = '1.2.17'
   zookeeperVersion = '3.4.6'
   zkclientVersion = '0.9.1-up'
-  baseVersion = '0.0.1'
-  traceVersion = '0.0.1'
+  baseVersion = '1.0.0'
+  traceVersion = '1.0.0'
 }
 
 repositories {

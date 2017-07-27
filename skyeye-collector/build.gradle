@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 group = 'skyeye'
 applicationName = 'skyeye-collector'
-version = '0.0.1'
+version = '1.0.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -25,8 +25,8 @@ ext {
   logbackVersion = '1.1.6'
   kafkaVersion = '0.10.0.1'
   esVersion = '2.3.3'
-  traceVersion = '0.0.1'
-  dataVersion = '0.0.1'
+  traceVersion = '1.0.0'
+  dataVersion = '1.0.0'
   zkclientVersion = '0.9.1-up'
   hadoopVersion = '2.6.0-cdh5.4.0'
   fastJsonVersion = '1.2.28'

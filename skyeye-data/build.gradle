@@ -4,7 +4,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'skyeye'
-  version = '0.0.1'
+  version = '1.0.0'
 
   sourceCompatibility = 1.7
   targetCompatibility = 1.7
@@ -55,7 +55,7 @@ subprojects {
 
   ext {
     slf4jVersion = '1.7.21'
-    baseVersion = '0.0.1'
+    baseVersion = '1.0.0'
   }
 
   [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
