@@ -8,7 +8,7 @@ compileJava.options.encoding = 'UTF-8'
 buildDir = 'target'
 
 ext {
-  springBootVersion = '1.3.6.RELEASE'
+  springBootVersion = '1.5.4.RELEASE'
   jacksonVersion = '1.9.13'
 }
 
