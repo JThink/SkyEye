@@ -20,7 +20,7 @@ class SparkConfiguration {
 
   @Bean
   def sparkContext(): SparkContext = {
-    val conf = new SparkConf().setAppName(this.taskProperties.getName)
+    val conf = new SparkConf().setAppName(this.taskProperties.getRpcJobName)
     val sc = new SparkContext(conf)
     sc
   }
