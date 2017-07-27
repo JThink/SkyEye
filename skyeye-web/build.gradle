@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 group = 'skyeye'
 applicationName = 'skyeye-web'
-version = '0.0.1'
+version = '1.0.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -25,8 +25,8 @@ repositories {
 
 ext {
   logbackVersion = '1.1.6'
-  baseVersion = '0.0.1'
-  dataVersion = '0.0.1'
+  baseVersion = '1.0.0'
+  dataVersion = '1.0.0'
   jacksonVersion = '1.9.13'
   httpclientVersion = '4.5.2'
   fastjsonVersion = '1.2.28'
