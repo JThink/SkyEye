@@ -15,6 +15,7 @@ buildDir = 'target'
 
 repositories {
   mavenLocal()
+  maven { url "https://repository.cloudera.com/artifactory/cloudera-repos" }
   maven { url "http://192.168.88.8:8081/nexus/content/groups/public" }
   maven { url "http://192.168.88.8:8081/nexus/content/repositories/releases" }
   mavenCentral()
