@@ -43,7 +43,7 @@ configurations {
   compile.exclude group: "org.springframework", module: "spring-web"
 }
 
-mainClassName = 'com.unionpaysmart.alch.launcher.Launcher'
+mainClassName = 'com.jthink.skyeye.benchmark.log.generater.launcher.Launcher'
 
 buildscript {
   ext {
