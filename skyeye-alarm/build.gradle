@@ -21,7 +21,6 @@ repositories {
 }
 
 ext {
-  logbackVersion = '1.1.6'
   baseVersion = '1.0.0'
   dataVersion = '1.0.0'
 }
@@ -34,9 +33,6 @@ dependencies {
     exclude group: 'ch.qos.logback', module: 'logback-classic'
     exclude group: 'ch.qos.logback', module: 'logback-core'
   }
-
-  compile "ch.qos.logback:logback-classic:$logbackVersion"
-  compile "ch.qos.logback:logback-core:$logbackVersion"
 
   compile "javax.mail:mail:1.4.7"
 
@@ -53,7 +49,7 @@ mainClassName = 'com.jthink.skyeye.alarm.launcher.Launcher'
 
 buildscript {
   ext {
-    springBootVersion = '1.5.4.RELEASE'
+    springBootVersion = '1.5.6.RELEASE'
   }
 
   repositories {
@@ -64,7 +60,7 @@ buildscript {
 
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath("io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE")
+    classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
   }
 }
 

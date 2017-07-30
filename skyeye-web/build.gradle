@@ -24,7 +24,6 @@ repositories {
 }
 
 ext {
-  logbackVersion = '1.1.6'
   baseVersion = '1.0.0'
   dataVersion = '1.0.0'
   jacksonVersion = '1.9.13'
@@ -53,9 +52,6 @@ dependencies {
 
   compile "org.apache.httpcomponents:httpclient:$httpclientVersion"
 
-  compile "ch.qos.logback:logback-classic:$logbackVersion"
-  compile "ch.qos.logback:logback-core:$logbackVersion"
-
   compile "com.101tec:zkclient:$zkclientVersion"
 
   compile "org.codehaus.jackson:jackson-core-asl:$jacksonVersion"
@@ -76,7 +72,7 @@ mainClassName = 'com.jthink.skyeye.web.application.Application'
 
 buildscript {
   ext {
-    springBootVersion = '1.5.4.RELEASE'
+    springBootVersion = '1.5.6.RELEASE'
   }
 
   repositories {
@@ -87,7 +83,7 @@ buildscript {
 
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath("io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE")
+    classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
   }
 }
 

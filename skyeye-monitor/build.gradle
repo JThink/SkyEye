@@ -21,7 +21,6 @@ repositories {
 }
 
 ext {
-  logbackVersion = '1.1.6'
   zookeeperVersion = '3.4.6'
   curatorVersion = '2.11.0'
   baseVersion = '1.0.0'
@@ -41,9 +40,6 @@ dependencies {
 
   compile("org.apache.commons:commons-dbcp2:2.1.1")
   compile("mysql:mysql-connector-java:5.1.39")
-
-  compile "ch.qos.logback:logback-classic:$logbackVersion"
-  compile "ch.qos.logback:logback-core:$logbackVersion"
 
   compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
 
@@ -68,7 +64,7 @@ mainClassName = 'com.jthink.skyeye.monitor.launcher.Launcher'
 
 buildscript {
   ext {
-    springBootVersion = '1.5.4.RELEASE'
+    springBootVersion = '1.5.6.RELEASE'
   }
 
   repositories {
@@ -79,7 +75,7 @@ buildscript {
 
   dependencies {
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath("io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE")
+    classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
   }
 }
 
