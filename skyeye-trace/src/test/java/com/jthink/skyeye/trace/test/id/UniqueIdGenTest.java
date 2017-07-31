@@ -18,7 +18,7 @@ public class UniqueIdGenTest {
     }
 
     public static void testTimeConsume() {
-        UniqueIdGen idGen = new UniqueIdGen(5);
+        UniqueIdGen idGen = UniqueIdGen.getInstance(5);
         long start = System.currentTimeMillis();
         for (int i = 0; i < 1024000; ++i) {
             System.out.println(idGen.nextId());
