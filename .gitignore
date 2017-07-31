@@ -21,4 +21,5 @@ disconf/
 /target/
 .DS_Store
 /.DS_Store
+/out/
 
