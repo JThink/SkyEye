@@ -96,7 +96,7 @@ public class ZkRegister {
      * @param nodeMode
      * @param data
      */
-    private void write(String path, NodeMode nodeMode, String data) {
+    public void write(String path, NodeMode nodeMode, String data) {
         if (nodeMode.symbol().equals(NodeMode.PERSISTENT.symbol())) {
             // 创建永久节点，加入数据
             this.client.writeData(nodeMode.label() + path, true);
