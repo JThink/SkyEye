@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+buildDir = 'target'
+
+ext {
+  logbackVersion = '1.1.11'
+}
+
+dependencies {
+  compile project(':skyeye-client-core')
+  compile "ch.qos.logback:logback-classic:$logbackVersion"
+}
+
+configurations {
+  compile.exclude group: "log4j", module: "log4j"
+  compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
