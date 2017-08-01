@@ -7,10 +7,7 @@ apply plugin: 'application'
 dependencies {
   compile project(":dubbo-service-client")
   compile "skyeye:skyeye-data-dubbox:$dataVersion"
-  compile("org.springframework.boot:spring-boot-starter-web") {
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
-    exclude group: 'ch.qos.logback', module: 'logback-core'
-  }
+  compile "org.springframework.boot:spring-boot-starter-web"
   compile "org.apache.zookeeper:zookeeper:$zookeeperVerison"
   compile "com.101tec:zkclient:$zkClientVersion"
 

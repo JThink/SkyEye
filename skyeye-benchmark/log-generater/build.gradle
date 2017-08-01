@@ -29,10 +29,7 @@ dependencies {
   compile ("skyeye:skyeye-client:$clientVersion") {
     exclude group: 'log4j', module: 'log4j'
   }
-  compile ("org.springframework.boot:spring-boot-starter") {
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
-    exclude group: 'ch.qos.logback', module: 'logback-core'
-  }
+  compile "org.springframework.boot:spring-boot-starter"
 
   testCompile "org.springframework.boot:spring-boot-starter-test"
 }
