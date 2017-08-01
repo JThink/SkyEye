@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+buildDir = 'target'
+
+ext {
+//  log4jVersion = '1.2.17'
+}
+
+dependencies {
+  compile project(':skyeye-client-core')
+//  compile "log4j:log4j:$log4jVersion"
+}

@@ -17,7 +17,7 @@ ext {
   baseVersion = '1.0.0'
   dataVersion = '1.0.0'
   slf4jVersion = '1.7.21'
-  fastJsonVersion = '1.2.28'
+  fastJsonVersion = '1.2.35'
   zookeeperVersion = '3.4.6'
   zkclientVersion = '0.9.1-up'
 }

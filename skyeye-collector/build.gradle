@@ -28,7 +28,7 @@ ext {
   dataVersion = '1.0.0'
   zkclientVersion = '0.9.1-up'
   hadoopVersion = '2.6.0-cdh5.4.0'
-  fastJsonVersion = '1.2.28'
+  fastJsonVersion = '1.2.35'
 }
 
 dependencies {
