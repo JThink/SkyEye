@@ -36,13 +36,13 @@ dependencies {
     compile "skyeye:skyeye-base:$baseVersion"
     compile "org.springframework.boot:spring-boot-starter"
 
-    providedCompile "org.scala-lang:scala-library:$scalaVersion"
-    providedCompile "org.scala-lang:scala-compiler:$scalaVersion"
+    compileOnly "org.scala-lang:scala-library:$scalaVersion"
+    compileOnly "org.scala-lang:scala-compiler:$scalaVersion"
 
-    providedCompile "org.apache.spark:spark-core_$scalaBinaryVersion:$sparkVersion"
+    compileOnly "org.apache.spark:spark-core_$scalaBinaryVersion:$sparkVersion"
 
-    providedCompile "org.apache.spark:spark-streaming-kafka_$scalaBinaryVersion:$sparkVersion"
-    providedCompile "org.apache.spark:spark-streaming_$scalaBinaryVersion:$sparkVersion"
+    compileOnly "org.apache.spark:spark-streaming-kafka_$scalaBinaryVersion:$sparkVersion"
+    compileOnly "org.apache.spark:spark-streaming_$scalaBinaryVersion:$sparkVersion"
 
     compile "com.alibaba:fastjson:$fastjsonVersion"
 
@@ -57,7 +57,7 @@ configurations {
 mainClassName = 'com.jthink.skyeye.statistics.launcher.Launcher'
 
 jar {
-    manifest {abstractHDXDTokenTransactionHandler
+    manifest {
         attributes "Main-Class": "$mainClassName"
     }
 
@@ -82,3 +82,5 @@ buildscript {
         classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
     }
 }
+
+
