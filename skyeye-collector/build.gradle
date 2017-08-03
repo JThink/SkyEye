@@ -1,97 +1,62 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'maven'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'application'
+allprojects {
+  apply plugin: 'java'
+  apply plugin: 'eclipse'
 
-group = 'skyeye'
-applicationName = 'skyeye-collector'
-version = '1.0.0'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-compileJava.options.encoding = 'UTF-8'
-buildDir = 'target'
-
-repositories {
-  mavenLocal()
-  maven { url "https://repository.cloudera.com/artifactory/cloudera-repos" }
-  maven { url "http://192.168.88.8:8081/nexus/content/groups/public" }
-  maven { url "http://192.168.88.8:8081/nexus/content/repositories/releases" }
-  mavenCentral()
-}
-
-ext {
-  kafkaVersion = '0.10.0.1'
-  esVersion = '2.3.3'
-  traceVersion = '1.0.0'
-  dataVersion = '1.0.0'
-  zkclientVersion = '0.9.1-up'
-  hadoopVersion = '2.6.0-cdh5.4.0'
-  fastJsonVersion = '1.2.35'
-}
-
-dependencies {
-  compile "skyeye:skyeye-data-jpa:$dataVersion"
-  compile "skyeye:skyeye-data-rabbitmq:$dataVersion"
-  compile "skyeye:skyeye-data-hbase:$dataVersion"
-  compile "org.springframework.boot:spring-boot-starter"
-
-  compile "org.apache.kafka:kafka-clients:$kafkaVersion"
-
-  compile "org.elasticsearch:elasticsearch:$esVersion"
-
-  compile "org.springframework.boot:spring-boot-starter-data-redis"
-
-  compile "com.101tec:zkclient:$zkclientVersion"
-
-  compile "commons-lang:commons-lang:2.6"
-
-  compile ("org.apache.hadoop:hadoop-common:$hadoopVersion") {
-    exclude group: 'tomcat', module: 'jasper-runtime'
-    exclude group: 'tomcat', module: 'jasper-compiler'
-  }
-
-  compile ("org.apache.hadoop:hadoop-hdfs:$hadoopVersion") {
-    exclude group: 'tomcat', module: 'jasper-runtime'
-    exclude group: 'tomcat', module: 'jasper-compiler'
-  }
-
-  compile ("org.apache.commons:commons-dbcp2:2.1.1")
-  compile ("mysql:mysql-connector-java:5.1.39")
-
-  compile "com.alibaba:fastjson:$fastJsonVersion"
-
-  testCompile "org.springframework.boot:spring-boot-starter-test"
-}
-
-configurations {
-  compile.exclude group: "log4j", module: "log4j"
-  compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
-  compile.exclude group: "org.springframework", module: "spring-web"
-}
-
-mainClassName = 'com.jthink.skyeye.collector.launcher.Launcher'
-
-buildscript {
+  group = 'skyeye'
+  version = '1.0.0'
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+  compileJava.options.encoding = 'UTF-8'
+  buildDir = 'target'
+  
   ext {
-    springBootVersion = '1.5.6.RELEASE'
+    mavenClouderaUrl = 'https://repository.cloudera.com/artifactory/cloudera-repos'
+    mavenPublicUrl = 'http://192.168.88.8:8081/nexus/content/repositories/public'
+    mavenReleaseUrl = 'http://192.168.88.8:8081/nexus/content/repositories/releases'
+    mavenSnapshotUrl = 'http://192.168.88.8:8081/nexus/content/repositories/snapshots'
   }
 
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+  }
+
+  // task javadocJar(type: Jar, dependsOn: javadoc) {
+  //   classifier = 'javadoc'
+  //   from javadoc.destinationDir
+  // }
+
+  artifacts {
+    archives sourcesJar
+    // archives javadocJar
+  }
+}
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'maven'
+  apply plugin: 'eclipse'
+
+  ext {
+    baseVersion = '1.0.0'
+    kafkaVersion = '0.10.0.1'
+    springBootVersion = '1.5.6.RELEASE'
+    esVersion = '2.3.3'
+  }
+
+  [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+ 
   repositories {
     mavenLocal()
-    maven { url "http://192.168.88.8:8081/nexus/content/groups/public" }
+    maven { url mavenPublicUrl }
+    maven { url mavenReleaseUrl }
+    maven { url mavenSnapshotUrl }
     mavenCentral()
   }
 
   dependencies {
-    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
-  }
-}
-
-startScripts {
-  doLast {
-    unixScript.text = unixScript.text.replaceAll("lib/(.*)\n", "lib/\\*")
+    compile "org.apache.kafka:kafka-clients:$kafkaVersion"
+    compile "org.springframework.boot:spring-boot-starter:$springBootVersion"
+    compile "skyeye:skyeye-base:$baseVersion"
+    compile "org.elasticsearch:elasticsearch:$esVersion"
   }
 }

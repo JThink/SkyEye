@@ -13,7 +13,7 @@ configurations {
   compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
 }
 
-mainClassName = "com.jthink.skyeye.benchmark.performance.test.launcher.Launcher"
+mainClassName = "com.jthink.skyeye.benchmark.performance.test.launcher.launcher"
 
 buildscript {
   repositories {

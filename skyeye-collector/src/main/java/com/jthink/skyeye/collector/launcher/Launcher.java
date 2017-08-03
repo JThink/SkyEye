@@ -1,6 +1,5 @@
 package com.jthink.skyeye.collector.launcher;
 
-import com.jthink.skyeye.collector.task.TaskExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
