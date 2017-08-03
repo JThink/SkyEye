@@ -2,7 +2,7 @@
 <!DOCTYPE xml>
 <configuration scan="false">
 
-  <property name="APP_NAME" value="zues" />
+  <property name="APP_NAME" value="web" />
   <property name="LOG_HOME" value="../logs/" />
   <contextName>${APP_NAME}</contextName>
 
