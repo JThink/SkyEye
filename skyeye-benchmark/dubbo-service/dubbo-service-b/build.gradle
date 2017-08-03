@@ -19,7 +19,7 @@ configurations {
   compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
 }
 
-mainClassName = "com.jthink.skyeye.benchmark.dubbo.service.b.launcher.Launcher"
+mainClassName = "com.jthink.skyeye.benchmark.dubbo.service.b.launcher.launcher"
 
 buildscript {
   ext {

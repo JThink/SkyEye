@@ -1,7 +1,7 @@
-package com.jthink.skyeye.collector.listener;
+package com.jthink.skyeye.collector.indexer.balancer;
 
-import com.jthink.skyeye.collector.configuration.kafka.KafkaProperties;
-import com.jthink.skyeye.collector.task.IndexerTask;
+import com.jthink.skyeye.collector.core.configuration.kafka.KafkaProperties;
+import com.jthink.skyeye.collector.indexer.task.IndexerTask;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
@@ -23,9 +23,9 @@ import java.util.Collection;
  * @date 2016-09-20 11:14:27
  */
 @Component
-public class HandleRebalanceForApp implements ConsumerRebalanceListener, InitializingBean {
+public class HandleRebalance implements ConsumerRebalanceListener, InitializingBean {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleRebalanceForApp.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandleRebalance.class);
 
     @Autowired
     private KafkaConsumer kafkaConsumerApp;

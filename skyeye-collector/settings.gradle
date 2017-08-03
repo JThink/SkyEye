@@ -1,1 +1,2 @@
-rootProject.name = 'skyeye-collector'
+include 'skyeye-collector-core', 'skyeye-collector-indexer'
+//, 'skyeye-collector-backup', , 'skyeye-collector-trace', ''skyeye-collector-metrics

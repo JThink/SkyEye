@@ -42,7 +42,7 @@ configurations {
   compile.exclude group: "org.springframework", module: "spring-web"
 }
 
-mainClassName = 'com.jthink.skyeye.alarm.launcher.Launcher'
+mainClassName = 'com.jthink.skyeye.alarm.launcher.launcher'
 
 buildscript {
   ext {

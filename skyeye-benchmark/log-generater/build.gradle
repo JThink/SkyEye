@@ -40,7 +40,7 @@ configurations {
   compile.exclude group: "org.springframework", module: "spring-web"
 }
 
-mainClassName = 'com.jthink.skyeye.benchmark.log.generater.launcher.Launcher'
+mainClassName = 'com.jthink.skyeye.benchmark.log.generater.launcher.launcher'
 
 buildscript {
   ext {

@@ -1,11 +1,15 @@
-package com.jthink.skyeye.collector.task;
+package com.jthink.skyeye.collector.indexer.task;
 
-import com.jthink.skyeye.collector.callback.KafkaOffsetCommitCallback;
-import com.jthink.skyeye.collector.configuration.es.EsProperties;
-import com.jthink.skyeye.collector.configuration.kafka.KafkaProperties;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.dto.LogDto;
-import org.apache.kafka.clients.consumer.*;
+import com.jthink.skyeye.collector.core.callback.KafkaOffsetCommitCallback;
+import com.jthink.skyeye.collector.core.configuration.es.EsProperties;
+import com.jthink.skyeye.collector.core.configuration.kafka.KafkaProperties;
+import com.jthink.skyeye.collector.core.task.Task;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -35,7 +39,7 @@ public class IndexerTask implements Task {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexerTask.class);
 
     @Autowired
-    private KafkaConsumer kafkaConsumerApp;
+    private KafkaConsumer kafkaConsumer;
     @Autowired
     private KafkaProperties kafkaProperties;
     @Autowired
@@ -62,7 +66,7 @@ public class IndexerTask implements Task {
         int count = 0;
         try {
             while (true) {
-                ConsumerRecords<byte[], String> records = this.kafkaConsumerApp.poll(this.kafkaProperties.getPollTimeout());
+                ConsumerRecords<byte[], String> records = this.kafkaConsumer.poll(this.kafkaProperties.getPollTimeout());
                 if (!records.isEmpty()) {
                     for (ConsumerRecord<byte[], String> record : records) {
                         String value = record.value();
@@ -78,7 +82,7 @@ public class IndexerTask implements Task {
                         count++;
                         if (count >= 1000) {
                             // 当达到了1000触发向kafka提交offset
-                            kafkaConsumerApp.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
+                            kafkaConsumer.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
                             count = 0;
                         }
                     }
@@ -88,7 +92,7 @@ public class IndexerTask implements Task {
                     }
                     LOGGER.info("total record: {}, indexed {} records to es", records.count(), size);
                     bulkRequest = transportClient.prepareBulk();
-                    kafkaConsumerApp.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
+                    kafkaConsumer.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
                 }
             }
         } catch (WakeupException e) {
@@ -97,7 +101,7 @@ public class IndexerTask implements Task {
         } catch (Exception e) {
             LOGGER.error("process records error, {}", e);
         } finally {
-            kafkaConsumerApp.commitSync(currentOffsets);
+            kafkaConsumer.commitSync(currentOffsets);
             LOGGER.info("finally commit the offset");
             // 不需要主动调kafkaConsumer.close(), spring bean容器会调用
         }
