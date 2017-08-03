@@ -1,10 +1,11 @@
-package com.jthink.skyeye.collector.task;
+package com.jthink.skyeye.collector.backup.task;
 
-import com.jthink.skyeye.collector.callback.KafkaOffsetCommitCallback;
-import com.jthink.skyeye.collector.configuration.kafka.KafkaProperties;
-import com.jthink.skyeye.collector.util.FileUtil;
 import com.jthink.skyeye.base.constant.LogLevel;
 import com.jthink.skyeye.base.dto.LogDto;
+import com.jthink.skyeye.collector.backup.util.FileUtil;
+import com.jthink.skyeye.collector.core.callback.KafkaOffsetCommitCallback;
+import com.jthink.skyeye.collector.core.configuration.kafka.KafkaProperties;
+import com.jthink.skyeye.collector.core.task.Task;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -16,7 +17,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * JThink@JThink
@@ -32,7 +36,7 @@ public class BackupTask implements Task {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackupTask.class);
 
     @Autowired
-    private KafkaConsumer kafkaConsumerBackup;
+    private KafkaConsumer kafkaConsumer;
     @Autowired
     private KafkaProperties kafkaProperties;
     @Autowired
@@ -47,7 +51,7 @@ public class BackupTask implements Task {
         int count = 0;
         try {
             while (true) {
-                ConsumerRecords<byte[], String> records = this.kafkaConsumerBackup.poll(this.kafkaProperties.getPollTimeout());
+                ConsumerRecords<byte[], String> records = this.kafkaConsumer.poll(this.kafkaProperties.getPollTimeout());
                 if (!records.isEmpty()) {
                     Map<String, List<String>> lines = new HashMap<String, List<String>>();
                     for (ConsumerRecord<byte[], String> record : records) {
@@ -75,14 +79,14 @@ public class BackupTask implements Task {
                         count++;
                         if (count >= 1000) {
                             // 当达到了1000触发向kafka提交offset
-                            this.kafkaConsumerBackup.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
+                            this.kafkaConsumer.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
                             count = 0;
                         }
                     }
                     // save to file
                     int size = this.fileUtil.save(lines);
 
-                    this.kafkaConsumerBackup.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
+                    this.kafkaConsumer.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
                     LOGGER.info("total record: {}, saved {} records to file", records.count(), size);
                 }
             }
@@ -92,7 +96,7 @@ public class BackupTask implements Task {
         } catch (Exception e) {
             LOGGER.error("process records error, {}", e);
         } finally {
-            this.kafkaConsumerBackup.commitSync(currentOffsets);
+            this.kafkaConsumer.commitSync(currentOffsets);
             LOGGER.info("finally commit the offset");
             // 不需要主动调kafkaConsumer.close(), spring bean容器会调用
         }

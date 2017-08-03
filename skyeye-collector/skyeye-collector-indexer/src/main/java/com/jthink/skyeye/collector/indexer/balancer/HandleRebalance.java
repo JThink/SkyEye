@@ -28,14 +28,14 @@ public class HandleRebalance implements ConsumerRebalanceListener, InitializingB
     private static final Logger LOGGER = LoggerFactory.getLogger(HandleRebalance.class);
 
     @Autowired
-    private KafkaConsumer kafkaConsumerApp;
+    private KafkaConsumer kafkaConsumer;
 
     @Autowired
     private KafkaProperties kafkaProperties;
 
     @Override
     public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-        this.kafkaConsumerApp.commitSync(IndexerTask.currentOffsets);
+        this.kafkaConsumer.commitSync(IndexerTask.currentOffsets);
         LOGGER.info("before rebalance, commit offset once");
     }
 
@@ -46,6 +46,6 @@ public class HandleRebalance implements ConsumerRebalanceListener, InitializingB
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.kafkaConsumerApp.subscribe(Arrays.asList(this.kafkaProperties.getTopic()), this);
+        this.kafkaConsumer.subscribe(Arrays.asList(this.kafkaProperties.getTopic()), this);
     }
 }

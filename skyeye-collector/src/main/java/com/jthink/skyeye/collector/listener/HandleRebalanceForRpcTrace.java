@@ -1,7 +1,6 @@
 package com.jthink.skyeye.collector.listener;
 
 import com.jthink.skyeye.collector.configuration.kafka.KafkaProperties;
-import com.jthink.skyeye.collector.task.BackupTask;
 import com.jthink.skyeye.collector.task.RpcTraceTask;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
