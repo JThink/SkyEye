@@ -47,6 +47,7 @@ subprojects {
  
   repositories {
     mavenLocal()
+    maven { url mavenClouderaUrl }
     maven { url mavenPublicUrl }
     maven { url mavenReleaseUrl }
     maven { url mavenSnapshotUrl }
