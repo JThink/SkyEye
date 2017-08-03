@@ -1,4 +1,4 @@
-package com.jthink.skyeye.collector.configuration.hadoop;
+package com.jthink.skyeye.collector.backup.configuration.hadoop;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -20,6 +20,8 @@ public class HadoopProperties {
     private String user;
 
     private String baseDir;
+
+    private String fileRoot;
 
     public String getHost() {
         return host;
@@ -51,5 +53,13 @@ public class HadoopProperties {
 
     public void setBaseDir(String baseDir) {
         this.baseDir = baseDir;
+    }
+
+    public String getFileRoot() {
+        return fileRoot;
+    }
+
+    public void setFileRoot(String fileRoot) {
+        this.fileRoot = fileRoot;
     }
 }

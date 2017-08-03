@@ -1,4 +1,4 @@
-package com.jthink.skyeye.collector.configuration.hadoop;
+package com.jthink.skyeye.collector.backup.configuration.hadoop;
 
 import com.jthink.skyeye.base.constant.Constants;
 import org.apache.hadoop.conf.Configuration;

@@ -55,7 +55,7 @@ dependencies {
   compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
   compile "com.alibaba:fastjson:$fastjsonVersion"
 
-  compile "joda-time:joda-time:2.9.4"
+  compile "joda-time:joda-time:2.9.9"
 
   testCompile "org.springframework.boot:spring-boot-starter-test"
 }
