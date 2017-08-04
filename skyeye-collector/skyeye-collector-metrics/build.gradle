@@ -6,27 +6,27 @@ apply plugin: 'application'
 
 ext {
   dataVersion = '1.0.0'
-  fastJsonVersion = '1.2.35'
+  zkclientVersion = '0.9.1-up'
 }
 
 dependencies {
   compile project(":skyeye-collector-core")
 
   compile "org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion"
-  compile "skyeye:skyeye-data-hbase:$dataVersion"
   compile "skyeye:skyeye-data-jpa:$dataVersion"
-  compile "com.alibaba:fastjson:$fastJsonVersion"
+  compile "skyeye:skyeye-data-rabbitmq:$dataVersion"
+  compile "com.101tec:zkclient:$zkclientVersion"
+  compile "commons-lang:commons-lang:2.6"
 
   testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 
 configurations {
   compile.exclude group: "log4j", module: "log4j"
-  compile.exclude group: "org.elasticsearch", module: "elasticsearch"
   compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
 }
 
-mainClassName = "com.jthink.skyeye.collector.trace.launcher.Launcher"
+mainClassName = "com.jthink.skyeye.collector.metrics.launcher.Launcher"
 
 buildscript {
   ext {
