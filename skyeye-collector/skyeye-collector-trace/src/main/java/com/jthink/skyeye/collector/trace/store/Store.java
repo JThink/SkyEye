@@ -1,4 +1,4 @@
-package com.jthink.skyeye.collector.dapper.store;
+package com.jthink.skyeye.collector.trace.store;
 
 import com.jthink.skyeye.base.dapper.Annotation;
 import com.jthink.skyeye.base.dapper.Span;

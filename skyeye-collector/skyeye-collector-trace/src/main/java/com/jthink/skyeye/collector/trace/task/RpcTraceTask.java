@@ -1,17 +1,18 @@
-package com.jthink.skyeye.collector.task;
+package com.jthink.skyeye.collector.trace.task;
 
 import com.alibaba.fastjson.JSON;
-import com.jthink.skyeye.base.dapper.Span;
-import com.jthink.skyeye.collector.service.CacheService;
-import com.jthink.skyeye.data.hbase.api.HbaseTemplate;
-import com.jthink.skyeye.collector.callback.KafkaOffsetCommitCallback;
-import com.jthink.skyeye.collector.configuration.kafka.KafkaProperties;
-import com.jthink.skyeye.collector.dapper.store.Store;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.constant.EventType;
+import com.jthink.skyeye.base.dapper.Span;
 import com.jthink.skyeye.base.dto.EventLog;
 import com.jthink.skyeye.base.dto.LogDto;
 import com.jthink.skyeye.base.dto.RpcTraceLog;
+import com.jthink.skyeye.collector.core.callback.KafkaOffsetCommitCallback;
+import com.jthink.skyeye.collector.core.configuration.kafka.KafkaProperties;
+import com.jthink.skyeye.collector.core.task.Task;
+import com.jthink.skyeye.collector.trace.cache.CacheService;
+import com.jthink.skyeye.collector.trace.store.Store;
+import com.jthink.skyeye.data.hbase.api.HbaseTemplate;
 import com.jthink.skyeye.data.jpa.domain.ServiceInfo;
 import com.jthink.skyeye.data.jpa.pk.ServiceInfoPK;
 import org.apache.hadoop.hbase.client.Mutation;
@@ -47,7 +48,7 @@ public class RpcTraceTask implements Task {
     private static final Logger LOGGER = LoggerFactory.getLogger(RpcTraceTask.class);
 
     @Autowired
-    private KafkaConsumer kafkaConsumerRpcTrace;
+    private KafkaConsumer kafkaConsumer;
     @Autowired
     private KafkaProperties kafkaProperties;
     @Autowired
@@ -71,7 +72,7 @@ public class RpcTraceTask implements Task {
         int count = 0;
         try {
             while (true) {
-                ConsumerRecords<byte[], String> records = this.kafkaConsumerRpcTrace.poll(this.kafkaProperties.getPollTimeout());
+                ConsumerRecords<byte[], String> records = this.kafkaConsumer.poll(this.kafkaProperties.getPollTimeout());
                 if (!records.isEmpty()) {
                     List<Mutation> spanPuts = new ArrayList<Mutation>();
                     List<Mutation> annotationPuts = new ArrayList<Mutation>();
@@ -122,7 +123,7 @@ public class RpcTraceTask implements Task {
                         count++;
                         if (count >= 1000) {
                             // 当达到了1000触发向kafka提交offset
-                            kafkaConsumerRpcTrace.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
+                            kafkaConsumer.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
                             count = 0;
                         }
                     }
@@ -132,7 +133,7 @@ public class RpcTraceTask implements Task {
                     this.storeToHbase(Constants.TABLE_TIME_CONSUME, tracePuts);
                     this.storeToHbase(Constants.TABLE_ANNOTATION, annotationPuts);
 
-                    kafkaConsumerRpcTrace.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
+                    kafkaConsumer.commitAsync(currentOffsets, new KafkaOffsetCommitCallback());
                     LOGGER.info("processed {} records, " +
                             "{} span records stored in hbase table trace, " +
                             "{} annotation records stored in hbase table annotation, " +
@@ -146,7 +147,7 @@ public class RpcTraceTask implements Task {
         } catch (Exception e) {
             LOGGER.error("process records error, {}", e);
         } finally {
-            kafkaConsumerRpcTrace.commitSync(currentOffsets);
+            kafkaConsumer.commitSync(currentOffsets);
             LOGGER.info("finally commit the offset");
             // 不需要主动调kafkaConsumer.close(), spring bean容器会调用
         }

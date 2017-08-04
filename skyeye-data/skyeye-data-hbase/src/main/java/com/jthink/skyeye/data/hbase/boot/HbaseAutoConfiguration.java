@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Bean;
 public class HbaseAutoConfiguration {
 
     private static final String HBASE_QUORUM = "hbase.zookeeper.quorum";
+    private static final String HBASE_ROOTDIR = "hbase.rootdir";
+    private static final String HBASE_ZNODE_PARENT = "zookeeper.znode.parent";
+
 
     @Autowired
     private HbaseProperties hbaseProperties;
@@ -32,6 +35,8 @@ public class HbaseAutoConfiguration {
     public HbaseTemplate hbaseTemplate() {
         Configuration configuration = HBaseConfiguration.create();
         configuration.set(HBASE_QUORUM, this.hbaseProperties.getQuorum());
+        configuration.set(HBASE_ROOTDIR, hbaseProperties.getRootDir());
+        configuration.set(HBASE_ZNODE_PARENT, hbaseProperties.getNodeParent());
         return new HbaseTemplate(configuration);
     }
 }
