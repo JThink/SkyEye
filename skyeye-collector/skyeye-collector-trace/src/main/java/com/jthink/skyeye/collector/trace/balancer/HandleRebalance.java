@@ -1,7 +1,7 @@
-package com.jthink.skyeye.collector.listener;
+package com.jthink.skyeye.collector.trace.balancer;
 
-import com.jthink.skyeye.collector.configuration.kafka.KafkaProperties;
-import com.jthink.skyeye.collector.task.RpcTraceTask;
+import com.jthink.skyeye.collector.core.configuration.kafka.KafkaProperties;
+import com.jthink.skyeye.collector.trace.task.RpcTraceTask;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
@@ -23,19 +23,19 @@ import java.util.Collection;
  * @date 2016-09-20 11:14:27
  */
 @Component
-public class HandleRebalanceForRpcTrace implements ConsumerRebalanceListener, InitializingBean {
+public class HandleRebalance implements ConsumerRebalanceListener, InitializingBean {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleRebalanceForRpcTrace.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandleRebalance.class);
 
     @Autowired
-    private KafkaConsumer kafkaConsumerRpcTrace;
+    private KafkaConsumer kafkaConsumer;
 
     @Autowired
     private KafkaProperties kafkaProperties;
 
     @Override
     public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-        this.kafkaConsumerRpcTrace.commitSync(RpcTraceTask.currentOffsets);
+        this.kafkaConsumer.commitSync(RpcTraceTask.currentOffsets);
         LOGGER.info("before rebalance, commit offset once");
     }
 
@@ -46,6 +46,6 @@ public class HandleRebalanceForRpcTrace implements ConsumerRebalanceListener, In
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.kafkaConsumerRpcTrace.subscribe(Arrays.asList(this.kafkaProperties.getTopic()), this);
+        this.kafkaConsumer.subscribe(Arrays.asList(this.kafkaProperties.getTopic()), this);
     }
 }
