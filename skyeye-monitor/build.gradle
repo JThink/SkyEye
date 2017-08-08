@@ -35,9 +35,6 @@ dependencies {
   compile "skyeye:skyeye-data-rabbitmq:$dataVersion"
   compile "org.springframework.boot:spring-boot-starter"
 
-  compile("org.apache.commons:commons-dbcp2:2.1.1")
-  compile("mysql:mysql-connector-java:5.1.39")
-
   compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
 
   compile "org.codehaus.jackson:jackson-core-asl:$jacksonVersion"
@@ -57,7 +54,7 @@ configurations {
   compile.exclude group: "org.springframework", module: "spring-web"
 }
 
-mainClassName = 'com.jthink.skyeye.monitor.launcher.launcher'
+mainClassName = 'com.jthink.skyeye.monitor.launcher.Launcher'
 
 buildscript {
   ext {

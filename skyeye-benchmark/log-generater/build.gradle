@@ -26,9 +26,7 @@ ext {
 }
 
 dependencies {
-  compile ("skyeye:skyeye-client:$clientVersion") {
-    exclude group: 'log4j', module: 'log4j'
-  }
+  compile "skyeye:skyeye-client-logback:$clientVersion"
   compile "org.springframework.boot:spring-boot-starter"
 
   testCompile "org.springframework.boot:spring-boot-starter-test"
@@ -40,7 +38,7 @@ configurations {
   compile.exclude group: "org.springframework", module: "spring-web"
 }
 
-mainClassName = 'com.jthink.skyeye.benchmark.log.generater.launcher.launcher'
+mainClassName = 'com.jthink.skyeye.benchmark.log.generater.launcher.Launcher'
 
 buildscript {
   ext {

@@ -44,9 +44,6 @@ dependencies {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-validation'
   }
 
-  compile("org.apache.commons:commons-dbcp2:2.1.1")
-  compile("mysql:mysql-connector-java:5.1.39")
-
   compile "org.apache.httpcomponents:httpclient:$httpclientVersion"
 
   compile "com.101tec:zkclient:$zkclientVersion"

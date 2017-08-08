@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan(basePackages={"com.jthink.skyeye.collector.core", "com.jthink.skyeye.collector.trace"})
+@ComponentScan(basePackages={"com.jthink.skyeye.collector.core", "com.jthink.skyeye.collector.trace", "com.jthink.skyeye.data.jpa"})
 @PropertySource("file:/opt/jthink/jthink-config/skyeye/collector/collector-trace.properties")
 //@PropertySource("classpath:properties/collector-trace.properties")
 public class Launcher {
