@@ -49,19 +49,19 @@
   </appender>
 
   <!-- kafka appender -->
-  <appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.logback.KafkaAppender">
-    <encoder class="com.jthink.skyeye.client.kafka.logback.encoder.KafkaLayoutEncoder">
+  <appender name="kafkaAppender" class="com.jthink.skyeye.client.logback.appender.KafkaAppender">
+    <encoder class="com.jthink.skyeye.client.logback.encoder.KafkaLayoutEncoder">
       <layout class="ch.qos.logback.classic.PatternLayout">
         <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
       </layout>
     </encoder>
     <topic>app-log</topic>
     <rpc>dubbo</rpc>
-    <zkServers>riot01:2181,riot02:2181,riot03:2181</zkServers>
-    <mail>xxx@xxx.com</mail>
-    <keyBuilder class="com.jthink.skyeye.client.kafka.partitioner.AppHostKeyBuilder" />
+    <zkServers>riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181</zkServers>
+    <mail>qianjc@unionpaysmart.com</mail>
+    <keyBuilder class="com.jthink.skyeye.client.logback.builder.AppHostKeyBuilder" />
 
-    <config>bootstrap.servers=riot01:9092,riot02:9092,riot03:9092</config>
+    <config>bootstrap.servers=riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</config>
     <config>acks=0</config>
     <config>linger.ms=100</config>
     <config>max.block.ms=5000</config>
