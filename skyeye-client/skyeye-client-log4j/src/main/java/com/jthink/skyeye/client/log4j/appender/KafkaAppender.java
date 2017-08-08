@@ -311,7 +311,7 @@ public class KafkaAppender extends AppenderSkeleton {
         }
 
         // 关闭client，临时节点消失，监控系统进行感知报警
-        ZkClient client = this.zkRegister.getClient();
+        ZkClient client = this.zkRegister == null ? null : this.zkRegister.getClient();
         if (null != client) {
             client.close();
         }

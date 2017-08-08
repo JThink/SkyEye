@@ -14,5 +14,9 @@ ext {
 dependencies {
   compile("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
 
+  compile ("org.apache.commons:commons-dbcp2:2.1.1")
+  compile ("mysql:mysql-connector-java:5.1.43")
+
+
   testCompile "junit:junit:4.12"
 }

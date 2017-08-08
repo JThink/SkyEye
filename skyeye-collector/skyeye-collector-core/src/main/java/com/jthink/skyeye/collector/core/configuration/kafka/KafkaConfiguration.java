@@ -29,7 +29,7 @@ public class KafkaConfiguration {
 
     // kafka consumer
     @Bean
-    public KafkaConsumer<byte[], String> kafkaConsumerApp() {
+    public KafkaConsumer<byte[], String> kafkaConsumer() {
         Map<String, Object> config = new HashMap<String, Object>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.kafkaProperties.getBrokers());
         config.put(ConsumerConfig.GROUP_ID_CONFIG, this.kafkaProperties.getConsumeGroup());
