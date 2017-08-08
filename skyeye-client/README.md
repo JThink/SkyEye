@@ -11,9 +11,7 @@
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile ("skyeye:skyeye-client:0.0.1") {
-  exclude group: 'log4j', module: 'log4j'
-}
+compile "skyeye:skyeye-client-logback:1.0.0"
 ```
 ### 配置
 在logback.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -21,81 +19,79 @@ compile ("skyeye:skyeye-client:0.0.1") {
 ``` xml
 <property name="APP_NAME" value="your-app-name" />
 <!-- kafka appender -->
-<appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.logback.KafkaAppender">
-  <encoder class="com.jthink.skyeye.client.kafka.logback.encoder.KafkaLayoutEncoder">
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
-    </layout>
-  </encoder>
-  <topic>${kafka.topic}</topic>
-  <rpc>none</rpc>
-  <zkServers>${zookeeper.servers}</zkServers>
-  <mail>${mail}</mail>
-  <keyBuilder class="com.jthink.skyeye.client.kafka.partitioner.AppHostKeyBuilder" />
+<appender name="kafkaAppender" class="com.jthink.skyeye.client.logback.appender.KafkaAppender">
+    <encoder class="com.jthink.skyeye.client.logback.encoder.KafkaLayoutEncoder">
+      <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
+      </layout>
+    </encoder>
+    <topic>app-log</topic>
+    <rpc>none</rpc>
+    <zkServers>riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181</zkServers>
+    <mail>xxx@xxx.com</mail>
+    <keyBuilder class="com.jthink.skyeye.client.logback.builder.AppHostKeyBuilder" />
 
-  <config>bootstrap.servers=${kafka.bootstrap.servers}</config>
-  <config>acks=0</config>
-  <config>linger.ms=100</config>
-  <config>max.block.ms=5000</config>
-  <config>client.id=${CONTEXT_NAME}-${HOSTNAME}-logback</config>
-</appender>
+    <config>bootstrap.servers=riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</config>
+    <config>acks=0</config>
+    <config>linger.ms=100</config>
+    <config>max.block.ms=5000</config>
+    <config>client.id=${CONTEXT_NAME}-${HOSTNAME}-logback</config>
+  </appender>
 ```
 ## log4j
 ### 依赖
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile ("skyeye:skyeye-client:0.0.1") {
-  exclude group: 'ch.qos.logback', module: 'logback-classic'
-}
+compile "skyeye:skyeye-client-log4j:1.0.0"
 ```
 ### 配置
 在log4j.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
 
 ``` xml
-<appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.log4j.KafkaAppender">
-  <param name="topic" value="${kafka.topic}"/>
-  <param name="zkServers" value="${zookeeper.servers}"/>
-  <param name="app" value="${app.name}"/>
-  <param name="mail" value="${mail}"/>
-  <param name="rpc" value="dubbo" />
-  <param name="bootstrapServers" value="${kafka.bootstrap.servers}"/>
-  <param name="acks" value="0"/>
-  <param name="maxBlockMs" value="5000"/>
-  <param name="lingerMs" value="100"/>
+<appender name="kafkaAppender" class="com.jthink.skyeye.client.log4j.appender.KafkaAppender">
+        <param name="topic" value="app-log"/>
+        <param name="zkServers" value="riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181"/>
+        <param name="app" value="xxx"/>
+        <param name="rpc" value="dubbo"/>
+        <param name="mail" value="xxx@xxx.com"/>
+        <param name="bootstrapServers" value="riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092"/>
+        <param name="acks" value="0"/>
+        <param name="maxBlockMs" value="2000"/>
+        <param name="lingerMs" value="100"/>
 
-  <layout class="org.apache.log4j.PatternLayout">
-    <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS};APP_NAME;HOSTNAME;%t;%p;%c;%L;%m%n"/>
-  </layout>
-</appender>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS};APP_NAME;HOSTNAME;%t;%p;%c;%L;%m%n"/>
+        </layout>
+    </appender>
 ```
 ## 注意点
 ## logback
-- 目前公司很多项目采用的是spring-boot，版本为1.3.6.RELEASE，该版本自带logback版本为1.1.7，该版本结合kafka有bug，需要降低一个版本
-- logback bug: http://jira.qos.ch/browse/LOGBACK-1158, 1.1.8版本会fix
-- 示例：
+- logback在对接kafka的时候有个bug，[jira bug](https://jira.qos.ch/browse/LOGBACK-1328)，所以需要将肉root level设置为INFO（不能是DEBUG）
 
-``` shell
-compile ("org.springframework.boot:spring-boot-starter") {
-  exclude group: 'ch.qos.logback', module: 'logback-classic'
-  exclude group: 'ch.qos.logback', module: 'logback-core'
-}
-compile "ch.qos.logback:logback-classic:1.1.6"
-compile "ch.qos.logback:logback-core:1.1.6"
-```
 ### log4j
 由于log4j本身的appender比较复杂难写，所以在稳定性和性能上没有logback支持得好，应用能使用logback请尽量使用logback
 ### 中间件
 如果项目中有使用到zkClient、，统一使用自己打包的版本，以防日志收集出错或者异常（PS：zk必须为3.4.6版本，尽量使用gradle进行打包部署）
 ### rpc trace
-使用自己打包的dubbox（https://github.com/JThink/dubbox/tree/skyeye-trace），在soa中间件dubbox中封装了rpc的跟踪
+使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.0.0)），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
 compile "com.101tec:zkclient:0.9.1-up"
-compile ("com.alibaba:dubbo:2.8.4-skyeye-trace") {
+compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.0.0") {
   exclude group: 'org.springframework', module: 'spring'
 }
 ```
+### spring boot
+
+如果项目使用的是spring-boot+logback，那么需要将spring-boot对logback的初始化去掉，防止初始化的时候在zk注册两次而报错，具体见我的几篇博客就可以解决：
+
+http://blog.csdn.net/jthink_/article/details/52513963
+
+http://blog.csdn.net/jthink_/article/details/52613953
+
+http://blog.csdn.net/jthink_/article/details/73106745
+
 ## 应用注册中心设计
 ### zookeeper注册中心节点tree
 ![](zknode.png)
