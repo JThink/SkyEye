@@ -14,11 +14,20 @@
 - alert: 具体报警手段，包括邮件和微信
 
 # 项目介绍
-日志生产系统，包括应用系统的日志入队列、埋点、应用系统注册等
-- 自定义一些log框架的appender，包含logback和log4j
-- 向注册中心注册应用
-- 应用埋点进行监控报警
-- rpc trace数据产生器
+对java、scala等运行于jvm的程序进行实时日志采集、索引和可视化，对系统进行进程级别的监控，对系统内部的操作进行策略性的报警、对分布式的rpc调用进行trace跟踪以便于进行性能分析
+
+- 日志实时采集（支持log4j和logback）
+- 日志实时页面实时展示（支持关键字过滤）
+- 历史日志查询（支持多种条件过滤，支持sql语句查询）
+- app实时部署位置展示（机器和文件夹）
+- app实时日志采集状态展示
+- app历史部署位置展示
+- api请求实时统计和历史统计
+- 第三方请求实时统计和历史统计
+- 基于dubbox的rpc调用数据收集和调用链展示（支持多种条件检索）
+- 系统上下线报警
+- 系统内嵌采集器报警
+- 中间件、api、第三方、job执行异常报警（策略报警和异常报警）
 
 # 部署步骤
 
@@ -77,12 +86,12 @@ gradle clean install uploadArchives
 
 ### dubbox
 
-由于使用dubbox，为了能够采集到dubbox里面的rpc数据，需要修改dubbox的源码，见我修改的dubbox项目：[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace)，该项目主要实现了rpc跟踪的具体实现，需要单独打包。
+由于使用dubbox，为了能够采集到dubbox里面的rpc数据，需要修改dubbox的源码，见我修改的dubbox项目：[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.0.0)，该项目主要实现了rpc跟踪的具体实现，需要单独打包。
 
 ```shell
 git clone https://github.com/JThink/dubbox.git
 cd dubbox
-git checkout skyeye-trace
+git checkout skyeye-trace-1.0.0
 修改相关pom中的私服地址
 mvn clean install deploy -Dmaven.test.skip=true
 ```
@@ -100,7 +109,7 @@ mvn clean install deploy -Dmaven.test.skip=true
 | zookeeper     | 3.4.6          |                                          |
 | rabbitmq      | 3.5.7          |                                          |
 | hbase         | 1.0.0-cdh5.4.0 | 不支持1.x以下的版本，比如0.9x.x                     |
-| gradle        | 3.0            |                                          |
+| gradle        | 3.0+           |                                          |
 | hadoop        | 2.6.0-cdh5.4.0 |                                          |
 | spark         | 1.3.0-cdh5.4.0 |                                          |
 | redis         | 3.x            | 单机版即可                                    |
@@ -120,7 +129,7 @@ source skyeye-data/skyeye-data-jpa/src/main/resources/sql/init.sql
 
 ```Shell
 hbase shell
-执行skyeye-collector/src/main/resources/shell/hbase/hbase这个文件里面的内容
+执行skyeye-collector/skyeye-collector-trace/src/main/resources/shell/hbase这个文件里面的内容
 ```
 
 ### elasticsearch
@@ -128,11 +137,10 @@ hbase shell
 首先安装相应的es python的module，然后再创建索引，根据需要修改es的的ip、端口
 
 ```shell
-cd skyeye-collector/src/main/resources/shell/es/
+cd skyeye-collector/skyeye-collector-indexer/src/main/resources/shell
 ./install.sh
-cd app-log
 bash start.sh app-log http://192.168.xx.xx:9200,http://192.168.xx.xx:9200,......
-cd event-log
+cd skyeye-collector/skyeye-collector-metrics/src/main/resources/shell
 bash start.sh event-log http://192.168.xx.xx:9200,http://192.168.xx.xx:9200,......
 
 注意点：如果es版本为5.x，那么需要修改skyeye-collector/src/main/resources/shell/es/app-log/create-index.py的49和50行为下面内容：
@@ -206,35 +214,120 @@ nohup bin/skyeye-alarm &
 
 ## skyeye-collector
 
-### 配置文件
+本项目从v1.0.0版本开始按不同的kafka消费group组织子module以实现可插拔的功能模块，主要包含如下5个module：
+
+- skyeye-collector-core: 收集项目的所有公用的配置和公用代码，改module不需要部署
+- skyeye-collector-backup: 对采集的所有日志进行备份
+- skyeye-collector-indexer: 对采集的所有日志进行索引存入es
+- kyeye-collector-metrics: 对事件日志进行meta  data的采集和相关报警metrics进行索引存入es
+- skyeye-collector-trace: 对rpc跟踪数据进行采集入hbase
+
+## 打包
+
+```shell
+cd skyeye-collector
+gradle clean build -x test
+```
+
+### skyeye-collector-backup
+
+#### 配置文件
 
 配置文件外部化，需要在机器上创建配置文件，根据对接系统的个数和产生日志的量进行部署，最好部署3个节点（每个节点消费3个partition的数据）
 
 ```shell
 ssh 到部署节点
 mkdir -p /opt/jthink/jthink-config/skyeye/collector
-vim collector.properties
+vim collector-backup.properties
 
 # kafka config
 kafka.brokers=riot01:9092,riot02:9092,riot03:9092
 kafka.topic=app-log
-kafka.group.indexer=es-indexer-consume-group
+kafka.consume.group=log-backup-consume-group
 kafka.poll.timeout=100
-kafka.group.collect=info-collect-consume-group
-kafka.group.backup=log-backup-consume-group
-kafka.group.rpc.trace=rpc-trace-consume-group
-kafka.hdfs.file.root=/tmp/monitor-center/
-kafka.hdfs.file.server.id=0                					# 如果部署多个节点，第一个节点值为0，第二个节点就是1，第三个节点是2，以此类推
+
+# hdfs
+hadoop.hdfs.namenode.port=8020
+hadoop.hdfs.namenode.host=192.168.88.131
+hadoop.hdfs.user=xxx
+hadoop.hdfs.baseDir=/user/xxx/JThink/
+hadoop.hdfs.fileRoot=/tmp/monitor-center/
+upload.log.cron=0 30 0 * * ?
+```
+
+### 部署
+
+多个节点部署需要部署多次
+
+```shell
+cd skyeye-collector-backup/target/distributions
+unzip skyeye-collector-backup-x.x.x.zip(替换相应的x为自己的版本)
+
+cd skyeye-collector-backup-x.x.x
+nohup bin/skyeye-collector-backup &
+```
+### skyeye-collector-indexer
+
+#### 配置文件
+
+配置文件外部化，需要在机器上创建配置文件，根据对接系统的个数和产生日志的量进行部署，最好部署3个节点（每个节点消费3个partition的数据）
+
+```shell
+ssh 到部署节点
+mkdir -p /opt/jthink/jthink-config/skyeye/collector
+vim collector-indexer.properties
+
+# kafka config
+kafka.brokers=riot01:9092,riot02:9092,riot03:9092
+kafka.topic=app-log
+kafka.consume.group=es-indexer-consume-group
+kafka.poll.timeout=100
 
 # es config
 es.ips=riot01,riot02,riot03
-es.cluster=mondeo					# 需要修改成搭建es的时候那个值
+es.cluster=mondeo
 es.port=9300
 es.sniff=true
 es.index=app-log
 es.doc=log
-es.index.event=event-log
-es.doc.event=log
+```
+
+### 部署
+
+多个节点部署需要部署多次
+
+```shell
+cd skyeye-collector-indexer/target/distributions
+unzip skyeye-collector-indexer-x.x.x.zip(替换相应的x为自己的版本)
+
+cd skyeye-collector-indexer-x.x.x
+nohup bin/skyeye-collector-indexer &
+```
+
+### skyeye-collector-metrics
+
+#### 配置文件
+
+配置文件外部化，需要在机器上创建配置文件，根据对接系统的个数和产生日志的量进行部署，最好部署3个节点（每个节点消费3个partition的数据）
+
+```shell
+ssh 到部署节点
+mkdir -p /opt/jthink/jthink-config/skyeye/collector
+vim collector-metrics.properties
+
+# kafka config
+kafka.brokers=riot01:9092,riot02:9092,riot03:9092
+kafka.topic=app-log
+kafka.consume.group=info-collect-consume-group
+kafka.poll.timeout=100
+
+# es config
+es.ips=riot01,riot02,riot03
+es.cluster=mondeo
+es.port=9300
+es.sniff=true
+es.index=event-log
+es.doc=log
 
 # redis config
 redis.host=localhost
@@ -261,33 +354,66 @@ rabbit.request.routingKey=log.key
 zookeeper.zkServers=riot01:2181,riot02:2181,riot03:2181
 zookeeper.sessionTimeout=60000
 zookeeper.connectionTimeout=5000
-
-# hdfs
-hadoop.hdfs.namenode.port=8020
-hadoop.hdfs.namenode.host=192.168.88.131
-hadoop.hdfs.user=qianjicheng
-hadoop.hdfs.baseDir=/user/qianjicheng/JThink/
-upload.log.cron=0 30 0 * * ?							# 按需修改，每天零点30分上传前一天的日志到hdfs，建议不改
-
-# hbase config
-hbase.quorum=panda-01
 ```
 
-需要修改相关的配置，注释过的是要注意的，别的ip和端口根据需要进行修改（rabbitmq的配置需和alarm一致）
-
-### 打包部署
+### 部署
 
 多个节点部署需要部署多次
 
 ```shell
-cd skyeye-collector
-gradle clean distZip -x test
-cd target/distributions
-unzip skyeye-collector-x.x.x.zip(替换相应的x为自己的版本)
+cd skyeye-collector-metrics/target/distributions
+unzip skyeye-collector-metrics-x.x.x.zip(替换相应的x为自己的版本)
 
-cd skyeye-collector-x.x.x
-nohup bin/skyeye-collector &
+cd skyeye-collector-metrics-x.x.x
+nohup bin/skyeye-collector-metrics &
 ```
+
+### skyeye-collector-trace
+
+#### 配置文件
+
+配置文件外部化，需要在机器上创建配置文件，根据对接系统的个数和产生日志的量进行部署，最好部署3个节点（每个节点消费3个partition的数据）
+
+```shell
+ssh 到部署节点
+mkdir -p /opt/jthink/jthink-config/skyeye/collector
+vim collector-trace.properties
+
+# kafka config
+kafka.brokers=riot01:9092,riot02:9092,riot03:9092
+kafka.topic=app-log
+kafka.consume.group=rpc-trace-consume-group
+kafka.poll.timeout=100
+
+# redis config
+redis.host=localhost
+redis.port=6379
+redis.password=
+
+# mysql config
+database.address=localhost:3306
+database.name=monitor-center
+database.username=root
+database.password=root
+
+# hbase config
+hbase.quorum=panda-01,panda-01,panda-03
+hbase.rootDir=hdfs://panda-01:8020/hbase
+hbase.zookeeper.znode.parent=/hbase
+```
+
+### 部署
+
+多个节点部署需要部署多次
+
+```shell
+cd skyeye-collector-trace/target/distributions
+unzip skyeye-collectortracemetrics-x.x.x.zip(替换相应的x为自己的版本)
+
+cd skyeye-collector-trace-x.x.x
+nohup bin/skyeye-collector-trace &
+```
+
 ## skyeye-monitor
 
 ### 配置文件
@@ -383,6 +509,11 @@ monitor.es.apiResponseTime=1000
 monitor.es.apiThreshold=0.1
 monitor.es.thirdResponseTime=1000
 monitor.es.thirdThreshold=0.1
+
+# hbase config
+hbase.quorum=panda-01,panda-01,panda-03
+hbase.rootDir=hdfs://panda-01:8020/hbase
+hbase.zookeeper.znode.parent=/hbase
 ```
 
 需要修改相关的配置（rabbitmq的配置需和alarm一致，es也需要前后一致），注释过的是要注意的
@@ -408,9 +539,7 @@ nohup bin/skyeye-web &
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile ("skyeye:skyeye-client:0.0.1") {
-  exclude group: 'log4j', module: 'log4j'
-}
+compile "skyeye:skyeye-client-logback:1.0.0"
 ```
 ### 配置
 在logback.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -418,78 +547,66 @@ compile ("skyeye:skyeye-client:0.0.1") {
 ``` xml
 <property name="APP_NAME" value="your-app-name" />
 <!-- kafka appender -->
-<appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.logback.KafkaAppender">
-  <encoder class="com.jthink.skyeye.client.kafka.logback.encoder.KafkaLayoutEncoder">
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
-    </layout>
-  </encoder>
-  <topic>${kafka.topic}</topic>
-  <rpc>none</rpc>
-  <zkServers>${zookeeper.servers}</zkServers>
-  <mail>${mail}</mail>
-  <keyBuilder class="com.jthink.skyeye.client.kafka.partitioner.AppHostKeyBuilder" />
+<appender name="kafkaAppender" class="com.jthink.skyeye.client.logback.appender.KafkaAppender">
+    <encoder class="com.jthink.skyeye.client.logback.encoder.KafkaLayoutEncoder">
+      <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
+      </layout>
+    </encoder>
+    <topic>app-log</topic>
+    <rpc>none</rpc>
+    <zkServers>riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181</zkServers>
+    <mail>xxx@xxx.com</mail>
+    <keyBuilder class="com.jthink.skyeye.client.logback.builder.AppHostKeyBuilder" />
 
-  <config>bootstrap.servers=${kafka.bootstrap.servers}</config>
-  <config>acks=0</config>
-  <config>linger.ms=100</config>
-  <config>max.block.ms=5000</config>
-  <config>client.id=${CONTEXT_NAME}-${HOSTNAME}-logback</config>
-</appender>
+    <config>bootstrap.servers=riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</config>
+    <config>acks=0</config>
+    <config>linger.ms=100</config>
+    <config>max.block.ms=5000</config>
+    <config>client.id=${CONTEXT_NAME}-${HOSTNAME}-logback</config>
+  </appender>
 ```
 ## log4j
 ### 依赖
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile ("skyeye:skyeye-client:0.0.1") {
-  exclude group: 'ch.qos.logback', module: 'logback-classic'
-}
+compile "skyeye:skyeye-client-log4j:1.0.0"
 ```
 ### 配置
 在log4j.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
 
 ``` xml
-<appender name="kafkaAppender" class="com.jthink.skyeye.client.kafka.log4j.KafkaAppender">
-  <param name="topic" value="${kafka.topic}"/>
-  <param name="zkServers" value="${zookeeper.servers}"/>
-  <param name="app" value="${app.name}"/>
-  <param name="mail" value="${mail}"/>
-  <param name="rpc" value="dubbo" />
-  <param name="bootstrapServers" value="${kafka.bootstrap.servers}"/>
-  <param name="acks" value="0"/>
-  <param name="maxBlockMs" value="5000"/>
-  <param name="lingerMs" value="100"/>
+<appender name="kafkaAppender" class="com.jthink.skyeye.client.log4j.appender.KafkaAppender">
+        <param name="topic" value="app-log"/>
+        <param name="zkServers" value="riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181"/>
+        <param name="app" value="xxx"/>
+        <param name="rpc" value="dubbo"/>
+        <param name="mail" value="xxx@xxx.com"/>
+        <param name="bootstrapServers" value="riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092"/>
+        <param name="acks" value="0"/>
+        <param name="maxBlockMs" value="2000"/>
+        <param name="lingerMs" value="100"/>
 
-  <layout class="org.apache.log4j.PatternLayout">
-    <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS};APP_NAME;HOSTNAME;%t;%p;%c;%L;%m%n"/>
-  </layout>
-</appender>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS};APP_NAME;HOSTNAME;%t;%p;%c;%L;%m%n"/>
+        </layout>
+    </appender>
 ```
 ## 注意点
 ## logback
-- 目前公司很多项目采用的是spring-boot，版本为1.3.6.RELEASE，该版本自带logback版本为1.1.7，该版本结合kafka有bug，需要降低一个版本
-- logback bug: [logback bug](http://jira.qos.ch/browse/LOGBACK-1158), 1.1.8版本会fix
-- 示例：
+- logback在对接kafka的时候有个bug，[jira bug](https://jira.qos.ch/browse/LOGBACK-1328)，所以需要将肉root level设置为INFO（不能是DEBUG）
 
-``` shell
-compile ("org.springframework.boot:spring-boot-starter") {
-  exclude group: 'ch.qos.logback', module: 'logback-classic'
-  exclude group: 'ch.qos.logback', module: 'logback-core'
-}
-compile "ch.qos.logback:logback-classic:1.1.6"
-compile "ch.qos.logback:logback-core:1.1.6"
-```
 ### log4j
 由于log4j本身的appender比较复杂难写，所以在稳定性和性能上没有logback支持得好，应用能使用logback请尽量使用logback
 ### 中间件
 如果项目中有使用到zkClient、，统一使用自己打包的版本，以防日志收集出错或者异常（PS：zk必须为3.4.6版本，尽量使用gradle进行打包部署）
 ### rpc trace
-使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace)），在soa中间件dubbox中封装了rpc的跟踪
+使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.0.0)），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
 compile "com.101tec:zkclient:0.9.1-up"
-compile ("com.alibaba:dubbo:2.8.4-skyeye-trace") {
+compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.0.0") {
   exclude group: 'org.springframework', module: 'spring'
 }
 ```
