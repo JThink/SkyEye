@@ -22,7 +22,6 @@ repositories {
 
 ext {
   clientVersion = '1.0.0'
-  dataVersion = '1.0.0'
 }
 
 dependencies {
