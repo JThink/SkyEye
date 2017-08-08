@@ -1,0 +1,3 @@
+create 'trace', {NAME => 'span', VERSIONS => 1, COMPRESSION => 'SNAPPY'}, {NUMREGIONS => 3, SPLITALGO => 'HexStringSplit'}
+create 'time_consume', {NAME => 'trace', VERSIONS => 1, COMPRESSION => 'SNAPPY'}, {NUMREGIONS => 3, SPLITALGO => 'HexStringSplit'}
+create 'annotation', {NAME => 'trace', VERSIONS => 1, COMPRESSION => 'SNAPPY'}, {NUMREGIONS => 3, SPLITALGO => 'HexStringSplit'}
