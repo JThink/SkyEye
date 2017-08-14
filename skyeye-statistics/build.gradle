@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 group = 'skyeye'
 applicationName = 'skyeye-statistics'
-version = '1.0.0'
+version = '1.1.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -27,7 +27,7 @@ ext {
   scalaVersion = '2.10.4'
   scalaBinaryVersion = '2.10'
   sparkVersion = '1.3.0-cdh5.4.0'
-  baseVersion = '1.0.0'
+  baseVersion = '1.1.0'
   fastjsonVersion = '1.2.35'
   zkClientVersion = '0.9.1-up'
 }

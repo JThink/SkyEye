@@ -3,7 +3,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'skyeye'
-  version = '1.0.0'
+  version = '1.1.0'
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
   compileJava.options.encoding = 'UTF-8'
@@ -37,7 +37,7 @@ subprojects {
   apply plugin: 'eclipse'
 
   ext {
-    baseVersion = '1.0.0'
+    baseVersion = '1.1.0'
     kafkaVersion = '0.10.0.1'
     springBootVersion = '1.5.6.RELEASE'
     esVersion = '2.3.3'

@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 group = 'skyeye'
-version = '1.0.0'
+version = '1.1.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -14,8 +14,8 @@ ext {
   mavenPublicUrl = 'http://192.168.88.8:8081/nexus/content/repositories/public'
   mavenReleaseUrl = 'http://192.168.88.8:8081/nexus/content/repositories/releases'
   mavenSnapshotUrl = "http://192.168.88.8:8081/nexus/content/repositories/snapshots"
-  baseVersion = '1.0.0'
-  dataVersion = '1.0.0'
+  baseVersion = '1.1.0'
+  dataVersion = '1.1.0'
   slf4jVersion = '1.7.21'
   fastJsonVersion = '1.2.35'
   zookeeperVersion = '3.4.6'

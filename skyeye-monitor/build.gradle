@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 group = 'skyeye'
 applicationName = 'skyeye-monitor'
-version = '1.0.0'
+version = '1.1.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -23,8 +23,8 @@ repositories {
 ext {
   zookeeperVersion = '3.4.6'
   curatorVersion = '2.11.0'
-  baseVersion = '1.0.0'
-  dataVersion = '1.0.0'
+  baseVersion = '1.1.0'
+  dataVersion = '1.1.0'
   jacksonVersion = '1.9.13'
   zkclientVersion = '0.9.1-up'
 }
