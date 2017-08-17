@@ -55,7 +55,7 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
     // 标记是否为rpc服务, 取值为RpcType.java
     private String rpc;
     // KafkaProducer类的配置
-    private Map<String, Object> config = new HashMap<String, Object>();
+    private Map<String, Object> config = new HashMap<>();
     // key生成器
     private KeyBuilder<? super E> keyBuilder;
     // 编码器
@@ -96,22 +96,10 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
         // 初始化zk
         this.zkRegister = new ZkRegister(new ZkClient(this.zkServers, 60000, 5000));
         // 注册节点
-        this.zkRegister.registerNode(KafkaAppender.this.host, KafkaAppender.this.app, KafkaAppender.this.mail);
+        this.zkRegister.registerNode(this.host, this.app, this.mail);
 
         // rpc trace注册中心
-        this.zkRegister.registerRpc(KafkaAppender.this.host, KafkaAppender.this.app, KafkaAppender.this.rpc);
-    }
-
-    /**
-     * 进行rpc trace注册
-     * @param app
-     * @param host
-     * @param zkClient
-     */
-    private void register(String app, String host, ZkClient zkClient) {
-        RegisterDto dto = new RegisterDto(app, host, zkClient);
-        Registry registry = new ZookeeperRegistry();
-        IncrementIdGen.setId(registry.register(dto));
+        this.zkRegister.registerRpc(this.host, this.app, this.rpc);
     }
 
     @Override

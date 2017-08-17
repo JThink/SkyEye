@@ -86,12 +86,12 @@ gradle clean install uploadArchives
 
 ### dubbox
 
-由于使用dubbox，为了能够采集到dubbox里面的rpc数据，需要修改dubbox的源码，见我修改的dubbox项目：[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.0.0)，该项目主要实现了rpc跟踪的具体实现，需要单独打包。
+由于使用dubbox，为了能够采集到dubbox里面的rpc数据，需要修改dubbox的源码，见我修改的dubbox项目：[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.1.0)，该项目主要实现了rpc跟踪的具体实现，需要单独打包。
 
 ```shell
 git clone https://github.com/JThink/dubbox.git
 cd dubbox
-git checkout skyeye-trace-1.0.0
+git checkout skyeye-trace-1.1.0
 修改相关pom中的私服地址
 mvn clean install deploy -Dmaven.test.skip=true
 ```
@@ -602,11 +602,11 @@ compile "skyeye:skyeye-client-log4j:1.0.0"
 ### 中间件
 如果项目中有使用到zkClient、，统一使用自己打包的版本，以防日志收集出错或者异常（PS：zk必须为3.4.6版本，尽量使用gradle进行打包部署）
 ### rpc trace
-使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.0.0)），在soa中间件dubbox中封装了rpc的跟踪
+使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.1.0)），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
 compile "com.101tec:zkclient:0.9.1-up"
-compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.0.0") {
+compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.1.0") {
   exclude group: 'org.springframework', module: 'spring'
 }
 ```

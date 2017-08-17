@@ -51,13 +51,13 @@ public class KafkaAppender extends AppenderSkeleton {
     // 标记是否为rpc服务, 取值为RpcType.java
     private String rpc;
     // KafkaProducer类的配置
-    private Map<String, Object> config = new HashMap<String, Object>();
+    private Map<String, Object> config = new HashMap<>();
     // zk注册器
     private ZkRegister zkRegister;
     // kafka producer是否正在初始化
     private volatile AtomicBoolean isInitializing = new AtomicBoolean(false);
     // kafka producer未完成初始化之前的消息存放的队列
-    private ConcurrentLinkedQueue<String> msgQueue = new ConcurrentLinkedQueue<String>();
+    private ConcurrentLinkedQueue<String> msgQueue = new ConcurrentLinkedQueue<>();
 
     // kafka server
     private String bootstrapServers;
@@ -131,7 +131,7 @@ public class KafkaAppender extends AppenderSkeleton {
     private void send(String value) {
         final byte[] key = ByteBuffer.allocate(4).putInt(new StringBuilder(app).append(host).toString().hashCode()).array();
 
-        final ProducerRecord<byte[], String> record = new ProducerRecord<byte[], String>(this.topic, key, value);
+        final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, key, value);
         LazySingletonProducer.getInstance(this.config).send(record, new Callback() {
             @Override
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {
@@ -258,18 +258,6 @@ public class KafkaAppender extends AppenderSkeleton {
 
             LazySingletonProducer.getInstance(this.config);
         }
-    }
-
-    /**
-     * 进行rpc trace注册
-     * @param app
-     * @param host
-     * @param zkClient
-     */
-    private void register(String app, String host, ZkClient zkClient) {
-        RegisterDto dto = new RegisterDto(app, host, zkClient);
-        Registry registry = new ZookeeperRegistry();
-        IncrementIdGen.setId(registry.register(dto));
     }
 
     /**
