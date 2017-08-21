@@ -43,7 +43,7 @@ public class Launcher {
         }
         builder.application().setListeners(listeners);
         ConfigurableApplicationContext context = builder.run(args);
-        LOGGER.info("alch start successfully");
+        LOGGER.info("log-generator start successfully");
 
         GenerateLogService logService = context.getBean(GenerateLogService.class);
 //        logService.generateCoverLog();

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="60">
+  <Properties>
+    <Property name="LOG_HOME">../logs/</Property>
+    <property name="APP_NAME" value="hi-log-log4j2" />
+  </Properties>
+
+  <Appenders>
+    <!-- 控制台输出 -->
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{96}[%line]: %msg%n"/>
+    </Console>
+
+    <!-- 按照每天生成日志文件 -->
+    <RollingFile name="RollingInfoFile" fileName="${LOG_HOME}/info/${APP_NAME}.log" filePattern="${LOG_HOME}/info/${APP_NAME}_%d{yyyy-MM-dd}.%i.log">
+      <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{96}[%line]: %msg%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy/>
+        <SizeBasedTriggeringPolicy size="128 MB"/>
+      </Policies>
+    </RollingFile>
+
+    <RollingFile name="RollingErrorFile" fileName="${LOG_HOME}/info/${APP_NAME}.log" filePattern="${LOG_HOME}/info/${APP_NAME}_%d{yyyy-MM-dd}.%i.log">
+      <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{96}[%line]: %msg%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy/>
+        <SizeBasedTriggeringPolicy size="128 MB"/>
+      </Policies>
+    </RollingFile>
+
+
+    <!-- kafka appender -->
+    <KafkaCustomize name="kafkaAppender" topic="app-log" zkServers="riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181"
+                    mail="qianjc@unionpaysmart.com" rpc="none" app="${APP_NAME}" host="${hostName}">
+      <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS};${APP_NAME};${hostName};%t;%-5level;%logger{96};%line;%msg%n"/>
+      <Property name="bootstrap.servers">riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</Property>
+      <Property name="acks">0</Property>
+      <Property name="linger.ms">100</Property>
+      <Property name="client.id">${APP_NAME}-${hostName}-log4j2</Property>
+    </KafkaCustomize>
+  </Appenders>
+
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingInfoFile"/>
+      <AppenderRef ref="RollingErrorFile"/>
+    </Root>
+  </Loggers>
+</Configuration>

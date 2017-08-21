@@ -115,8 +115,6 @@ public class KafkaAppender extends AbstractAppender {
                 throw new AppenderLoggingException("Unable to write to Kafka in appender: " + e.getMessage(), e);
             }
         }
-
-
     }
 
     @Override
