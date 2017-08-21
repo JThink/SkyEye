@@ -632,7 +632,7 @@ compile "skyeye:skyeye-client-log4j2:1.1.0"
 
 ``` shell
 compile "com.101tec:zkclient:0.10"
-compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.1.0") {
+compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.2.0") {
   exclude group: 'org.springframework', module: 'spring'
 }
 ```
