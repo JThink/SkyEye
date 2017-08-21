@@ -26,7 +26,7 @@ ext {
   baseVersion = '1.1.0'
   dataVersion = '1.1.0'
   jacksonVersion = '1.9.13'
-  zkclientVersion = '0.9.1-up'
+  zkclientVersion = '0.10'
 }
 
 dependencies {

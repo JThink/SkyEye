@@ -121,6 +121,14 @@ public class KafkaAppender extends AbstractAppender {
     public void start() {
         super.start();
 
+        // 添加hook
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                KafkaAppender.this.manager.closeResources();
+            }
+        });
+
         this.manager.startup();
     }
 

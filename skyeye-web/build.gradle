@@ -29,7 +29,7 @@ ext {
   jacksonVersion = '1.9.13'
   httpclientVersion = '4.5.2'
   fastjsonVersion = '1.2.35'
-  zkclientVersion = '0.9.1-up'
+  zkclientVersion = '0.10'
 }
 
 dependencies {

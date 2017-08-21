@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.logging.LoggingApplicationListener;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.ComponentScan;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -27,7 +26,7 @@ public class Launcher {
     private static volatile boolean RUNNING = true;
     private static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         SpringApplicationBuilder builder = new SpringApplicationBuilder(Launcher.class);
         Set<ApplicationListener<?>> listeners = builder.application().getListeners();
         for (Iterator<ApplicationListener<?>> it = listeners.iterator(); it.hasNext();) {
@@ -44,6 +43,7 @@ public class Launcher {
         String a = "哈哈";
         while (true) {
             LOGGER.info("i am test, {}", a);
+            Thread.sleep(1000);
         }
     }
 }

@@ -56,7 +56,7 @@ subprojects {
   ext {
     kafkaVersion = '0.10.0.1'
     zookeeperVersion = '3.4.6'
-    zkclientVersion = '0.9.1-up'
+    zkclientVersion = '0.10'
     baseVersion = '1.1.0'
     traceVersion = '1.1.0'
   }

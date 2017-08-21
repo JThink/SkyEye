@@ -77,7 +77,7 @@ compile "skyeye:skyeye-client-log4j:1.0.0"
 使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.0.0)），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
-compile "com.101tec:zkclient:0.9.1-up"
+compile "com.101tec:zkclient:0.10"
 compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.0.0") {
   exclude group: 'org.springframework', module: 'spring'
 }

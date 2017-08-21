@@ -107,7 +107,7 @@ public class KafkaManager extends AbstractManager {
     /**
      * 关闭zk和kafka
      */
-    private void closeResources() {
+    public void closeResources() {
         if (LazySingletonProducer.isInstanced()) {
             LazySingletonProducer.getInstance(KafkaManager.this.config).close();
         }

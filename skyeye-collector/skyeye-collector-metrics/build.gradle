@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 ext {
   dataVersion = '1.1.0'
-  zkclientVersion = '0.9.1-up'
+  zkclientVersion = '0.10'
 }
 
 dependencies {

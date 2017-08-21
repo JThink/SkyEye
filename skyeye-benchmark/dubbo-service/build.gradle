@@ -40,7 +40,7 @@ subprojects {
     dataVersion = '1.1.0'
     clientVersion = '1.1.0'
     zookeeperVerison = '3.4.6'
-    zkClientVersion = '0.9.1-up'
+    zkClientVersion = '0.10'
   }
 
   [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
