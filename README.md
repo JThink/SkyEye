@@ -16,7 +16,7 @@
 # 项目介绍
 对java、scala等运行于jvm的程序进行实时日志采集、索引和可视化，对系统进行进程级别的监控，对系统内部的操作进行策略性的报警、对分布式的rpc调用进行trace跟踪以便于进行性能分析
 
-- 日志实时采集（支持log4j和logback）
+- 日志实时采集（支持log4j、logback和log4j2）
 - 日志实时页面实时展示（支持关键字过滤）
 - 历史日志查询（支持多种条件过滤，支持sql语句查询）
 - app实时部署位置展示（机器和文件夹）
@@ -32,6 +32,7 @@
 # 部署步骤
 
 每个项目都需要修改gradle文件中的私服地址（这样才能打包deploy到自己的本地私服）
+可以使用新增的打包脚本：bash build.sh(所有的jar包都会上传到私服和install到本地, 可运行项目依旧打在各自的target下)
 
 ## skyeye-base
 
@@ -539,7 +540,7 @@ nohup bin/skyeye-web &
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-logback:1.0.0"
+compile "skyeye:skyeye-client-logback:1.1.0"
 ```
 ### 配置
 在logback.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -571,7 +572,7 @@ compile "skyeye:skyeye-client-logback:1.0.0"
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-log4j:1.0.0"
+compile "skyeye:skyeye-client-log4j:1.1.0"
 ```
 ### 配置
 在log4j.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -593,14 +594,39 @@ compile "skyeye:skyeye-client-log4j:1.0.0"
         </layout>
     </appender>
 ```
+## Log4j2
+
+### 依赖
+
+gradle或者pom中加入skyeye-client的依赖
+
+```xml
+compile "skyeye:skyeye-client-log4j2:1.1.0"
+```
+
+### 配置
+
+在log4j2.xml中加入一个KafkaCustomize，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
+
+```xml
+<KafkaCustomize name="KafkaCustomize" topic="app-log" zkServers="riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181"
+                mail="qianjc@unionpaysmart.com" rpc="none" app="${APP_NAME}" host="${hostName}">
+  <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+  <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS};${APP_NAME};${hostName};%t;%-5level;%logger{96};%line;%msg%n"/>
+  <Property name="bootstrap.servers">riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</Property>
+  <Property name="acks">0</Property>
+  <Property name="linger.ms">100</Property>
+  <Property name="client.id">${APP_NAME}-${hostName}-log4j2</Property>
+</KafkaCustomize>
+```
+
 ## 注意点
+
 ## logback
-- logback在对接kafka的时候有个bug，[jira bug](https://jira.qos.ch/browse/LOGBACK-1328)，所以需要将肉root level设置为INFO（不能是DEBUG）
+- logback在对接kafka的时候有个bug，[jira bug](https://jira.qos.ch/browse/LOGBACK-1328)，所以需要将root level设置为INFO（不能是DEBUG）
 
 ### log4j
 由于log4j本身的appender比较复杂难写，所以在稳定性和性能上没有logback支持得好，应用能使用logback请尽量使用logback
-### 中间件
-如果项目中有使用到zkClient、，统一使用自己打包的版本，以防日志收集出错或者异常（PS：zk必须为3.4.6版本，尽量使用gradle进行打包部署）
 ### rpc trace
 使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.1.0)），在soa中间件dubbox中封装了rpc的跟踪
 

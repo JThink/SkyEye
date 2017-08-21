@@ -11,7 +11,7 @@
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-logback:1.0.0"
+compile "skyeye:skyeye-client-logback:1.1.0"
 ```
 ### 配置
 在logback.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -43,7 +43,7 @@ compile "skyeye:skyeye-client-logback:1.0.0"
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-log4j:1.0.0"
+compile "skyeye:skyeye-client-log4j:1.1.0"
 ```
 ### 配置
 在log4j.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -65,20 +65,45 @@ compile "skyeye:skyeye-client-log4j:1.0.0"
         </layout>
     </appender>
 ```
+## Log4j2
+
+### 依赖
+
+gradle或者pom中加入skyeye-client的依赖
+
+```xml
+compile "skyeye:skyeye-client-log4j2:1.1.0"
+```
+
+### 配置
+
+在log4j2.xml中加入一个KafkaCustomize，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
+
+```xml
+<KafkaCustomize name="KafkaCustomize" topic="app-log" zkServers="riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181"
+                mail="qianjc@unionpaysmart.com" rpc="none" app="${APP_NAME}" host="${hostName}">
+  <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+  <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS};${APP_NAME};${hostName};%t;%-5level;%logger{96};%line;%msg%n"/>
+  <Property name="bootstrap.servers">riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</Property>
+  <Property name="acks">0</Property>
+  <Property name="linger.ms">100</Property>
+  <Property name="client.id">${APP_NAME}-${hostName}-log4j2</Property>
+</KafkaCustomize>
+```
+
 ## 注意点
+
 ## logback
-- logback在对接kafka的时候有个bug，[jira bug](https://jira.qos.ch/browse/LOGBACK-1328)，所以需要将肉root level设置为INFO（不能是DEBUG）
+- logback在对接kafka的时候有个bug，[jira bug](https://jira.qos.ch/browse/LOGBACK-1328)，所以需要将root level设置为INFO（不能是DEBUG）
 
 ### log4j
 由于log4j本身的appender比较复杂难写，所以在稳定性和性能上没有logback支持得好，应用能使用logback请尽量使用logback
-### 中间件
-如果项目中有使用到zkClient、，统一使用自己打包的版本，以防日志收集出错或者异常（PS：zk必须为3.4.6版本，尽量使用gradle进行打包部署）
 ### rpc trace
-使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.0.0)），在soa中间件dubbox中封装了rpc的跟踪
+使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.1.0)），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
 compile "com.101tec:zkclient:0.10"
-compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.0.0") {
+compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.1.0") {
   exclude group: 'org.springframework', module: 'spring'
 }
 ```
