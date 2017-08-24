@@ -8,6 +8,9 @@ compileJava.options.encoding = 'UTF-8'
 buildDir = 'target'
 
 ext {
+  fastJsonVersion = '1.2.35'
+  zookeeperVersion = '3.4.6'
+  zkclientVersion = '0.10'
 }
 
 repositories {
@@ -19,11 +22,7 @@ repositories {
 }
 
 dependencies {
-}
-
-configurations {
-  compile.exclude group: "log4j", module: "log4j"
-  compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
-  compile.exclude group: "ch.qos.logback", module: "logback-classic"
-  compile.exclude group: "ch.qos.logback", module: "logback-core"
+  compile "com.alibaba:fastjson:$fastJsonVersion"
+  compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
+  compile "com.101tec:zkclient:$zkclientVersion"
 }
