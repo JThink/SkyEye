@@ -51,8 +51,7 @@ public class ZkRegister {
      * @param rpc
      */
     public void registerRpc(String host, String app, String rpc) {
-        if (rpc.equals(RpcType.dubbo.symbol())) {
-            // TODO: 目前仅支持dubbo作为rpc/soa框架
+        if (!rpc.equals(RpcType.none.symbol())) {
             RegisterDto dto = new RegisterDto(app, host, this.client);
             Registry registry = new ZookeeperRegistry();
             IncrementIdGen.setId(registry.register(dto));

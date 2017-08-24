@@ -12,8 +12,7 @@ public enum RpcType {
 
     none(Constants.RPC_TYPE_NONE, "none"),
     dubbo(Constants.RPC_TYPE_DUBBO, "dubbo"),
-    sc(Constants.RPC_TYPE_SC, "spring-cloud"),
-    thrift(Constants.RPC_TYPE_THRIFT, "thrift");
+    sc(Constants.RPC_TYPE_SC, "spring-cloud");
 
     private String symbol;
 

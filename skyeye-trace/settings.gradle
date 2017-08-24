@@ -1,2 +1,1 @@
-include 'skyeye-trace-core'
-//, 'skyeye-trace-sc'
+include 'skyeye-trace-core' , 'skyeye-trace-sc'

@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+buildDir = 'target'
+
+ext {
+  zullVersion = '1.3.0'
+}
+
+repositories {
+  mavenLocal()
+  maven { url mavenPublicUrl }
+  maven { url mavenReleaseUrl }
+  maven { url mavenSnapshotUrl }
+  mavenCentral()
+}
+
+dependencies {
+  compile "com.netflix.zuul:zuul-core:$zullVersion"
+}

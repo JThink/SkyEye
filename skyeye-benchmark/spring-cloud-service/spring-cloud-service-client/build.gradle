@@ -1,0 +1,16 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+ext {
+  springVersion = '4.3.8.RELEASE'
+  feignHystrixVersion = '9.5.0'
+}
+
+dependencies {
+  compile ("org.springframework.cloud:spring-cloud-netflix-core:$netflixCoreVersion") {
+    exclude group: 'org.springframework.boot', module: 'spring-boot'
+    exclude group: 'org.springframework.boot', module: 'spring-boot-autoconfigure'
+  }
+  compile ("org.springframework:spring-web:$springVersion")
+  compile "io.github.openfeign:feign-hystrix:$feignHystrixVersion"
+}
