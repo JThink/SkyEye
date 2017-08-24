@@ -65,7 +65,7 @@ subprojects {
 
   dependencies {
     compile "skyeye:skyeye-base:$baseVersion"
-    compile "skyeye:skyeye-trace:$traceVersion"
+    compile "skyeye:skyeye-trace-core:$traceVersion"
     compile "org.apache.kafka:kafka-clients:$kafkaVersion"
     compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
     compile "com.101tec:zkclient:$zkclientVersion"
