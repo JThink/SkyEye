@@ -17,10 +17,9 @@ import org.springframework.context.annotation.PropertySource;
  * @desc
  * @date 2017-08-27 10:10:57
  */
-@EnableFeignClients(basePackages = {"com.jthink.skyeye.benchmark.spring.cloud.service.client.iface"})
 @EnableDiscoveryClient
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.jthink.skyeye.benchmark.spring.cloud.service.c", "com.jthink.skyeye.benchmark.spring.cloud.service.client.fallback"})
+@ComponentScan(basePackages = {"com.jthink.skyeye.benchmark.spring.cloud.service.b", "com.jthink.skyeye.benchmark.spring.cloud.service.client.fallback"})
 @PropertySource("classpath:properties/service-b.properties")
 public class Application {
 
