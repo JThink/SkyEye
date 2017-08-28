@@ -19,6 +19,7 @@ dependencyManagement {
 dependencies {
   compile project(":spring-cloud-service-client")
   compile "org.springframework.boot:spring-boot-starter-web"
+  compile "org.springframework.boot:spring-boot-starter-aop"
   compile "org.springframework.cloud:spring-cloud-starter-eureka"
   compile "org.springframework.cloud:spring-cloud-starter-feign"
   compile "org.springframework.cloud:spring-cloud-starter-hystrix"
@@ -35,7 +36,7 @@ configurations {
 //  compile.exclude group: "org.hibernate", module: "hibernate-validator"
 }
 
-mainClassName = 'com.jthink.skyeye.benchmark.spring.cloud.service.a.application.Application'
+mainClassName = 'com.jthink.skyeye.benchmark.spring.cloud.service.c.application.Application'
 
 buildscript {
   ext {
