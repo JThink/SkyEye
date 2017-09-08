@@ -129,6 +129,10 @@ public class KafkaAppender extends AppenderSkeleton {
      * @param value
      */
     private void send(String value) {
+        // 对value的大小进行判定，当大于某个值认为该日志太大直接丢弃（防止影响到kafka）
+        if (value.length() > 10000) {
+            return;
+        }
         final byte[] key = ByteBuffer.allocate(4).putInt(new StringBuilder(app).append(host).toString().hashCode()).array();
 
         final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, key, value);

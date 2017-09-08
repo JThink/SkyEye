@@ -3,7 +3,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'skyeye'
-  version = '1.1.0'
+  version = '1.1.1'
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
   compileJava.options.encoding = 'UTF-8'
@@ -37,8 +37,8 @@ subprojects {
   ext {
     slf4jVersion = '1.7.21'
     dubboVersion = '2.8.4-skyeye-trace-1.1.0'
-    dataVersion = '1.1.0'
-    clientVersion = '1.1.0'
+    dataVersion = '1.1.1'
+    clientVersion = '1.1.1'
     zookeeperVerison = '3.4.6'
     zkClientVersion = '0.10'
   }

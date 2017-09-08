@@ -125,6 +125,10 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
             return;
         }
         final String value = System.nanoTime() + Constants.SEMICOLON + this.encoder.doEncode(e);
+        // 对value的大小进行判定，当大于某个值认为该日志太大直接丢弃（防止影响到kafka）
+        if (value.length() > 10000) {
+            return;
+        }
         final byte[] key = this.keyBuilder.build(e);
         final ProducerRecord<byte[], String> record = new ProducerRecord<byte[], String>(this.topic, key, value);
         LazySingletonProducer.getInstance(this.config).send(record, new Callback() {

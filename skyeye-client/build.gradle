@@ -4,7 +4,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'skyeye'
-  version = '1.1.0'
+  version = '1.1.1'
 
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
@@ -57,8 +57,8 @@ subprojects {
     kafkaVersion = '0.10.0.1'
     zookeeperVersion = '3.4.6'
     zkclientVersion = '0.10'
-    baseVersion = '1.1.0'
-    traceVersion = '1.1.0'
+    baseVersion = '1.1.1'
+    traceVersion = '1.1.1'
   }
 
   [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'

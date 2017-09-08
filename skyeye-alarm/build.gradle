@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 group = 'skyeye'
 applicationName = 'skyeye-alarm'
-version = '1.1.0'
+version = '1.1.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -21,8 +21,8 @@ repositories {
 }
 
 ext {
-  baseVersion = '1.1.0'
-  dataVersion = '1.1.0'
+  baseVersion = '1.1.1'
+  dataVersion = '1.1.1'
 }
 
 dependencies {
