@@ -23,7 +23,6 @@ dependencies {
   compile "org.springframework.cloud:spring-cloud-starter-eureka"
   compile "org.springframework.cloud:spring-cloud-starter-feign"
   compile "org.springframework.cloud:spring-cloud-starter-hystrix"
-  compile "org.springframework.cloud:spring-cloud-starter-zuul"
 
   compile "jthink:spring-boot-starter-feign-httpclient:0.0.1"
 

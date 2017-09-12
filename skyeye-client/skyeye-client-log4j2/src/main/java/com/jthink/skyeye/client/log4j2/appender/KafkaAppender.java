@@ -91,6 +91,10 @@ public class KafkaAppender extends AbstractAppender {
                 }
                 // 发送数据到kafka
                 String value = System.nanoTime() + Constants.SEMICOLON + new String(data);
+                // 对value的大小进行判定，当大于某个值认为该日志太大直接丢弃（防止影响到kafka）
+                if (value.length() > 10000) {
+                    return;
+                }
                 final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.manager.getTopic(), this.manager.getKey(), value);
                 LazySingletonProducer.getInstance(this.manager.getConfig()).send(record, new Callback() {
                     @Override

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2017-06-05 11:36:52
  */
 @RestController
-@RequestMapping("trace")
+@RequestMapping("service-a")
 public class TraceController {
 
     @Autowired

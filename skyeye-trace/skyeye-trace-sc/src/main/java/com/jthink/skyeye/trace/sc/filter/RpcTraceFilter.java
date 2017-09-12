@@ -21,7 +21,7 @@ public class RpcTraceFilter extends ZuulFilter {
 
     @Override
     public String filterType() {
-        return null;
+        return "post";
     }
 
     @Override
@@ -39,6 +39,7 @@ public class RpcTraceFilter extends ZuulFilter {
         RequestContext context = RequestContext.getCurrentContext();
         Map<String, String> headers = context.getZuulRequestHeaders();
 
+        headers.forEach((k, v) -> LOGGER.info("key: {}, value: {}", k, v));
 
         return null;
     }
