@@ -89,7 +89,8 @@ public class MonitorTask {
             if (threadhold > this.thirdThreshold) {
                 // 超过阈值，需要报警
                 LOGGER.info("{} 需要报警", third);
-                this.rabbitmqService.sendMessage(this.buildMsg(third, timestamp, third, this.thirdResponseTime, this.thirdThreshold, threadhold), this.mail);
+                this.rabbitmqService.sendMessage(this.buildMsg(third, timestamp, third, this.thirdResponseTime, this.thirdThreshold, threadhold,
+                        thirdTotalInfos.get(third)), this.mail);
             }
         }
 
@@ -122,7 +123,8 @@ public class MonitorTask {
             if (threadhold > this.middlewareThreshold) {
                 // 超过阈值，需要报警
                 LOGGER.info("{} 需要报警", middleware);
-                this.rabbitmqService.sendMessage(this.buildMsg(middleware, timestamp, middleware, this.middlewareResponseTime, this.middlewareThreshold, threadhold), this.mail);
+                this.rabbitmqService.sendMessage(this.buildMsg(middleware, timestamp, middleware, this.middlewareResponseTime, this.middlewareThreshold,
+                        threadhold, middlewareTotalInfos.get(middleware)), this.mail);
             }
         }
 
@@ -154,7 +156,8 @@ public class MonitorTask {
             if (threadhold > this.apiThreshold) {
                 // 超过阈值，需要报警
                 LOGGER.info("{} 需要报警", app);
-                this.rabbitmqService.sendMessage(this.buildMsg(app, timestamp, Constants.API, this.apiResponseTime, this.apiThreshold, threadhold), this.mail);
+                this.rabbitmqService.sendMessage(this.buildMsg(app, timestamp, Constants.API, this.apiResponseTime, this.apiThreshold, threadhold,
+                        appTotalInfos.get(app)), this.mail);
             }
         }
         sw.stop();
@@ -171,10 +174,11 @@ public class MonitorTask {
      * @param currentThreshold
      * @return
      */
-    private String buildMsg(String app, long timestamp, String key, String responseTime, double threshold, double currentThreshold) {
+    private String buildMsg(String app, long timestamp, String key, String responseTime, double threshold, double currentThreshold, int callTotalCnt) {
         StringBuilder sb = new StringBuilder();
         sb.append(key).append(Constants.WECHAT_ALERT_RESPONSE_EXCEED).append(Constants.COMMA).append(this.interval).append("分钟内响应时间超过").append(responseTime)
-                .append("ms占比大于").append(threshold * 100).append("%").append(Constants.COMMA).append("当前占比:").append(currentThreshold * 100).append("%");
+                .append("ms占比大于").append(threshold * 100).append("%").append(Constants.COMMA).append("当前占比:").append(currentThreshold * 100).append("%")
+                .append(Constants.COMMA).append("总请求次数:").append(callTotalCnt);
         AlertDto alertDto = new AlertDto();
         alertDto.setApp(app);
         alertDto.setMsg(sb.toString());
