@@ -85,10 +85,11 @@ public class MonitorTask {
         for (Map.Entry<String, Integer> entry : thirdInfos.entrySet()) {
             String third = entry.getKey();
             int cnt = entry.getValue();
-            if ((double) cnt / thirdTotalInfos.get(third) > this.thirdThreshold) {
+            double threadhold = (double) cnt / thirdTotalInfos.get(third);
+            if (threadhold > this.thirdThreshold) {
                 // 超过阈值，需要报警
                 LOGGER.info("{} 需要报警", third);
-                this.rabbitmqService.sendMessage(this.buildMsg(third, timestamp, third), this.mail);
+                this.rabbitmqService.sendMessage(this.buildMsg(third, timestamp, third, this.thirdResponseTime, this.thirdThreshold, threadhold), this.mail);
             }
         }
 
@@ -117,10 +118,11 @@ public class MonitorTask {
         for (Map.Entry<String, Integer> entry : middlewareInfos.entrySet()) {
             String middleware = entry.getKey();
             int cnt = entry.getValue();
-            if ((double) cnt / middlewareTotalInfos.get(middleware) > this.middlewareThreshold) {
+            double threadhold = (double) cnt / middlewareTotalInfos.get(middleware);
+            if (threadhold > this.middlewareThreshold) {
                 // 超过阈值，需要报警
                 LOGGER.info("{} 需要报警", middleware);
-                this.rabbitmqService.sendMessage(this.buildMsg(middleware, timestamp, middleware), this.mail);
+                this.rabbitmqService.sendMessage(this.buildMsg(middleware, timestamp, middleware, this.middlewareResponseTime, this.middlewareThreshold, threadhold), this.mail);
             }
         }
 
@@ -148,10 +150,11 @@ public class MonitorTask {
         for (Map.Entry<String, Integer> entry : appInfos.entrySet()) {
             String app = entry.getKey();
             int cnt = entry.getValue();
-            if ((double) cnt / appTotalInfos.get(app) > this.apiThreshold) {
+            double threadhold = (double) cnt / appTotalInfos.get(app);
+            if (threadhold > this.apiThreshold) {
                 // 超过阈值，需要报警
                 LOGGER.info("{} 需要报警", app);
-                this.rabbitmqService.sendMessage(this.buildMsg(app, timestamp, Constants.API), this.mail);
+                this.rabbitmqService.sendMessage(this.buildMsg(app, timestamp, Constants.API, this.apiResponseTime, this.apiThreshold, threadhold), this.mail);
             }
         }
         sw.stop();
@@ -163,12 +166,18 @@ public class MonitorTask {
      * @param app
      * @param timestamp
      * @param key
+     * @param responseTime
+     * @param threshold
+     * @param currentThreshold
      * @return
      */
-    private String buildMsg(String app, long timestamp, String key) {
+    private String buildMsg(String app, long timestamp, String key, String responseTime, double threshold, double currentThreshold) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(key).append(Constants.WECHAT_ALERT_RESPONSE_EXCEED).append(Constants.COMMA).append(this.interval).append("分钟内响应时间超过").append(responseTime)
+                .append("ms占比大于").append(threshold * 100).append("%").append(Constants.COMMA).append("当前占比:").append(currentThreshold * 100).append("%");
         AlertDto alertDto = new AlertDto();
         alertDto.setApp(app);
-        alertDto.setMsg(key + Constants.WECHAT_ALERT_RESPONSE_EXCEED);
+        alertDto.setMsg(sb.toString());
         alertDto.setTime(new DateTime(timestamp).toString(DateUtil.YYYYMMDDHHMMSS));
         return alertDto.toString();
     }
