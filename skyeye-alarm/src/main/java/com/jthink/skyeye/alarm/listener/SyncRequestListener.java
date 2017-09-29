@@ -28,8 +28,6 @@ public class SyncRequestListener {
     @Autowired
     private MailService mailService;
     @Autowired
-    private RabbitmqService rabbitmqService;
-    @Autowired
     private WechatService wechatService;
     @Autowired
     private WechatProperties wechatProperties;
