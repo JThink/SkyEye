@@ -1,6 +1,8 @@
 package com.jthink.skyeye.alarm.listener;
 
+import com.jthink.skyeye.alarm.configuration.dingding.DingdingProperties;
 import com.jthink.skyeye.alarm.configuration.wechat.WechatProperties;
+import com.jthink.skyeye.alarm.service.DingDingService;
 import com.jthink.skyeye.alarm.service.MailService;
 import com.jthink.skyeye.alarm.service.WechatService;
 import com.jthink.skyeye.base.dto.MailDto;
@@ -31,6 +33,10 @@ public class SyncRequestListener {
     private WechatService wechatService;
     @Autowired
     private WechatProperties wechatProperties;
+    @Autowired
+    private DingDingService dingDingService;
+    @Autowired
+    private DingdingProperties dingdingProperties;
 
     public void onMessage(Object object) {
         MailDto mailDto = null;
@@ -49,6 +55,9 @@ public class SyncRequestListener {
             }
 
             // 发送钉钉
+            if (this.dingdingProperties.isSwitchFlag()) {
+                this.dingDingService.send(mailDto.getContent());
+            }
 
         }  catch (Exception e) {
             LOGGER.info("drop a error message, {}, {}", mailDto.getContent(), e);
