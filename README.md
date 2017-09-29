@@ -34,6 +34,9 @@
 每个项目都需要修改gradle文件中的私服地址（这样才能打包deploy到自己的本地私服）
 可以使用新增的打包脚本：bash build.sh(所有的jar包都会上传到私服和install到本地, 可运行项目依旧打在各自的target下)
 
+- clean ./build --clean
+- 打包 ./build --build
+
 ## skyeye-base
 
 本项目没有具体的业务逻辑，主要是各个模块通用的类定义，如：常量、dto、dapper相关、公用util，所以该项目无需部署，只需要打包。
@@ -69,7 +72,7 @@ gradle clean install uploadArchives
 
 该项目主要是自定义的spring-boot的hbase starter，为hbase的query和更新等操作提供简易的api并集成spring-boot的auto configuration，见我的另一个开源项目：[spring-boot-starter-hbase](https://github.com/JThink/spring-boot-starter-hbase)
 
-### skyeye-data-http
+### skyeye-data-httpl
 
 该项目主要使用连接池简单封装了http的请求，如果项目中使用的spring版本较高可以使用RestTemplate代替。
 

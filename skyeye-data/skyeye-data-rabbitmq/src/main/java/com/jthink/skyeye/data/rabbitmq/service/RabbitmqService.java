@@ -22,14 +22,6 @@ public class RabbitmqService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public MailDto getMessage() {
-        Object object = this.rabbitTemplate.receiveAndConvert();
-        if (object != null) {
-            return (MailDto) object;
-        }
-        return null;
-    }
-
     public void sendMessage(String info, String mail) {
         this.rabbitTemplate.convertAndSend(this.buildMailDto(info, mail));
     }
