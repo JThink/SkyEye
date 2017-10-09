@@ -46,7 +46,7 @@ public class Launcher {
         LOGGER.info("log-generator start successfully");
 
         GenerateLogService logService = context.getBean(GenerateLogService.class);
-//        logService.generateCoverLog();
+        logService.generateCoverLog();
 
 
 
