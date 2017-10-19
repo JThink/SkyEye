@@ -17,6 +17,7 @@ dependencies {
 configurations {
   compile.exclude group: "log4j", module: "log4j"
   compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
+  compile.exclude group: "com.github.sgroschupf", module: "zkclient"
 }
 
 mainClassName = "com.jthink.skyeye.benchmark.dubbo.service.e.launcher.Launcher"

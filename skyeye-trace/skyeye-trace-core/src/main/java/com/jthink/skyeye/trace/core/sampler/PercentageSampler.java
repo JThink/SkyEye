@@ -31,7 +31,7 @@ public class PercentageSampler implements Sampler {
                     isSample = false;
                 }
             }
-            if (n > levelOne) {
+            if (n > levelTwo) {
                 n = n % 10;
                 if (n != 0) {
                     isSample = false;
@@ -47,8 +47,8 @@ public class PercentageSampler implements Sampler {
     public static void main(String[] args) {
         PercentageSampler sampler = new PercentageSampler();
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 10000; ++i) {
-            System.out.println(sampler.isCollect());
+        for (int i = 0; i < 1000; ++i) {
+            System.out.println(String.valueOf(i) + sampler.isCollect());
         }
         long end = System.currentTimeMillis();
         System.out.println(end - start);
