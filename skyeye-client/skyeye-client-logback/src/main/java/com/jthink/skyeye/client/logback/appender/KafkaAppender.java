@@ -5,6 +5,7 @@ import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.hook.DelayingShutdownHook;
 import ch.qos.logback.core.status.ErrorStatus;
+import ch.qos.logback.core.status.InfoStatus;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.constant.RpcType;
 import com.jthink.skyeye.base.util.StringUtil;
@@ -24,8 +25,11 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -63,6 +67,8 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
     // kafkaAppender遇到异常需要向zk进行写入数据，由于onCompletion()的调用在kafka集群完全挂掉时会有很多阻塞的日志会调用，所以我们需要保证只向zk写一次数据，监控中心只会发生一次报警
     private volatile AtomicBoolean flag = new AtomicBoolean(true);
 
+    private Timer timer;
+
     /**
      * 构造方法
      */
@@ -73,6 +79,9 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
         this.checkAndSetConfig(ProducerConfig.PARTITIONER_CLASS_CONFIG, KeyModPartitioner.class.getName());
 
         shutdownHook = new DelayingShutdownHook();
+
+        // 心跳检测定时器初始化
+        this.timer = new Timer();
     }
 
     @Override
@@ -126,17 +135,19 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
             return;
         }
         final byte[] key = this.keyBuilder.build(e);
-        final ProducerRecord<byte[], String> record = new ProducerRecord<byte[], String>(this.topic, key, value);
+        final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, key, value);
         LazySingletonProducer.getInstance(this.config).send(record, new Callback() {
             @Override
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                // TODO: 异常发生如何处理(目前使用RollingFileAppender.java中的方法)
                 if (null != e) {
                     // 如果发生异常, 将开始状态设置为false, 并每次append的时候都先check该状态
                     started = false;
                     addStatus(new ErrorStatus("kafka send error in appender", this, e));
                     // 发生异常，kafkaAppender 停止收集，向节点写入数据（监控系统会感知进行报警）
                     if (flag.get() == true) {
+                        // 启动心跳检测机制
+                        KafkaAppender.this.heartbeatStart();
+                        // 向zk通知
                         zkRegister.write(Constants.SLASH + app + Constants.SLASH + host, NodeMode.EPHEMERAL,
                                 String.valueOf(System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
                         flag.compareAndSet(true, false);
@@ -144,6 +155,47 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
                 }
             }
         });
+    }
+
+    /**
+     * 心跳检测开始
+     */
+    public void heartbeatStart() {
+        this.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                byte[] key = ByteBuffer.allocate(4).putInt(Constants.HEARTBEAT_KEY.hashCode()).array();
+                final ProducerRecord<byte[], String> record = new ProducerRecord<>(topic, key, Constants.HEARTBEAT_VALUE);
+
+                // java 8 lambda
+//                LazySingletonProducer.getInstance(config).send(record, (RecordMetadata recordMetadata, Exception e) -> {
+                // logic code
+//                });
+
+                LazySingletonProducer.getInstance(config).send(record, new Callback() {
+                    @Override
+                    public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+                        if (null == e) {
+                            // 如果没有发生异常, 说明kafka从异常状态切换为正常状态, 将开始状态设置为true
+                            started = true;
+                            addStatus(new InfoStatus("kafka send normal in appender", this, e));
+                            // 关闭心跳检测机制
+                            KafkaAppender.this.heartbeatStop();
+                            // TODO: 向zk通知
+//                            zkRegister.write(Constants.SLASH + app + Constants.SLASH + host, NodeMode.EPHEMERAL,
+//                                    String.valueOf(System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
+                        }
+                    }
+                });
+            }
+        }, 0,60000);
+    }
+
+    /**
+     * 心跳检测停止
+     */
+    private void heartbeatStop() {
+        this.timer.cancel();
     }
 
     @Override

@@ -221,4 +221,8 @@ public class Constants {
     public static final String TRACE_TYPE = "type";
     public static final String TRACE_TABLE_NAME = "rpctrace";
 
+    // 心跳检测相关
+    public static final String HEARTBEAT_KEY = "heart beat key";
+    public static final String HEARTBEAT_VALUE = "heart beat value";
+
 }
