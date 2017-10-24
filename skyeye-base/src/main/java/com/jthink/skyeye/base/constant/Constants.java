@@ -132,6 +132,9 @@ public class Constants {
     public static final String WECHAT_ALERT_MSG = "详情: ";
     public static final String APP_START = "start";
     public static final String APP_STOP = "stop";
+    public static final String APP_APPENDER_RESTART_KEY = "restart";
+    public static final String APP_APPENDER_RESTART = "kafka appender restart";
+    public static final String APP_APPENDER_STOP_KEY = "stop";
     public static final String APP_APPENDER_STOP = "kafka appender stop";
     public static final String WECHAT_ALERT_RESPONSE_EXCEED = "响应时间超过阈值";
 

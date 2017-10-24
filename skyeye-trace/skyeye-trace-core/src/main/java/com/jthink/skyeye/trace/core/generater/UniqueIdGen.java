@@ -20,9 +20,9 @@ public class UniqueIdGen implements IdGen {
     // 序列号，支持单节点最高1000*1024的并发
     private final static int SEQUENCE_BITS = 10;
 
-    // 最大的app host id，65535
+    // 最大的app host id，8091
     private final static long MAX_APP_HOST_ID = ~(-1L << APP_HOST_ID_BITS);
-    // 最大的序列号，127
+    // 最大的序列号，1023
     private final static long MAX_SEQUENCE = ~(-1L << SEQUENCE_BITS);
 
     // app host编号的移位

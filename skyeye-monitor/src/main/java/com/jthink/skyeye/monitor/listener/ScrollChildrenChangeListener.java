@@ -39,7 +39,7 @@ public class ScrollChildrenChangeListener implements PathChildrenCacheListener  
         switch (event.getType()) {
             case CHILD_ADDED:
                 PathChildrenCache pathChildrenCache = new PathChildrenCache(client, event.getData().getPath(), true);
-                pathChildrenCache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);
+                pathChildrenCache.start(PathChildrenCache.StartMode.BUILD_INITIAL_CACHE);
                 pathChildrenCache.getListenable().addListener(new AppChildrenChangeListener(this.rabbitmqService, this.zkClient, this.appInfoService));
                 LOGGER.info("app added: " + event.getData().getPath());
                 break;

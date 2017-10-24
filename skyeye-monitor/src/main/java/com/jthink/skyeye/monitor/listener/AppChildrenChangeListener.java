@@ -91,13 +91,22 @@ public class AppChildrenChangeListener implements PathChildrenCacheListener {
                 app = this.getApp(node);
                 host = this.getHost(node);
 
-                info = this.buildMsg(DateUtil.format(new Date(Long.parseLong(datas[0])), DateUtil.YYYYMMDDHHMMSS), app,
-                        this.getHost(node), datas[1], Constants.APP_APPENDER_STOP);
+                String detail = Constants.APP_APPENDER_STOP;
+                LogCollectionStatus status = LogCollectionStatus.STOPPED;
+
+                if (datas[0].equals(Constants.APP_APPENDER_RESTART_KEY)) {
+                    // 如果是kafka appender restart
+                    detail = Constants.APP_APPENDER_RESTART;
+                    status = LogCollectionStatus.RUNNING;
+                }
+
+                info = this.buildMsg(DateUtil.format(new Date(Long.parseLong(datas[1])), DateUtil.YYYYMMDDHHMMSS), app,
+                        this.getHost(node), datas[2], detail);
 
                 // add to the queue
                 this.rabbitmqService.sendMessage(info, this.zkClient.readData(Constants.ROOT_PATH_PERSISTENT + Constants.SLASH + app + Constants.SLASH + host).toString().split(Constants.SEMICOLON)[0]);
                 LOGGER.info(info);
-                this.appInfoService.update(host, app, Constants.ZK_NODE_TYPE_EPHEMERAL, LogCollectionStatus.STOPPED);
+                this.appInfoService.update(host, app, Constants.ZK_NODE_TYPE_EPHEMERAL, status);
                 break;
         }
     }

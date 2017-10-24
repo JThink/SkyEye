@@ -79,9 +79,6 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
         this.checkAndSetConfig(ProducerConfig.PARTITIONER_CLASS_CONFIG, KeyModPartitioner.class.getName());
 
         shutdownHook = new DelayingShutdownHook();
-
-        // 心跳检测定时器初始化
-        this.timer = new Timer();
     }
 
     @Override
@@ -144,12 +141,12 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
                     started = false;
                     addStatus(new ErrorStatus("kafka send error in appender", this, e));
                     // 发生异常，kafkaAppender 停止收集，向节点写入数据（监控系统会感知进行报警）
-                    if (flag.get() == true) {
+                    if (flag.get()) {
                         // 启动心跳检测机制
                         KafkaAppender.this.heartbeatStart();
                         // 向zk通知
                         zkRegister.write(Constants.SLASH + app + Constants.SLASH + host, NodeMode.EPHEMERAL,
-                                String.valueOf(System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
+                                String.valueOf(Constants.APP_APPENDER_STOP_KEY + Constants.SEMICOLON + System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
                         flag.compareAndSet(true, false);
                     }
                 }
@@ -161,6 +158,8 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
      * 心跳检测开始
      */
     public void heartbeatStart() {
+        // 心跳检测定时器初始化
+        this.timer = new Timer();
         this.timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -176,19 +175,20 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
                     @Override
                     public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                         if (null == e) {
+                            // 更新flag状态
+                            flag.compareAndSet(false, true);
                             // 如果没有发生异常, 说明kafka从异常状态切换为正常状态, 将开始状态设置为true
                             started = true;
                             addStatus(new InfoStatus("kafka send normal in appender", this, e));
                             // 关闭心跳检测机制
                             KafkaAppender.this.heartbeatStop();
-                            // TODO: 向zk通知
-//                            zkRegister.write(Constants.SLASH + app + Constants.SLASH + host, NodeMode.EPHEMERAL,
-//                                    String.valueOf(System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
+                            zkRegister.write(Constants.SLASH + app + Constants.SLASH + host, NodeMode.EPHEMERAL,
+                                    String.valueOf(Constants.APP_APPENDER_RESTART_KEY + Constants.SEMICOLON + System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
                         }
                     }
                 });
             }
-        }, 0,60000);
+        }, 10000,60000);
     }
 
     /**
