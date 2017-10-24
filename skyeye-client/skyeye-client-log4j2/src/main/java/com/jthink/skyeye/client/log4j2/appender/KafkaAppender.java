@@ -114,7 +114,7 @@ public class KafkaAppender extends AbstractAppender {
                                 // 向zk通知
                                 KafkaAppender.this.manager.getZkRegister().write(Constants.SLASH + KafkaAppender.this.manager.getApp() + Constants.SLASH +
                                                 KafkaAppender.this.manager.getHost(), NodeMode.EPHEMERAL,
-                                        String.valueOf(System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
+                                        String.valueOf(Constants.APP_APPENDER_STOP_KEY + Constants.SEMICOLON + System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
                                 flag.compareAndSet(true, false);
                             }
                         }

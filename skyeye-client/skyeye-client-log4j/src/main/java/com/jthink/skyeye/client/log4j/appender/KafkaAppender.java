@@ -147,7 +147,7 @@ public class KafkaAppender extends AppenderSkeleton {
                     if (flag.get() == true) {
                         KafkaAppender.this.heartbeatStart();
                         zkRegister.write(Constants.SLASH + app + Constants.SLASH + host, NodeMode.EPHEMERAL,
-                                String.valueOf(System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
+                                String.valueOf(Constants.APP_APPENDER_RESTART_KEY + Constants.SEMICOLON + System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
                         flag.compareAndSet(true, false);
                     }
                 }
