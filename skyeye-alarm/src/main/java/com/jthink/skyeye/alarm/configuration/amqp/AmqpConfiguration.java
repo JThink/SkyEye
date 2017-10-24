@@ -23,12 +23,10 @@ import org.springframework.context.annotation.Configuration;
  * @desc rabbitmq的配置
  * @date 2017-09-29 09:16:16
  */
-@Configuration
+@Configuration("amqpListenerConfiguration")
 @ConfigurationProperties(prefix = "spring.queue.rabbitmq")
 @ConditionalOnClass(com.jthink.skyeye.data.rabbitmq.configuration.AmqpConfiguration.class)
 public class AmqpConfiguration {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AmqpConfiguration.class);
 
     // 最大并发处理的消费者个数
     private int maxConcurrentConsumers;
