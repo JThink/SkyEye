@@ -22,7 +22,10 @@ import org.apache.logging.log4j.core.layout.SerializedLayout;
 import org.apache.logging.log4j.core.util.StringEncoder;
 
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -106,6 +109,9 @@ public class KafkaAppender extends AbstractAppender {
                             LOGGER.error("kafka send error in appender", e);
                             // 发生异常，kafkaAppender 停止收集，向节点写入数据（监控系统会感知进行报警）
                             if (flag.get() == true) {
+                                // 启动心跳检测机制
+                                KafkaAppender.this.heartbeatStart();
+                                // 向zk通知
                                 KafkaAppender.this.manager.getZkRegister().write(Constants.SLASH + KafkaAppender.this.manager.getApp() + Constants.SLASH +
                                                 KafkaAppender.this.manager.getHost(), NodeMode.EPHEMERAL,
                                         String.valueOf(System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
@@ -118,6 +124,54 @@ public class KafkaAppender extends AbstractAppender {
                 LOGGER.error("Unable to write to Kafka [{}] for appender [{}].", manager.getName(), getName(), e);
                 throw new AppenderLoggingException("Unable to write to Kafka in appender: " + e.getMessage(), e);
             }
+        }
+    }
+
+    /**
+     * 心跳检测开始
+     */
+    public void heartbeatStart() {
+        // 心跳检测定时器初始化
+        this.manager.setTimer(new Timer());
+        Timer timer = this.manager.getTimer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                byte[] key = ByteBuffer.allocate(4).putInt(Constants.HEARTBEAT_KEY.hashCode()).array();
+                final ProducerRecord<byte[], String> record = new ProducerRecord<>(KafkaAppender.this.manager.getTopic(), key, Constants.HEARTBEAT_VALUE);
+
+                // java 8 lambda
+//                LazySingletonProducer.getInstance(config).send(record, (RecordMetadata recordMetadata, Exception e) -> {
+                // logic code
+//                });
+
+                LazySingletonProducer.getInstance(KafkaAppender.this.manager.getConfig()).send(record, new Callback() {
+                    @Override
+                    public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+                        if (null == e) {
+                            // 更新flag状态
+                            flag.compareAndSet(false, true);
+                            // 如果没有发生异常, 说明kafka从异常状态切换为正常状态, 将开始状态设置为true
+                            setStarted();
+                            LOGGER.info("kafka send normal in appender", e);
+                            // 关闭心跳检测机制
+                            KafkaAppender.this.heartbeatStop();
+                            KafkaAppender.this.manager.getZkRegister().write(Constants.SLASH + KafkaAppender.this.manager.getApp() +
+                                            Constants.SLASH + KafkaAppender.this.manager.getHost(), NodeMode.EPHEMERAL,
+                                    String.valueOf(Constants.APP_APPENDER_RESTART_KEY + Constants.SEMICOLON + System.currentTimeMillis()) + Constants.SEMICOLON + SysUtil.userDir);
+                        }
+                    }
+                });
+            }
+        }, 10000,60000);
+    }
+
+    /**
+     * 心跳检测停止
+     */
+    private void heartbeatStop() {
+        if (null != this.manager.getTimer()) {
+            this.manager.getTimer().cancel();
         }
     }
 

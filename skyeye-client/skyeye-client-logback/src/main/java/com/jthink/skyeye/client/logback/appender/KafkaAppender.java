@@ -66,7 +66,7 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
     private DelayingShutdownHook shutdownHook;
     // kafkaAppender遇到异常需要向zk进行写入数据，由于onCompletion()的调用在kafka集群完全挂掉时会有很多阻塞的日志会调用，所以我们需要保证只向zk写一次数据，监控中心只会发生一次报警
     private volatile AtomicBoolean flag = new AtomicBoolean(true);
-
+    // 心跳检测
     private Timer timer;
 
     /**
@@ -107,6 +107,9 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
     @Override
     public void stop() {
         super.stop();
+
+        // 停止心跳
+        this.heartbeatStop();
 
         // 关闭KafkaProuder
         if (LazySingletonProducer.isInstanced()) {
@@ -195,7 +198,9 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
      * 心跳检测停止
      */
     private void heartbeatStop() {
-        this.timer.cancel();
+        if (null != this.timer) {
+            this.timer.cancel();
+        }
     }
 
     @Override

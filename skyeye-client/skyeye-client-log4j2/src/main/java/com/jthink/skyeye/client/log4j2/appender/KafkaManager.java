@@ -15,6 +15,7 @@ import org.apache.logging.log4j.core.config.Property;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -46,6 +47,8 @@ public class KafkaManager extends AbstractManager {
     // zk注册器
     private ZkRegister zkRegister;
     private byte[] key;
+    // 心跳检测
+    private Timer timer;
 
     public KafkaManager(final LoggerContext loggerContext, final String name, final String topic, final String zkServers, final String mail, final  String rpc,
                         final String app, final String host, final Property[] properties) {
@@ -105,9 +108,12 @@ public class KafkaManager extends AbstractManager {
     }
 
     /**
-     * 关闭zk和kafka
+     * 关闭zk和kafka、心跳检测
      */
     public void closeResources() {
+        if (null != this.timer) {
+            this.timer.cancel();
+        }
         if (LazySingletonProducer.isInstanced()) {
             LazySingletonProducer.getInstance(KafkaManager.this.config).close();
         }
@@ -200,5 +206,14 @@ public class KafkaManager extends AbstractManager {
 
     public void setKey(byte[] key) {
         this.key = key;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public KafkaManager setTimer(Timer timer) {
+        this.timer = timer;
+        return this;
     }
 }
