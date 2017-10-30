@@ -33,6 +33,7 @@ public class Constants {
     public static final String VERTICAL_LINE = "|";
     public static final String VERTICAL_LINE_SPLIT = "\\|";
     public static final String XING_HAO = "*";
+    public static final String JING_HAO = "#";
 
     // 构造sql相关
     public static final String LEFT_S_BRACKETS = "(";

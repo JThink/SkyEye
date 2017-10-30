@@ -77,6 +77,8 @@ public class KafkaManager extends AbstractManager {
     public void startup() {
         // 初始化zk
         this.zkRegister = new ZkRegister(new ZkClient(this.zkServers, 60000, 5000));
+        // 对app重新编号，防止一台host部署一个app的多个实例
+        this.app = this.zkRegister.mark(this.app, this.host);
         // 注册节点
         this.zkRegister.registerNode(this.host, this.app, this.mail);
         // rpc trace注册中心

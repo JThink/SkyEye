@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Scope;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StopWatch;
 
@@ -29,6 +30,7 @@ import java.util.Properties;
  * @date 2016-09-23 16:51:38
  */
 @org.springframework.stereotype.Service
+@Scope("prototype")
 @EnableConfigurationProperties(MailProperties.class)
 public class MailService {
 

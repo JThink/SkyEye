@@ -283,6 +283,8 @@ public class KafkaAppender extends AppenderSkeleton {
                 public void run() {
                     // 初始化zk
                     KafkaAppender.this.zkRegister = new ZkRegister(new ZkClient(zkServers, 60000, 5000));
+                    // 对app重新编号，防止一台host部署一个app的多个实例
+                    KafkaAppender.this.app = KafkaAppender.this.zkRegister.mark(KafkaAppender.this.app, KafkaAppender.this.host);
                     // 注册节点
                     KafkaAppender.this.zkRegister.registerNode(KafkaAppender.this.host, KafkaAppender.this.app, KafkaAppender.this.mail);
 

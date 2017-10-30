@@ -1,15 +1,19 @@
 package com.jthink.skyeye.alarm.listener;
 
+import com.alibaba.fastjson.JSON;
 import com.jthink.skyeye.alarm.configuration.dingding.DingdingProperties;
 import com.jthink.skyeye.alarm.configuration.wechat.WechatProperties;
 import com.jthink.skyeye.alarm.service.DingDingService;
 import com.jthink.skyeye.alarm.service.MailService;
 import com.jthink.skyeye.alarm.service.WechatService;
 import com.jthink.skyeye.base.dto.MailDto;
-import com.jthink.skyeye.data.rabbitmq.service.RabbitmqService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,12 +25,12 @@ import org.springframework.stereotype.Component;
  * @date 2017-09-29 09:16:16
  */
 @Component
-public class SyncRequestListener {
+public class SyncRequestListener implements ApplicationContextAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SyncRequestListener.class);
 
-    @Autowired
-    private MailService mailService;
+    private ApplicationContext context;
+
     @Autowired
     private WechatService wechatService;
     @Autowired
@@ -42,10 +46,10 @@ public class SyncRequestListener {
             if (null != object) {
                 mailDto = (MailDto) object;
             }
-            LOGGER.info("get a message, {}", object);
+            LOGGER.info("get a message, {}", JSON.toJSONString(object));
 
             // 发送邮件
-            this.mailService.sendMail(mailDto);
+            this.context.getBean(MailService.class).sendMail(mailDto);
 
             // 发送微信
             if (this.wechatProperties.isSwitchFlag()) {
@@ -60,5 +64,10 @@ public class SyncRequestListener {
         }  catch (Exception e) {
             LOGGER.info("drop a error message, {}, {}", mailDto.getContent(), e);
         }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
     }
 }
