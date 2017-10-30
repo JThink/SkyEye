@@ -68,7 +68,7 @@ public class ZkRegister {
                 return app + Constants.JING_HAO + mark;
             }
         }
-        return null;
+        return app;
     }
 
     /**
