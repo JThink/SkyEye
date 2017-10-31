@@ -27,7 +27,7 @@ public interface AppInfoRepository extends CrudRepository<AppInfo, AppInfoPK> {
     List<AppStatusDto> findBySql(int type);
 
     @Query(value = "select new com.jthink.skyeye.data.jpa.dto.AppStatusDto(a.appInfoPK.host, a.appInfoPK.app, a.status, " +
-            "a.deploy) from AppInfo a where a.appInfoPK.host=?1 and a.appInfoPK.app=?2 and a.appInfoPK.type=?3")
+            "a.deploy) from AppInfo a where a.appInfoPK.host=?1 and a.appInfoPK.app like ?2 and a.appInfoPK.type=?3")
     List<AppStatusDto> findBySql(String host, String app, int type);
 
     @Query(value = "select new com.jthink.skyeye.data.jpa.dto.AppStatusDto(a.appInfoPK.host, a.appInfoPK.app, a.status, " +
@@ -35,6 +35,6 @@ public interface AppInfoRepository extends CrudRepository<AppInfo, AppInfoPK> {
     List<AppStatusDto> findBySql(String host, int type);
 
     @Query(value = "select new com.jthink.skyeye.data.jpa.dto.AppStatusDto(a.appInfoPK.host, a.appInfoPK.app, a.status, " +
-            "a.deploy) from AppInfo a where a.appInfoPK.app=?1 and a.appInfoPK.type=?2")
+            "a.deploy) from AppInfo a where a.appInfoPK.app like ?1 and a.appInfoPK.type=?2")
     List<AppStatusDto> findBySqlApp(String app, int type);
 }
