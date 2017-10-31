@@ -69,6 +69,8 @@ public class KafkaAppender extends AppenderSkeleton {
     private volatile AtomicBoolean flag = new AtomicBoolean(true);
     // 心跳检测
     private Timer timer;
+    // key
+    private byte[] key;
 
     /**
      * 构造方法
@@ -133,9 +135,8 @@ public class KafkaAppender extends AppenderSkeleton {
         if (value.length() > 10000) {
             return;
         }
-        final byte[] key = ByteBuffer.allocate(4).putInt(new StringBuilder(app).append(host).toString().hashCode()).array();
 
-        final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, key, value);
+        final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, this.key, value);
         LazySingletonProducer.getInstance(this.config).send(record, new Callback() {
             @Override
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {
@@ -284,7 +285,9 @@ public class KafkaAppender extends AppenderSkeleton {
                     // 初始化zk
                     KafkaAppender.this.zkRegister = new ZkRegister(new ZkClient(zkServers, 60000, 5000));
                     // 对app重新编号，防止一台host部署一个app的多个实例
-                    KafkaAppender.this.app = KafkaAppender.this.zkRegister.mark(KafkaAppender.this.app, KafkaAppender.this.host);
+                    KafkaAppender.this.app = KafkaAppender.this.app + KafkaAppender.this.zkRegister.mark(KafkaAppender.this.app, KafkaAppender.this.host);
+                    KafkaAppender.this.key = ByteBuffer.allocate(4).putInt(new StringBuilder(app).append(host).toString().hashCode()).array();
+
                     // 注册节点
                     KafkaAppender.this.zkRegister.registerNode(KafkaAppender.this.host, KafkaAppender.this.app, KafkaAppender.this.mail);
 

@@ -2,12 +2,14 @@ package com.jthink.skyeye.web.task;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.jthink.skyeye.data.http.HttpRequest;
-import com.jthink.skyeye.data.rabbitmq.service.RabbitmqService;
 import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.base.constant.EventType;
 import com.jthink.skyeye.base.dto.AlertDto;
 import com.jthink.skyeye.base.util.DateUtil;
+import com.jthink.skyeye.data.http.HttpRequest;
+import com.jthink.skyeye.data.jpa.dto.NameInfoDto;
+import com.jthink.skyeye.data.jpa.repository.NameInfoRepository;
+import com.jthink.skyeye.data.rabbitmq.service.RabbitmqService;
 import com.jthink.skyeye.web.constant.EsSqlTemplate;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import org.springframework.util.StopWatch;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +43,8 @@ public class MonitorTask {
 
     @Autowired
     private RabbitmqService rabbitmqService;
+    @Autowired
+    private NameInfoRepository nameInfoRepository;
 
     private String mail;
     private int interval;
@@ -141,23 +146,28 @@ public class MonitorTask {
         StopWatch sw = new StopWatch();
         sw.start();
         long timestamp = System.currentTimeMillis();
-        String scope = "app";
+        String scope = "uniqueName";
 
         Map<String, Integer> appTotalInfos = this.parseRealtimeData(this.query(this.buildSql(this.totalTemplate,
                 timestamp, scope, this.apiResponseTime, EventType.invoke_interface)), scope);
 
-        Map<String, Integer> appInfos = this.parseRealtimeData(this.query(this.buildSql(this.template, timestamp,
+        Map<String, Integer> apiInfos = this.parseRealtimeData(this.query(this.buildSql(this.template, timestamp,
                 scope, this.apiResponseTime, EventType.invoke_interface)), scope);
 
-        for (Map.Entry<String, Integer> entry : appInfos.entrySet()) {
-            String app = entry.getKey();
+        for (Map.Entry<String, Integer> entry : apiInfos.entrySet()) {
+            String api = entry.getKey();
             int cnt = entry.getValue();
-            double threadhold = (double) cnt / appTotalInfos.get(app);
+            double threadhold = (double) cnt / appTotalInfos.get(api);
             if (threadhold > this.apiThreshold) {
                 // 超过阈值，需要报警
-                LOGGER.info("{} 需要报警", app);
-                this.rabbitmqService.sendMessage(this.buildMsg(app, timestamp, Constants.API, this.apiResponseTime, this.apiThreshold, threadhold,
-                        appTotalInfos.get(app)), this.mail);
+                LOGGER.info("{} 需要报警", api);
+                List<NameInfoDto> apis =  this.nameInfoRepository.findBySql(Constants.API, api);
+                String name = Constants.EMPTY_STR;
+                if (apis.size() != 0) {
+                    name = apis.get(0).getApp();
+                }
+                this.rabbitmqService.sendMessage(this.buildMsg(name + Constants.JING_HAO + api, timestamp, api, this.apiResponseTime, this.apiThreshold, threadhold,
+                        appTotalInfos.get(api)), this.mail);
             }
         }
         sw.stop();

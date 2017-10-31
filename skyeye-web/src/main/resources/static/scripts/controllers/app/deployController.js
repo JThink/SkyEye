@@ -57,7 +57,8 @@ define(['controllers/controllers', 'common/util','common/constant', 'services/da
     var renderHost = function() {
       var params = {
         url: 'app/hostApp',
-        type: constant.zkNodeTypePersistent
+        type: constant.zkNodeTypePersistent,
+        isDeploy: true
       };
       if (gIsApp) {
         params = {

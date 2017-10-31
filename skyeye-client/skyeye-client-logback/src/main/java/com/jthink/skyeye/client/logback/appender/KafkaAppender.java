@@ -68,6 +68,10 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
     private volatile AtomicBoolean flag = new AtomicBoolean(true);
     // 心跳检测
     private Timer timer;
+    // key
+    private byte[] key;
+    // 原始app
+    private String orginApp;
 
     /**
      * 构造方法
@@ -98,7 +102,10 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
         // 初始化zk
         this.zkRegister = new ZkRegister(new ZkClient(this.zkServers, 60000, 5000));
         // 对app重新编号，防止一台host部署一个app的多个实例
+        this.orginApp = app;
         this.app = this.zkRegister.mark(this.app, this.host);
+        this.key = ByteBuffer.allocate(4).putInt(new StringBuilder(this.app).append(this.host).toString().hashCode()).array();
+
         // 注册节点
         this.zkRegister.registerNode(this.host, this.app, this.mail);
 
@@ -136,8 +143,7 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
         if (value.length() > 10000) {
             return;
         }
-        final byte[] key = this.keyBuilder.build(e);
-        final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, key, value);
+        final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, this.key, value.replaceFirst(this.orginApp, this.app));
         LazySingletonProducer.getInstance(this.config).send(record, new Callback() {
             @Override
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {

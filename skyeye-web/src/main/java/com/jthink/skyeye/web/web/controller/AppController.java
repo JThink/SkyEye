@@ -62,11 +62,12 @@ public class AppController {
     }
 
     @RequestMapping(path = "hostApp", method = RequestMethod.GET)
-    public BaseMessage getHostApp(@RequestParam(value = "type", required = false) final int type) {
+    public BaseMessage getHostApp(@RequestParam(value = "type", required = false) final int type,
+            @RequestParam(value = "isDeploy", required = false) final boolean isDeploy) {
         BaseMessage msg = new BaseMessage();
         try {
             ResponseUtil.buildResMsg(msg, MessageCode.SUCCESS, StatusCode.SUCCESS);
-            msg.setData(this.appMonitorService.getHostApp(type));
+            msg.setData(this.appMonitorService.getHostApp(type, isDeploy));
             return msg;
         } catch (Exception e) {
             LOGGER.error("host app 查询失败(app)");

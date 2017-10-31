@@ -85,7 +85,8 @@ define(['controllers/controllers', 'common/util','common/constant', 'underscore'
     var renderHost = function() {
       var params = {
         url: 'app/hostApp',
-        type: constant.zkNodeTypeEphemeral
+        type: constant.zkNodeTypeEphemeral,
+        isDeploy: false
       };
       DataService.getData(params, function(data) {
         var hostApps = data.data;

@@ -98,7 +98,7 @@ public class KafkaAppender extends AbstractAppender {
                 if (value.length() > 10000) {
                     return;
                 }
-                final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.manager.getTopic(), this.manager.getKey(), value);
+                final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.manager.getTopic(), this.manager.getKey(), value.replaceFirst(this.manager.getOrginApp(), this.manager.getApp()));
                 LazySingletonProducer.getInstance(this.manager.getConfig()).send(record, new Callback() {
                     @Override
                     public void onCompletion(RecordMetadata recordMetadata, Exception e) {

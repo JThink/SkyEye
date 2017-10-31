@@ -88,13 +88,13 @@ public class AppMonitorService {
      * @param type
      * @return
      */
-    public Map<String, Set<String>> getHostApp(int type) {
+    public Map<String, Set<String>> getHostApp(int type, boolean isDeploy) {
         Map<String, Set<String>> hostApps = new HashMap<>();
         List<AppStatusDto> appStatusDtos = this.appInfoRepository.findBySql(type);
         Set<String> apps = null;
         for (AppStatusDto dto : appStatusDtos) {
             String app = dto.getApp();
-            if (app.contains(Constants.JING_HAO)) {
+            if (app.contains(Constants.JING_HAO) && isDeploy) {
                 // 如果是V1.2.0以及以后版本，对同一个app部署多个实例在同一个host上进行编号
                 dto.setApp(app.split(Constants.JING_HAO)[0]);
             }
