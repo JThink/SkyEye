@@ -2,6 +2,7 @@ package com.jthink.skyeye.alarm.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.jthink.skyeye.alarm.configuration.dingding.DingdingProperties;
+import com.jthink.skyeye.alarm.configuration.mail.MailProperties;
 import com.jthink.skyeye.alarm.configuration.wechat.WechatProperties;
 import com.jthink.skyeye.alarm.service.DingDingService;
 import com.jthink.skyeye.alarm.service.MailService;
@@ -39,6 +40,8 @@ public class SyncRequestListener implements ApplicationContextAware {
     private DingDingService dingDingService;
     @Autowired
     private DingdingProperties dingdingProperties;
+    @Autowired
+    private MailProperties mailProperties;
 
     public void onMessage(Object object) {
         MailDto mailDto = null;
@@ -49,7 +52,9 @@ public class SyncRequestListener implements ApplicationContextAware {
             LOGGER.info("get a message, {}", JSON.toJSONString(object));
 
             // 发送邮件
-            this.context.getBean(MailService.class).sendMail(mailDto);
+            if (this.mailProperties.isSwitchFlag()) {
+                this.context.getBean(MailService.class).sendMail(mailDto);
+            }
 
             // 发送微信
             if (this.wechatProperties.isSwitchFlag()) {

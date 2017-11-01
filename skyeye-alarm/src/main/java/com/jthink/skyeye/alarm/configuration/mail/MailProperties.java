@@ -27,6 +27,8 @@ public class MailProperties {
 
     private String password;
 
+    private boolean switchFlag;
+
     public List<String> getCcs() {
         return Arrays.asList(cc.split(Constants.COMMA));
     }
@@ -69,5 +71,14 @@ public class MailProperties {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isSwitchFlag() {
+        return switchFlag;
+    }
+
+    public MailProperties setSwitchFlag(boolean switchFlag) {
+        this.switchFlag = switchFlag;
+        return this;
     }
 }
