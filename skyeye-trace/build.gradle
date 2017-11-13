@@ -1,29 +1,4 @@
 allprojects {
-  apply plugin: 'java'
-  apply plugin: 'maven'
-  apply plugin: 'eclipse'
-
-  group = 'skyeye'
-  version = '1.2.0'
-
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-  compileJava.options.encoding = 'UTF-8'
-  buildDir = 'target'
-
-  ext {
-    mavenPublicUrl = 'http://192.168.88.8:8081/nexus/content/repositories/public'
-    mavenReleaseUrl = 'http://192.168.88.8:8081/nexus/content/repositories/releases'
-    mavenSnapshotUrl = 'http://192.168.88.8:8081/nexus/content/repositories/snapshots'
-  }
-
-  repositories {
-    mavenLocal()
-    maven { url mavenPublicUrl }
-    maven { url mavenReleaseUrl }
-    maven { url mavenSnapshotUrl }
-    mavenCentral()
-  }
 
   task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -49,19 +24,13 @@ allprojects {
 }
 
 subprojects {
-  apply plugin: 'java'
-  apply plugin: 'maven'
-  apply plugin: 'eclipse'
 
   ext {
-    slf4jVersion = '1.7.25'
-    baseVersion = '1.2.0'
+
   }
 
-  [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
   dependencies {
+    compile project(':skyeye-base')
     compile "org.slf4j:slf4j-api:$slf4jVersion"
-    compile "skyeye:skyeye-base:$baseVersion"
   }
 }

@@ -1,63 +1,12 @@
 allprojects {
-  apply plugin: 'java'
-  apply plugin: 'eclipse'
 
-  group = 'skyeye'
-  version = '1.2.0'
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-  compileJava.options.encoding = 'UTF-8'
-  buildDir = 'target'
-  
-  ext {
-    mavenClouderaUrl = 'https://repository.cloudera.com/artifactory/cloudera-repos'
-    mavenPublicUrl = 'http://192.168.88.8:8081/nexus/content/repositories/public'
-    mavenReleaseUrl = 'http://192.168.88.8:8081/nexus/content/repositories/releases'
-    mavenSnapshotUrl = 'http://192.168.88.8:8081/nexus/content/repositories/snapshots'
-  }
-
-  task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-  }
-
-  // task javadocJar(type: Jar, dependsOn: javadoc) {
-  //   classifier = 'javadoc'
-  //   from javadoc.destinationDir
-  // }
-
-  artifacts {
-    archives sourcesJar
-    // archives javadocJar
-  }
 }
 subprojects {
-  apply plugin: 'java'
-  apply plugin: 'maven'
-  apply plugin: 'eclipse'
-
-  ext {
-    baseVersion = '1.2.0'
-    kafkaVersion = '0.10.0.1'
-    springBootVersion = '1.5.6.RELEASE'
-    esVersion = '2.3.3'
-  }
-
-  [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
- 
-  repositories {
-    mavenLocal()
-    maven { url mavenClouderaUrl }
-    maven { url mavenPublicUrl }
-    maven { url mavenReleaseUrl }
-    maven { url mavenSnapshotUrl }
-    mavenCentral()
-  }
 
   dependencies {
     compile "org.apache.kafka:kafka-clients:$kafkaVersion"
     compile "org.springframework.boot:spring-boot-starter:$springBootVersion"
-    compile "skyeye:skyeye-base:$baseVersion"
+    compile project (':skyeye-base')
     compile "org.elasticsearch:elasticsearch:$esVersion"
   }
 }

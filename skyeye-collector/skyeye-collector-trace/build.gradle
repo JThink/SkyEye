@@ -1,20 +1,18 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'application'
 
-ext {
-  dataVersion = '1.2.0'
-  fastJsonVersion = '1.2.35'
+repositories {
+  mavenLocal()
+  maven { url mavenClouderaUrl }
+  mavenCentral()
 }
 
 dependencies {
-  compile project(":skyeye-collector-core")
+  compile project(':skyeye-collector:skyeye-collector-core')
 
   compile "org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion"
-  compile "skyeye:skyeye-data-hbase:$dataVersion"
-  compile "skyeye:skyeye-data-jpa:$dataVersion"
+  compile project(':skyeye-data:skyeye-data-jpa')
+  compile project(':skyeye-data:skyeye-data-hbase')
   compile "com.alibaba:fastjson:$fastJsonVersion"
 
   testCompile "org.springframework.boot:spring-boot-starter-test"
@@ -29,9 +27,6 @@ configurations {
 mainClassName = "com.jthink.skyeye.collector.trace.launcher.Launcher"
 
 buildscript {
-  ext {
-    springBootVersion = '1.5.6.RELEASE'
-  }
 
   repositories {
     mavenLocal()
@@ -40,8 +35,8 @@ buildscript {
   }
 
   dependencies {
-    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    classpath("io.spring.gradle:dependency-management-plugin:$gradlePluginVersion")
   }
 }
 

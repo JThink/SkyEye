@@ -1,22 +1,6 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'eclipse'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-compileJava.options.encoding = 'UTF-8'
-buildDir = 'target'
-
-ext {
-  springBootVersion = '1.5.6.RELEASE'
-}
-
 dependencies {
   compile("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
 
   compile ("org.apache.commons:commons-dbcp2:2.1.1")
   compile ("mysql:mysql-connector-java:5.1.43")
-
-
-  testCompile "junit:junit:4.12"
 }

@@ -1,37 +1,18 @@
 allprojects {
-  apply plugin: 'java'
-  apply plugin: 'maven'
-  apply plugin: 'eclipse'
-
-  group = 'skyeye'
-  version = '1.2.0'
-
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-  compileJava.options.encoding = 'UTF-8'
-  buildDir = 'target'
-
-  ext {
-    mavenPublicUrl = 'http://192.168.88.8:8081/nexus/content/repositories/public'
-    mavenReleaseUrl = 'http://192.168.88.8:8081/nexus/content/repositories/releases'
-    mavenSnapshotUrl = 'http://192.168.88.8:8081/nexus/content/repositories/snapshots'
-  }
-
-  repositories {
-    mavenLocal()
-    maven { url mavenPublicUrl }
-    maven { url mavenReleaseUrl }
-    maven { url mavenSnapshotUrl }
-    mavenCentral()
-  }
 
   task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
   }
 
+  // task javadocJar(type: Jar, dependsOn: javadoc) {
+  //   classifier = 'javadoc'
+  //   from javadoc.destinationDir
+  // }
+
   artifacts {
     archives sourcesJar
+    // archives javadocJar
   }
 
   uploadArchives {
@@ -49,23 +30,14 @@ allprojects {
 }
 
 subprojects {
-  apply plugin: 'java'
-  apply plugin: 'maven'
-  apply plugin: 'eclipse'
 
   ext {
-    kafkaVersion = '0.10.0.1'
-    zookeeperVersion = '3.4.6'
-    zkclientVersion = '0.10'
-    baseVersion = '1.2.0'
-    traceVersion = '1.2.0'
+
   }
 
-  [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
   dependencies {
-    compile "skyeye:skyeye-base:$baseVersion"
-    compile "skyeye:skyeye-trace-core:$traceVersion"
+    compile project(':skyeye-base')
+    compile project(':skyeye-trace:skyeye-trace-core')
     compile "org.apache.kafka:kafka-clients:$kafkaVersion"
     compile "org.apache.zookeeper:zookeeper:$zookeeperVersion"
     compile "com.101tec:zkclient:$zkclientVersion"

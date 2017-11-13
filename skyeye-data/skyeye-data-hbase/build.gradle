@@ -1,25 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'eclipse'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-compileJava.options.encoding = 'UTF-8'
-buildDir = 'target'
-
 repositories {
   mavenLocal()
-  maven { url "https://repository.cloudera.com/artifactory/cloudera-repos" }
-  maven { url mavenPublicUrl }
-  maven { url mavenReleaseUrl }
-  maven { url mavenSnapshotUrl }
+  maven { url mavenClouderaUrl }
   mavenCentral()
-}
-
-ext {
-  springBootVersion = '1.5.6.RELEASE'
-  springVersion = '4.3.10.RELEASE'
-  hbaseVersion = '1.0.0-cdh5.4.0'
 }
 
 dependencies {
@@ -28,6 +10,4 @@ dependencies {
   compile ("org.apache.hbase:hbase-client:$hbaseVersion") {
     exclude group: 'javax.servlet', module: 'servlet-api'
   }
-
-  testCompile "junit:junit:4.12"
 }
