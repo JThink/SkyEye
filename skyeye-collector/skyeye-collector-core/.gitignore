@@ -20,3 +20,4 @@ nohup.out
 disconf/
 /target/
 /build/
+/out/
