@@ -1,5 +1,12 @@
 # SkyEye
 对java、scala等运行于jvm的程序进行实时日志采集、索引和可视化，对系统进行进程级别的监控，对系统内部的操作进行策略性的报警、对分布式的rpc调用进行trace跟踪以便于进行性能分析
+
+# 交流方式
+
+1. QQ群: 624054633
+2. Email: leviqian@sina.com
+3. blog: [blog](http://blog.csdn.net/jthink_)
+
 # 架构
 ![](architecture.png)
 - APP: 接入skyeye-client的系统会通过kafkaAppender向kafka写入日志
@@ -31,38 +38,20 @@
 
 # 部署步骤
 
-每个项目都需要修改gradle文件中的私服地址（这样才能打包deploy到自己的本地私服）
-可以使用新增的打包脚本：bash build.sh(所有的jar包都会上传到私服和install到本地, 可运行项目依旧打在各自的target下)
-
-- clean ./build --clean
-- 打包 ./build --build
+修改根目录gradle文件中的私服地址（这样才能打包deploy到自己的本地私服）
+打包：gradle clean install upload -x test
 
 ## skyeye-base
 
 本项目没有具体的业务逻辑，主要是各个模块通用的类定义，如：常量、dto、dapper相关、公用util，所以该项目无需部署，只需要打包。
 
-```shell
-cd skyeye-base
-gradle clean install uploadArchives
-```
-
 ## skyeye-client
 
 本项目主要是提供给对接的项目使用，包含了log4j和logback的自定义appender和项目注册相关，所以该项目无需部署，只需要打包提供给对接方对接。
 
-```shell
-cd skyeye-client
-gradle clean install uploadArchives
-```
-
 ## skyeye-data
 
 本项目主要是用来提供和数据操作相关的中间件，具体分为以下5个子modoule。本项目无需部署，只需要打包。
-
-```shell
-cd skyeye-data
-gradle clean install uploadArchives
-```
 
 ### skyeye-data-dubbox
 
@@ -597,7 +586,7 @@ compile "skyeye:skyeye-client-log4j:1.2.0"
         </layout>
     </appender>
 ```
-## Log4j2
+## log4j2
 
 ### 依赖
 
@@ -696,8 +685,3 @@ LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "xx1", 100, EventL
 LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "xx2", 100, EventLog.MONITOR_STATUS_SUCCESS, "我是mock third 成功日志").toString());
 LOGGER.info(EventLog.buildEventLog(EventType.thirdparty_call, "xx2", 100, EventLog.MONITOR_STATUS_FAILED, "我是mock third 失败日志").toString());
 ```
-
-# 交流方式
-1. QQ群: 624054633
-2. Email: leviqian@sina.com
-3. blog: http://blog.csdn.net/jthink_

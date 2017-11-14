@@ -1,26 +1,26 @@
 allprojects {
 
-  task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-  }
-
-  artifacts {
-    archives sourcesJar
-  }
-
-  uploadArchives {
-    repositories {
-      mavenDeployer {
-        repository(url: mavenReleaseUrl) {
-          authentication(userName: 'admin', password: 'admin123')
-        }
-        snapshotRepository(url: mavenSnapshotUrl) {
-          authentication(userName: 'admin', password: 'admin123')
-        }
-      }
-    }
-  }
+//  task sourcesJar(type: Jar, dependsOn: classes) {
+//    classifier = 'sources'
+//    from sourceSets.main.allSource
+//  }
+//
+//  artifacts {
+//    archives sourcesJar
+//  }
+//
+//  uploadArchives {
+//    repositories {
+//      mavenDeployer {
+//        repository(url: mavenReleaseUrl) {
+//          authentication(userName: 'admin', password: 'admin123')
+//        }
+//        snapshotRepository(url: mavenSnapshotUrl) {
+//          authentication(userName: 'admin', password: 'admin123')
+//        }
+//      }
+//    }
+//  }
 }
 
 subprojects {

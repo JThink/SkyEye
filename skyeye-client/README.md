@@ -65,7 +65,7 @@ compile "skyeye:skyeye-client-log4j:1.2.0"
         </layout>
     </appender>
 ```
-## Log4j2
+## log4j2
 
 ### 依赖
 
@@ -127,15 +127,15 @@ http://blog.csdn.net/jthink_/article/details/73106745
 
 ## 埋点对接
 ### 日志类型
- 日志类型 | 说明
-:------  |:-----
- normal  | 正常入库日志
- invoke_interface  | api调用日志
- middleware_opt  | 中间件操作日志(目前仅支持hbase和mongo)
- job_execute  | job执行日志
- rpc_trace  | rpc trace跟踪日志
- custom_log  | 自定义埋点日志
- thirdparty_call  | 第三方系统调用日志
+| 日志类型             | 说明                        |
+| :--------------- | :------------------------ |
+| normal           | 正常入库日志                    |
+| invoke_interface | api调用日志                   |
+| middleware_opt   | 中间件操作日志(目前仅支持hbase和mongo) |
+| job_execute      | job执行日志                   |
+| rpc_trace        | rpc trace跟踪日志             |
+| custom_log       | 自定义埋点日志                   |
+| thirdparty_call  | 第三方系统调用日志                 |
 ### 正常日志
 
 ``` shell
