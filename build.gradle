@@ -36,7 +36,7 @@ subprojects {
     zkclientVersion = '0.10'
     slf4jVersion = '1.7.25'
     fastJsonVersion = '1.2.40'
-    dubboVersion = '2.8.4-skyeye-trace-1.2.0'
+    dubboVersion = '2.8.4-skyeye-trace-1.2.1'
     springBootVersion = '1.5.6.RELEASE'
     springVersion = '4.3.10.RELEASE'
     hbaseVersion = '1.0.0-cdh5.4.4'
