@@ -34,9 +34,12 @@ public class CacheService implements InitializingBean {
     private AppInfoService appInfoService;
     @Autowired
     private ZkClient zkClient;
+    @Autowired
+    private AppStatusMonitorService appStatusMonitorService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        LOGGER.info("开始加载缓存");
         // 将mysql数据进行清空
         this.appInfoService.deleteAll();
         List<String> apps = curatorFramework.getChildren().forPath(Constants.ROOT_PATH_EPHEMERAL);
@@ -57,6 +60,10 @@ public class CacheService implements InitializingBean {
                 this.appInfoService.add(host, app, Constants.ZK_NODE_TYPE_PERSISTENT, LogCollectionStatus.HISTORY);
             }
         }
+
+        LOGGER.info("加载缓存结束");
+
+        this.appStatusMonitorService.init();
     }
 
     /**
@@ -67,7 +74,7 @@ public class CacheService implements InitializingBean {
      */
     private LogCollectionStatus calLogCollectionStatus(String app, String host) {
         String[] datas = this.zkClient.readData(Constants.ROOT_PATH_EPHEMERAL + Constants.SLASH + app + Constants.SLASH + host).toString().split(Constants.SEMICOLON);
-        if (datas[0].equals(Constants.APPENDER_INIT_DATA)) {
+        if (datas[0].equals(Constants.APPENDER_INIT_DATA) || datas[0].equals(Constants.APP_APPENDER_RESTART_KEY)) {
             return LogCollectionStatus.RUNNING;
         }
         return LogCollectionStatus.STOPPED;

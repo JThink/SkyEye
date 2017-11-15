@@ -84,7 +84,7 @@ public class AppInfoService {
      * @return
      */
     private String getDeploy(String path) {
-        String data = this.zkClient.readData(path);
-        return data.split(Constants.SEMICOLON)[1];
+        String[] datas = this.zkClient.readData(path).toString().split(Constants.SEMICOLON);
+        return  datas[datas.length - 1];
     }
 }

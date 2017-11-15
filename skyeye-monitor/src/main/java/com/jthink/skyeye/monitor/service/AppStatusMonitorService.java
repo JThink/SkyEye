@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @date 2016-09-23 14:55:28
  */
 @Service
-public class AppStatusMonitorService implements InitializingBean {
+public class AppStatusMonitorService {
 
     @Autowired
     private CuratorFramework curatorFramework;
@@ -30,8 +30,7 @@ public class AppStatusMonitorService implements InitializingBean {
     @Autowired
     private AppInfoService appInfoService;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    public void init() throws Exception {
         PathChildrenCache pathChildrenCache = new PathChildrenCache(curatorFramework, Constants.ROOT_PATH_EPHEMERAL, true);
         pathChildrenCache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);
         pathChildrenCache.getListenable().addListener(new ScrollChildrenChangeListener(this.rabbitmqService, this.zkClient, this.appInfoService));
