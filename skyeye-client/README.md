@@ -11,7 +11,7 @@
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-logback:1.2.0"
+compile "skyeye:skyeye-client-logback:1.3.0"
 ```
 ### 配置
 在logback.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -43,7 +43,7 @@ compile "skyeye:skyeye-client-logback:1.2.0"
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-log4j:1.2.0"
+compile "skyeye:skyeye-client-log4j:1.3.0"
 ```
 ### 配置
 在log4j.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -72,7 +72,7 @@ compile "skyeye:skyeye-client-log4j:1.2.0"
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-log4j2:1.2.0"
+compile "skyeye:skyeye-client-log4j2:1.3.0"
 ```
 
 ### 配置
@@ -99,11 +99,11 @@ compile "skyeye:skyeye-client-log4j2:1.2.0"
 ### log4j
 由于log4j本身的appender比较复杂难写，所以在稳定性和性能上没有logback支持得好，应用能使用logback请尽量使用logback
 ### rpc trace
-使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.2.0)），在soa中间件dubbox中封装了rpc的跟踪
+使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.3.0)），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
 compile "com.101tec:zkclient:0.10"
-compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.2.0") {
+compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.3.0") {
   exclude group: 'org.springframework', module: 'spring'
 }
 ```
