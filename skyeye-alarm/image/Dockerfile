@@ -9,7 +9,7 @@ FROM 192.168.88.73:8888/common/jdk:8u144-ubuntu16.04
 MAINTAINER leviqian leviqian@sina.com
 # copy the file
 RUN mkdir -p /home/deploy
-ADD ../target/distributions/*.tar /home/deploy
+ADD *.tar /home/deploy
 COPY run.sh /run.sh
 RUN chmod +x /run.sh
 # CMD to start

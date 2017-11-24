@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /etc/profile.d/java.sh
+
 cd /opt/jthink/jthink-config
 git pull -r origin master
 cd /home/deploy/skyeye-alarm-1.3.0
