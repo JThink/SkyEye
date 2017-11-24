@@ -13,6 +13,10 @@ MAINTAINER leviqian leviqian@sina.com
 ARG version
 ARG branch
 
+# set env
+ENV VERSION $version
+ENV BRANCH $branch
+
 # copy the file
 RUN mkdir -p /home/deploy
 ADD skyeye-alarm-$version.tar /home/deploy
@@ -20,4 +24,4 @@ COPY run.sh /run.sh
 RUN chmod +x /run.sh
 
 # CMD to start
-CMD ["/run.sh", $version, $branch]
+CMD ["/run.sh"]

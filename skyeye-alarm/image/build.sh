@@ -3,5 +3,6 @@
 version=$1
 branch=$2
 cp ../target/distributions/*.tar .
-sudo docker build -t --build-arg branch=$branch --build-arg version=$version 192.168.88.73:8888/skyeye/skyeye-alarm:$version .
+
+sudo docker build --build-arg version=$version --build-arg branch=$branch -t 192.168.88.73:8888/skyeye/skyeye-alarm:$version .
 sudo docker push 192.168.88.73:8888/skyeye/skyeye-alarm:$version
