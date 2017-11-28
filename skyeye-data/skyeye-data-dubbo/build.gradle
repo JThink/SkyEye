@@ -1,0 +1,9 @@
+dependencies {
+  compile "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion"
+  compile "org.springframework:spring-tx:$springVersion"
+  compile ("com.alibaba:dubbo-config-spring:$dubboVersion")
+  compile ("com.alibaba:dubbo-registry-zookeeper:$dubboVersion")
+  compile ("com.alibaba:dubbo-rpc-default:$dubboVersion")
+  compile ("com.alibaba:dubbo-remoting-netty:$dubboVersion")
+  compile ("com.alibaba:dubbo-monitor-default:$dubboVersion")
+}
