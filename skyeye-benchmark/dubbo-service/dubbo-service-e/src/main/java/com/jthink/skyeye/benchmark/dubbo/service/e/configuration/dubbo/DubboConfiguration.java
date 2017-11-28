@@ -1,6 +1,6 @@
 package com.jthink.skyeye.benchmark.dubbo.service.e.configuration.dubbo;
 
-import com.jthink.skyeye.data.dubbox.DubboService;
+import com.jthink.skyeye.data.dubbo.DubboService;
 import com.jthink.skyeye.benchmark.dubbo.service.client.ServiceE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
