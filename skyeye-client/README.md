@@ -22,7 +22,7 @@ compile "skyeye:skyeye-client-logback:1.3.0"
 <appender name="kafkaAppender" class="com.jthink.skyeye.client.logback.appender.KafkaAppender">
     <encoder class="com.jthink.skyeye.client.logback.encoder.KafkaLayoutEncoder">
       <layout class="ch.qos.logback.classic.PatternLayout">
-        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};HOSTNAME;%thread;%-5level;%logger{96};%line;%msg%n</pattern>
       </layout>
     </encoder>
     <topic>app-log</topic>
@@ -35,7 +35,6 @@ compile "skyeye:skyeye-client-logback:1.3.0"
     <config>acks=0</config>
     <config>linger.ms=100</config>
     <config>max.block.ms=5000</config>
-    <config>client.id=${CONTEXT_NAME}-${HOSTNAME}-logback</config>
   </appender>
 ```
 ## log4j
@@ -81,13 +80,12 @@ compile "skyeye:skyeye-client-log4j2:1.3.0"
 
 ```xml
 <KafkaCustomize name="KafkaCustomize" topic="app-log" zkServers="riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181"
-                mail="qianjc@unionpaysmart.com" rpc="none" app="${APP_NAME}" host="${hostName}">
+                mail="qianjc@unionpaysmart.com" rpc="none" app="${APP_NAME}">
   <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
-  <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS};${APP_NAME};${hostName};%t;%-5level;%logger{96};%line;%msg%n"/>
+  <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS};${APP_NAME};HOSTNAME;%t;%-5level;%logger{96};%line;%msg%n"/>
   <Property name="bootstrap.servers">riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</Property>
   <Property name="acks">0</Property>
   <Property name="linger.ms">100</Property>
-  <Property name="client.id">${APP_NAME}-${hostName}-log4j2</Property>
 </KafkaCustomize>
 ```
 

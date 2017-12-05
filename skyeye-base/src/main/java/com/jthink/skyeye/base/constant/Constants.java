@@ -229,4 +229,7 @@ public class Constants {
     public static final String HEARTBEAT_KEY = "heart beat key";
     public static final String HEARTBEAT_VALUE = "heart beat value";
 
+    // docker容器相关
+    public static final String SKYEYE_HOST_TO_REGISTRY = "SKYEYE_HOST_TO_REGISTRY";
+
 }

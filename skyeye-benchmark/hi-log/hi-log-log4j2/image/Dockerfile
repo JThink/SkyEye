@@ -19,7 +19,7 @@ ENV BRANCH $branch
 
 # copy the file
 RUN mkdir -p /home/deploy
-ADD dubbo-service-e-$version.tar /home/deploy
+ADD hi-log-log4j2-$version.tar /home/deploy
 COPY run.sh /run.sh
 RUN chmod +x /run.sh
 
