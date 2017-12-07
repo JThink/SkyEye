@@ -231,5 +231,8 @@ public class Constants {
 
     // docker容器相关
     public static final String SKYEYE_HOST_TO_REGISTRY = "SKYEYE_HOST_TO_REGISTRY";
+    public static final String COMPUTERNAME = "COMPUTERNAME";
+    public static final String SKYEYE_HOST_FILE = System.getProperty("user.home") + "/.skyeye/host";
+    public static final String UNKNOWN_HOST = "UnknownHost";
 
 }

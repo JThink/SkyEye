@@ -5,6 +5,11 @@ branch=$2
 
 pwd=`pwd`
 
+echo "start build skyeye-agent"
+cd $pwd/skyeye-agent/image
+sudo bash build.sh $version
+echo "finished build skyeye-agent"
+
 echo "start build skyeye-alarm"
 cd $pwd/skyeye-alarm/image
 sudo bash build.sh $version $branch
