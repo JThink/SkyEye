@@ -138,6 +138,13 @@ public class Constants {
     public static final String APP_APPENDER_STOP_KEY = "stop";
     public static final String APP_APPENDER_STOP = "kafka appender stop";
     public static final String WECHAT_ALERT_RESPONSE_EXCEED = "响应时间超过阈值";
+    public static final String TIME_CONSUME_ALARM_TEMPLATE = "{uniqueName}响应时间超过阈值,{window}分钟内响应时间超过{cost}ms占比大于{threshold}%,当前占比:{total}%,总请求次数:{cnt}";
+    public static final String TIME_CONSUME_ALARM_TEMPLATE_UNIQUENAME = "{uniqueName}";
+    public static final String TIME_CONSUME_ALARM_TEMPLATE_WINDOW = "{window}";
+    public static final String TIME_CONSUME_ALARM_TEMPLATE_COST = "{cost}";
+    public static final String TIME_CONSUME_ALARM_TEMPLATE_THRESHOLD = "{threshold}";
+    public static final String TIME_CONSUME_ALARM_TEMPLATE_TOTAL = "{total}";
+    public static final String TIME_CONSUME_ALARM_TEMPLATE_CNT = "{cnt}";
 
     // 日志类型
     public static final String EVENT_TYPE_NORMAL = "normal";

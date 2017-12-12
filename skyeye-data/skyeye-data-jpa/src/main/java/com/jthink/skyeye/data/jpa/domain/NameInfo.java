@@ -25,6 +25,9 @@ public class NameInfo {
     // 来自哪个app
     @Column(name = "app")
     private String app;
+    // 属于哪个报警模板
+    @Column(name = "tid", nullable = false)
+    private Integer tid;
 
     public NameInfoPK getNameInfoPK() {
         return nameInfoPK;
@@ -40,5 +43,14 @@ public class NameInfo {
 
     public void setApp(String app) {
         this.app = app;
+    }
+
+    public Integer getTid() {
+        return tid;
+    }
+
+    public NameInfo setTid(Integer tid) {
+        this.tid = tid;
+        return this;
     }
 }

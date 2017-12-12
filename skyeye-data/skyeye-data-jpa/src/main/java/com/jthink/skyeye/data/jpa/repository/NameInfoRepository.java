@@ -26,4 +26,10 @@ public interface NameInfoRepository extends CrudRepository<NameInfo, NameInfoPK>
             + "from NameInfo a where a.nameInfoPK.type=?1 and a.nameInfoPK.name=?2")
     List<NameInfoDto> findBySql(String type, String name);
 
+    /**
+     * 查询属于tid模板的所有name info
+     * @param tid
+     * @return
+     */
+    List<NameInfo> findByTid(Integer tid);
 }
