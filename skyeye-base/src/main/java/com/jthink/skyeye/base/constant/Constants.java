@@ -109,6 +109,7 @@ public class Constants {
     //  name info类型相关
     public static final String API = "api";
     public static final String ACCOUNT = "account";
+    public static final String MIDDLEWARE = "middleware";
     public static final String THIRD = "third";
 
     // zk节点

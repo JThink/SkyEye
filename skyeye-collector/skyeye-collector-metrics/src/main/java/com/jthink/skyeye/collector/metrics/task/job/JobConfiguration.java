@@ -47,7 +47,7 @@ public class JobConfiguration {
 
     @Bean
     public NameCollector nameCollector(ExceptionProcessor exceptionProcessor) {
-        List<EventType> names = Arrays.asList(EventType.invoke_interface, EventType.thirdparty_call);
+        List<EventType> names = Arrays.asList(EventType.invoke_interface, EventType.thirdparty_call, EventType.middleware_opt);
         NameCollector nameCollector = new NameCollector(names);
         nameCollector.setNextJob(exceptionProcessor);
         nameCollector.setCacheService(this.cacheService);

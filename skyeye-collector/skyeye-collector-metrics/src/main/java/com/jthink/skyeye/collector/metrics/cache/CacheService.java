@@ -44,12 +44,14 @@ public class CacheService implements InitializingBean {
     private static final String API_NAME_PREFIX = "jthink_monitor_collector_api_name";
     private static final String ACCOUNT_NAME_PREFIX = "jthink_monitor_collector_account_name";
     private static final String THIRD_NAME_PREFIX = "jthink_monitor_collector_third_name";
+    private static final String MIDDLEWARE_NAME_PREFIX = "jthink_monitor_collector_middleware_name";
 
     private static final Map<String, String> mapping = new HashMap<String, String>() {
         {
             put(NameInfoType.API.symbol(), API_NAME_PREFIX);
             put(NameInfoType.ACCOUNT.symbol(), ACCOUNT_NAME_PREFIX);
             put(NameInfoType.THIRD.symbol(), THIRD_NAME_PREFIX);
+            put(NameInfoType.MIDDLEWARE.symbol(), MIDDLEWARE_NAME_PREFIX);
         }
     };
 
