@@ -41,6 +41,16 @@
 修改根目录gradle文件中的私服地址（这样才能打包deploy到自己的本地私服）
 打包：gradle clean install upload -x test
 
+## 容器部署
+
+需要自己修改每个项目下的image下的Dockerfile文件
+
+PS: rancher一键部署skyeye后期出教程，基本符合持续交付的场景。
+
+```shell
+sudo bash build.sh 1.3.0 master
+```
+
 ## skyeye-base
 
 本项目没有具体的业务逻辑，主要是各个模块通用的类定义，如：常量、dto、dapper相关、公用util，所以该项目无需部署，只需要打包。
@@ -493,15 +503,8 @@ rabbit.request.exchange=direct.log
 rabbit.request.routingKey=log.key
 
 # monitor
-monitor.es.window=*/10 * * * * ?					# 监控代码执行的周期，建议不修改
+monitor.es.interval=0 */1 * * * ?					# 监控代码执行的周期，建议不修改
 monitor.es.mail=leviqian@sina.com
-monitor.es.interval=10								# 采集多久之前的数据进行分析（单位：分钟），建议按需修改
-monitor.es.middlewareResponseTime=1000				# 中间件操作耗时大于多少（毫秒），建议根据实际报警情况来定，防止出现报警风暴(比如大于5秒，这个值就要设置5000)
-monitor.es.middlewareThreshold=0.1					# 中间件的报警阈值（耗时大于 monitor.es.middlewareResponseTime 该值的比例大于该值），该值需要按照实际运行过程的情况不断得调节，防止出现报警风暴
-monitor.es.apiResponseTime=1000
-monitor.es.apiThreshold=0.1
-monitor.es.thirdResponseTime=1000
-monitor.es.thirdThreshold=0.1
 
 # hbase config
 hbase.quorum=panda-01,panda-01,panda-03
