@@ -10,10 +10,10 @@
   /*overflow-x: hidden;*/
   /*overflow-y: visible;*/
 }
+
 .row.trace-chain.ng-scope {
   /*overflow-x: hidden;*/
   /*overflow-y: visible;*/
-  overflow: hidden;
 }
 
 .trace-chain .input-group {
@@ -188,7 +188,7 @@
 }
 
 .trace-chain-item *::selection {
-  /*background: none;*/
+  background: none;
 }
 
 .scale-plate.plate > div > div {
@@ -198,7 +198,7 @@
 
 .trace-chain-item[level] > .title > div {
   color: #FFF;
-  /*background-color: #00A2E8;*/
+  background-color: #00A2E8;
   background-color: #0084B4;
 }
 
