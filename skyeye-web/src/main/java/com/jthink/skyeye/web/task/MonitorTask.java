@@ -155,8 +155,8 @@ public class MonitorTask {
         String msg = Constants.TIME_CONSUME_ALARM_TEMPLATE.replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_UNIQUENAME, uniqueName)
                 .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_WINDOW, String.valueOf(window))
                 .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_COST, cost)
-                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_THRESHOLD, String.valueOf(threshold))
-                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_TOTAL, String.valueOf(total))
+                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_THRESHOLD, String.valueOf(threshold * 100))
+                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_TOTAL, String.valueOf(total * 100))
                 .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_CNT, String.valueOf(cnt));
         AlertDto alertDto = new AlertDto();
         alertDto.setApp(app);
