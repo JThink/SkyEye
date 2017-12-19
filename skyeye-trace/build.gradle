@@ -8,19 +8,19 @@ allprojects {
   artifacts {
     archives sourcesJar
   }
-//
-//  uploadArchives {
-//    repositories {
-//      mavenDeployer {
-//        repository(url: mavenReleaseUrl) {
-//          authentication(userName: 'admin', password: 'admin123')
-//        }
-//        snapshotRepository(url: mavenSnapshotUrl) {
-//          authentication(userName: 'admin', password: 'admin123')
-//        }
-//      }
-//    }
-//  }
+
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        repository(url: mavenReleaseUrl) {
+          authentication(userName: 'admin', password: 'admin123')
+        }
+        snapshotRepository(url: mavenSnapshotUrl) {
+          authentication(userName: 'admin', password: 'admin123')
+        }
+      }
+    }
+  }
 }
 
 subprojects {

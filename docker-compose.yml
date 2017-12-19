@@ -1,0 +1,58 @@
+version: '2'
+services:
+  skyeye-alarm:
+    image: 192.168.88.73:8888/skyeye/skyeye-alarm:1.3.0
+    container_name: skyeye-alarm
+    restart: always
+    mem_limit: 1g
+    volumes:
+      - /home/upsmart/deploy/skyeye/logs/alarm:/home/deploy/logs
+  skyeye-monitor:
+    image: 192.168.88.73:8888/skyeye/skyeye-monitor:1.3.0
+    container_name: skyeye-monitor
+    restart: always
+    mem_limit: 1g
+    volumes:
+      - /home/upsmart/deploy/skyeye/logs/monitor:/home/deploy/logs
+  skyeye-collector-backup:
+    image: 192.168.88.73:8888/skyeye/skyeye-collector-backup:1.3.0
+    container_name: skyeye-collector-backup
+    scale: 3
+    restart: always
+    mem_limit: 2g
+    volumes:
+      - /home/upsmart/deploy/skyeye/logs/collector/backup:/home/deploy/logs
+      - /tmp/monitor-center:/tmp/monitor-center
+  skyeye-collector-indexer:
+    image: 192.168.88.73:8888/skyeye/skyeye-collector-indexer:1.3.0
+    container_name: skyeye-collector-indexer
+    scale: 3
+    restart: always
+    mem_limit: 4g
+    volumes:
+      - /home/upsmart/deploy/skyeye/logs/collector/indexer:/home/deploy/logs
+  skyeye-collector-metrics:
+    image: 192.168.88.73:8888/skyeye/skyeye-collector-metrics:1.3.0
+    container_name: skyeye-collector-metrics
+    scale: 3
+    restart: always
+    mem_limit: 2g
+    volumes:
+      - /home/upsmart/deploy/skyeye/logs/collector/metrics:/home/deploy/logs
+  skyeye-collector-trace:
+    image: 192.168.88.73:8888/skyeye/skyeye-collector-trace:1.3.0
+    container_name: skyeye-collector-trace
+    scale: 3
+    restart: always
+    mem_limit: 3g
+    volumes:
+      - /home/upsmart/deploy/skyeye/logs/collector/trace:/home/deploy/logs
+  skyeye-web:
+    image: 192.168.88.73:8888/skyeye/skyeye-web:1.3.0
+    container_name: skyeye-web
+    restart: always
+    mem_limit: 4g
+    volumes:
+      - /home/upsmart/deploy/skyeye/logs/web:/home/deploy/logs
+    ports:
+     - "18090:8090"

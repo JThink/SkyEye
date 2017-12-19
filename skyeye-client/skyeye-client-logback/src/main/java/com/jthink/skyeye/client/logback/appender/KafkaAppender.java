@@ -1,7 +1,6 @@
 package com.jthink.skyeye.client.logback.appender;
 
 import ch.qos.logback.core.Context;
-import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.hook.DelayingShutdownHook;
 import ch.qos.logback.core.status.ErrorStatus;
@@ -82,6 +81,9 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
         // 设置分区类, 使用自定义的KeyModPartitioner，同样的key进入相同的partition
         this.checkAndSetConfig(ProducerConfig.PARTITIONER_CLASS_CONFIG, KeyModPartitioner.class.getName());
 
+        // 由于容器部署需要从外部获取host
+        this.checkAndSetConfig(ProducerConfig.CLIENT_ID_CONFIG, this.app + Constants.MIDDLE_LINE + this.host + Constants.MIDDLE_LINE + "logback");
+
         shutdownHook = new DelayingShutdownHook();
     }
 
@@ -143,7 +145,7 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
         if (value.length() > 10000) {
             return;
         }
-        final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, this.key, value.replaceFirst(this.orginApp, this.app));
+        final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.topic, this.key, value.replaceFirst(this.orginApp, this.app).replaceFirst(Constants.HOSTNAME, this.host));
         LazySingletonProducer.getInstance(this.config).send(record, new Callback() {
             @Override
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {
@@ -215,7 +217,7 @@ public class KafkaAppender<E> extends UnsynchronizedAppenderBase<E>  {
     public void setContext(Context context) {
         super.setContext(context);
 
-        this.host = context.getProperty(CoreConstants.HOSTNAME_KEY);
+        this.host = SysUtil.host;
         this.app = context.getName();
     }
 

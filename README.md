@@ -41,6 +41,16 @@
 修改根目录gradle文件中的私服地址（这样才能打包deploy到自己的本地私服）
 打包：gradle clean install upload -x test
 
+## 容器部署
+
+需要自己修改每个项目下的image下的Dockerfile文件
+
+PS: rancher一键部署skyeye后期出教程，基本符合持续交付的场景。
+
+```shell
+sudo bash build.sh 1.3.0 master
+```
+
 ## skyeye-base
 
 本项目没有具体的业务逻辑，主要是各个模块通用的类定义，如：常量、dto、dapper相关、公用util，所以该项目无需部署，只需要打包。
@@ -79,12 +89,12 @@
 
 ### dubbox
 
-由于使用dubbox，为了能够采集到dubbox里面的rpc数据，需要修改dubbox的源码，见我修改的dubbox项目：[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.2.0)，该项目主要实现了rpc跟踪的具体实现，需要单独打包。
+由于使用dubbox，为了能够采集到dubbox里面的rpc数据，需要修改dubbox的源码，见我修改的dubbox项目：[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.3.0)，该项目主要实现了rpc跟踪的具体实现，需要单独打包。
 
 ```shell
 git clone https://github.com/JThink/dubbox.git
 cd dubbox
-git checkout skyeye-trace-1.2.0
+git checkout skyeye-trace-1.3.0
 修改相关pom中的私服地址
 mvn clean install deploy -Dmaven.test.skip=true
 ```
@@ -493,15 +503,8 @@ rabbit.request.exchange=direct.log
 rabbit.request.routingKey=log.key
 
 # monitor
-monitor.es.window=*/10 * * * * ?					# 监控代码执行的周期，建议不修改
+monitor.es.interval=0 */1 * * * ?					# 监控代码执行的周期，建议不修改
 monitor.es.mail=leviqian@sina.com
-monitor.es.interval=10								# 采集多久之前的数据进行分析（单位：分钟），建议按需修改
-monitor.es.middlewareResponseTime=1000				# 中间件操作耗时大于多少（毫秒），建议根据实际报警情况来定，防止出现报警风暴(比如大于5秒，这个值就要设置5000)
-monitor.es.middlewareThreshold=0.1					# 中间件的报警阈值（耗时大于 monitor.es.middlewareResponseTime 该值的比例大于该值），该值需要按照实际运行过程的情况不断得调节，防止出现报警风暴
-monitor.es.apiResponseTime=1000
-monitor.es.apiThreshold=0.1
-monitor.es.thirdResponseTime=1000
-monitor.es.thirdThreshold=0.1
 
 # hbase config
 hbase.quorum=panda-01,panda-01,panda-03
@@ -532,7 +535,7 @@ nohup bin/skyeye-web &
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-logback:1.2.0"
+compile "skyeye:skyeye-client-logback:1.3.0"
 ```
 ### 配置
 在logback.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -543,7 +546,7 @@ compile "skyeye:skyeye-client-logback:1.2.0"
 <appender name="kafkaAppender" class="com.jthink.skyeye.client.logback.appender.KafkaAppender">
     <encoder class="com.jthink.skyeye.client.logback.encoder.KafkaLayoutEncoder">
       <layout class="ch.qos.logback.classic.PatternLayout">
-        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};HOSTNAME;%thread;%-5level;%logger{96};%line;%msg%n</pattern>
       </layout>
     </encoder>
     <topic>app-log</topic>
@@ -556,7 +559,6 @@ compile "skyeye:skyeye-client-logback:1.2.0"
     <config>acks=0</config>
     <config>linger.ms=100</config>
     <config>max.block.ms=5000</config>
-    <config>client.id=${CONTEXT_NAME}-${HOSTNAME}-logback</config>
   </appender>
 ```
 ## log4j
@@ -564,7 +566,7 @@ compile "skyeye:skyeye-client-logback:1.2.0"
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-log4j:1.2.0"
+compile "skyeye:skyeye-client-log4j:1.3.0"
 ```
 ### 配置
 在log4j.xml中加入一个kafkaAppender，并在properties中配置好相关的值，如下（rpc这个项目前支持none和dubbo，所以如果项目中有dubbo服务的配置成dubbo，没有dubbo服务的配置成none，以后会支持其他的rpc框架，如：thrift、spring cloud等）：
@@ -593,7 +595,7 @@ compile "skyeye:skyeye-client-log4j:1.2.0"
 gradle或者pom中加入skyeye-client的依赖
 
 ``` xml
-compile "skyeye:skyeye-client-log4j2:1.2.0"
+compile "skyeye:skyeye-client-log4j2:1.3.0"
 ```
 
 ### 配置
@@ -602,13 +604,12 @@ compile "skyeye:skyeye-client-log4j2:1.2.0"
 
 ```xml
 <KafkaCustomize name="KafkaCustomize" topic="app-log" zkServers="riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181"
-                mail="qianjc@unionpaysmart.com" rpc="none" app="${APP_NAME}" host="${hostName}">
+                mail="qianjc@unionpaysmart.com" rpc="none" app="${APP_NAME}">
   <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
-  <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS};${APP_NAME};${hostName};%t;%-5level;%logger{96};%line;%msg%n"/>
+  <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS};${APP_NAME};HOSTNAME;%t;%-5level;%logger{96};%line;%msg%n"/>
   <Property name="bootstrap.servers">riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</Property>
   <Property name="acks">0</Property>
   <Property name="linger.ms">100</Property>
-  <Property name="client.id">${APP_NAME}-${hostName}-log4j2</Property>
 </KafkaCustomize>
 ```
 
@@ -620,11 +621,11 @@ compile "skyeye:skyeye-client-log4j2:1.2.0"
 ### log4j
 由于log4j本身的appender比较复杂难写，所以在稳定性和性能上没有logback支持得好，应用能使用logback请尽量使用logback
 ### rpc trace
-使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.2.0)），在soa中间件dubbox中封装了rpc的跟踪
+使用自己打包的dubbox（[dubbox](https://github.com/JThink/dubbox/tree/skyeye-trace-1.3.0)），在soa中间件dubbox中封装了rpc的跟踪
 
 ``` shell
 compile "com.101tec:zkclient:0.10"
-compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.2.0") {
+compile ("com.alibaba:dubbo:2.8.4-skyeye-trace-1.3.0") {
   exclude group: 'org.springframework', module: 'spring'
 }
 ```

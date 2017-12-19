@@ -12,6 +12,7 @@ public enum NameInfoType {
 
     API(Constants.API, "api名称"),
     ACCOUNT(Constants.ACCOUNT, "account名称"),
+    MIDDLEWARE(Constants.MIDDLEWARE, "中间件名称"),
     THIRD(Constants.THIRD, "第三方名称");
 
     private String symbol;

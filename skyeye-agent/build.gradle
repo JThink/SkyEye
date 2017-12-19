@@ -1,0 +1,32 @@
+apply plugin: 'application'
+
+dependencies {
+  compile project(':skyeye-base')
+}
+
+configurations {
+  compile.exclude group: "log4j", module: "log4j"
+  compile.exclude group: "org.slf4j", module: "slf4j-log4j12"
+  compile.exclude group: "org.springframework", module: "spring-web"
+}
+
+mainClassName = 'com.jthink.skyeye.agent.launcher.Launcher'
+
+buildscript {
+
+  repositories {
+    mavenLocal()
+    maven { url mavenPublicUrl }
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath("io.spring.gradle:dependency-management-plugin:$gradlePluginVersion")
+  }
+}
+
+startScripts {
+  doLast {
+    unixScript.text = unixScript.text.replaceAll("lib/(.*)\n", "lib/\\*")
+  }
+}

@@ -19,4 +19,6 @@ nohup.out
 .idea/
 disconf/
 /target/
-/build/
+.DS_Store
+/.DS_Store
+/out/

@@ -7,7 +7,10 @@ import com.jthink.skyeye.base.constant.EventType;
 import com.jthink.skyeye.base.dto.AlertDto;
 import com.jthink.skyeye.base.util.DateUtil;
 import com.jthink.skyeye.data.http.HttpRequest;
+import com.jthink.skyeye.data.jpa.domain.MonitorTemplate;
+import com.jthink.skyeye.data.jpa.domain.NameInfo;
 import com.jthink.skyeye.data.jpa.dto.NameInfoDto;
+import com.jthink.skyeye.data.jpa.repository.MonitorTemplateRepository;
 import com.jthink.skyeye.data.jpa.repository.NameInfoRepository;
 import com.jthink.skyeye.data.rabbitmq.service.RabbitmqService;
 import com.jthink.skyeye.web.constant.EsSqlTemplate;
@@ -21,10 +24,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StopWatch;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * JThink@JThink
@@ -45,18 +45,13 @@ public class MonitorTask {
     private RabbitmqService rabbitmqService;
     @Autowired
     private NameInfoRepository nameInfoRepository;
+    @Autowired
+    private MonitorTemplateRepository monitorTemplateRepository;
 
     private String mail;
-    private int interval;
     private String url;
-    private String middlewareResponseTime;
-    private double middlewareThreshold;
-    private String thirdResponseTime;
-    private double thirdThreshold;
     private String totalTemplate;
     private String template;
-    private String apiResponseTime;
-    private double apiThreshold;
     private int delay;
 
     /**
@@ -65,150 +60,122 @@ public class MonitorTask {
      * @return
      */
     private String query(String sql) {
-        String response = HttpRequest.get(this.url, sql);
-        return response;
+        return HttpRequest.get(this.url, sql);
     }
 
     /**
-     * 对第三方进行监控报警
+     * 监控, 对加入监控模板的第三方、中间件、api进行报警
      */
-    @Scheduled(cron = "${spring.monitor.es.window}")
-    private void monitorThirdParty() {
-        LOGGER.info("开始对第三方进行监控");
+    @Scheduled(cron = "${spring.monitor.es.interval}")
+    private void monitor() {
+        LOGGER.info("开始进行监控");
         StopWatch sw = new StopWatch();
         sw.start();
 
-        long timestamp = System.currentTimeMillis();
         String scope = "uniqueName";
-
-        Map<String, Integer> thirdTotalInfos = this.parseRealtimeData(this.query(this.buildSql(this.totalTemplate,
-                timestamp, scope, this.thirdResponseTime, EventType.thirdparty_call)), scope);
-
-        Map<String, Integer> thirdInfos = this.parseRealtimeData(this.query(this.buildSql(this.template, timestamp,
-                scope, this.thirdResponseTime, EventType.thirdparty_call)), scope);
-
-        for (Map.Entry<String, Integer> entry : thirdInfos.entrySet()) {
-            String third = entry.getKey();
-            int cnt = entry.getValue();
-            double threadhold = (double) cnt / thirdTotalInfos.get(third);
-            if (threadhold > this.thirdThreshold) {
-                // 超过阈值，需要报警
-                LOGGER.info("{} 需要报警", third);
-                this.rabbitmqService.sendMessage(this.buildMsg(third, timestamp, third, this.thirdResponseTime, this.thirdThreshold, threadhold,
-                        thirdTotalInfos.get(third)), this.mail);
-            }
-        }
-
-        sw.stop();
-        LOGGER.info("结束对第三方进行监控, 耗时: {}ms", sw.getTotalTimeMillis());
-    }
-
-    /**
-     * 对中间件进行监控报警
-     */
-    @Scheduled(cron = "${spring.monitor.es.window}")
-    private void monitorMiddleWare() {
-        LOGGER.info("开始对中间件进行监控");
-        StopWatch sw = new StopWatch();
-        sw.start();
-
         long timestamp = System.currentTimeMillis();
-        String scope = "uniqueName";
 
-        Map<String, Integer> middlewareTotalInfos = this.parseRealtimeData(this.query(this.buildSql(this.totalTemplate,
-                timestamp, scope, this.middlewareResponseTime, EventType.middleware_opt)), scope);
+        // 查询出所有当前以及存在的报警模板
+        List<MonitorTemplate> templates = this.monitorTemplateRepository.findAll();
+        for (MonitorTemplate template : templates) {
+            // 对每个模板里面包含的具体内容进行报警
+            Set<String> names = this.transform(this.nameInfoRepository.findByTid(template.getId()));
 
-        Map<String, Integer> middlewareInfos = this.parseRealtimeData(this.query(this.buildSql(this.template, timestamp,
-                scope, this.middlewareResponseTime, EventType.middleware_opt)), scope);
+            String cost = template.getCost();
+            double threshold = template.getThreshold();
+            int window = template.getWindow();
 
-        for (Map.Entry<String, Integer> entry : middlewareInfos.entrySet()) {
-            String middleware = entry.getKey();
-            int cnt = entry.getValue();
-            double threadhold = (double) cnt / middlewareTotalInfos.get(middleware);
-            if (threadhold > this.middlewareThreshold) {
-                // 超过阈值，需要报警
-                LOGGER.info("{} 需要报警", middleware);
-                this.rabbitmqService.sendMessage(this.buildMsg(middleware, timestamp, middleware, this.middlewareResponseTime, this.middlewareThreshold,
-                        threadhold, middlewareTotalInfos.get(middleware)), this.mail);
-            }
-        }
+            // 获取当前的数据，超过响应时间的和不超过的，方便计算占比
+            Map<String, Integer> totalInfos = this.parseRealtimeData(this.query(this.buildSql(timestamp, window)), scope);
+            Map<String, Integer> infos = this.parseRealtimeData(this.query(this.buildSql(timestamp, cost , window)), scope);
 
-        sw.stop();
-        LOGGER.info("结束对中间件进行监控, 耗时: {}ms", sw.getTotalTimeMillis());
-    }
-
-    /**
-     * 对api进行监控报警
-     */
-    @Scheduled(cron = "${spring.monitor.es.window}")
-    private void monitorApi() {
-        LOGGER.info("开始对api进行监控");
-        StopWatch sw = new StopWatch();
-        sw.start();
-        long timestamp = System.currentTimeMillis();
-        String scope = "uniqueName";
-
-        Map<String, Integer> appTotalInfos = this.parseRealtimeData(this.query(this.buildSql(this.totalTemplate,
-                timestamp, scope, this.apiResponseTime, EventType.invoke_interface)), scope);
-
-        Map<String, Integer> apiInfos = this.parseRealtimeData(this.query(this.buildSql(this.template, timestamp,
-                scope, this.apiResponseTime, EventType.invoke_interface)), scope);
-
-        for (Map.Entry<String, Integer> entry : apiInfos.entrySet()) {
-            String api = entry.getKey();
-            int cnt = entry.getValue();
-            double threadhold = (double) cnt / appTotalInfos.get(api);
-            if (threadhold > this.apiThreshold) {
-                // 超过阈值，需要报警
-                LOGGER.info("{} 需要报警", api);
-                List<NameInfoDto> apis =  this.nameInfoRepository.findBySql(Constants.API, api);
-                String name = Constants.EMPTY_STR;
-                if (apis.size() != 0) {
-                    name = apis.get(0).getApp();
+            // 计算阈值进行报警
+            for (Map.Entry<String, Integer> entry : infos.entrySet()) {
+                String uniqueName = entry.getKey();
+                if (names.contains(uniqueName)) {
+                    // 如果当前数据存在于使用该模板的uniqueName
+                    int cnt = entry.getValue();
+                    double th = (double) cnt / totalInfos.get(uniqueName);
+                    if (th > threshold) {
+                        // 超过阈值，需要报警
+                        LOGGER.info("{} 需要报警", uniqueName);
+                        // 如果是api的需要在app上加一个
+                        List<NameInfoDto> apis = this.nameInfoRepository.findBySql(Constants.API, uniqueName);
+                        String app = uniqueName;
+                        if (apis.size() != 0) {
+                            app = apis.get(0).getApp() + Constants.JING_HAO + uniqueName;
+                        }
+                        this.rabbitmqService.sendMessage(this.buildMsg(uniqueName, window, cost, threshold, th, totalInfos.get(uniqueName), timestamp, app), this.mail);
+                    }
                 }
-                this.rabbitmqService.sendMessage(this.buildMsg(name + Constants.JING_HAO + api, timestamp, api, this.apiResponseTime, this.apiThreshold, threadhold,
-                        appTotalInfos.get(api)), this.mail);
             }
         }
+
         sw.stop();
-        LOGGER.info("结束对api进行监控, 耗时: {}ms", sw.getTotalTimeMillis());
+        LOGGER.info("结束监控, 耗时: {}ms", sw.getTotalTimeMillis());
+    }
+
+    /**
+     * 构造sql
+     * @param timestamp
+     * @param responseTime
+     * @param window
+     * @return
+     */
+    private String buildSql(long timestamp, String responseTime, int window) {
+        String sql = this.template.replace(EsSqlTemplate.BEGIN, this.getBegin(timestamp, window)).replace(EsSqlTemplate.END, this.getEnd(timestamp))
+                .replace(EsSqlTemplate.COST, responseTime);
+        return sql;
+    }
+
+    /**
+     * 构造sql
+     * @param timestamp
+     * @param window
+     * @return
+     */
+    private String buildSql(long timestamp, int window) {
+        String sql = this.totalTemplate.replace(EsSqlTemplate.BEGIN, this.getBegin(timestamp, window)).replace(EsSqlTemplate.END, this.getEnd(timestamp));
+        return sql;
     }
 
     /**
      * 构造dto以及msg
-     * @param app
-     * @param timestamp
-     * @param key
-     * @param responseTime
+     * @param uniqueName
+     * @param window
+     * @param cost
      * @param threshold
-     * @param currentThreshold
+     * @param total
+     * @param cnt
+     * @param timestamp
+     * @param app
      * @return
      */
-    private String buildMsg(String app, long timestamp, String key, String responseTime, double threshold, double currentThreshold, int callTotalCnt) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(key).append(Constants.WECHAT_ALERT_RESPONSE_EXCEED).append(Constants.COMMA).append(this.interval).append("分钟内响应时间超过").append(responseTime)
-                .append("ms占比大于").append(threshold * 100).append("%").append(Constants.COMMA).append("当前占比:").append(currentThreshold * 100).append("%")
-                .append(Constants.COMMA).append("总请求次数:").append(callTotalCnt);
+    private String buildMsg(String uniqueName, int window, String cost, double threshold, double total, int cnt, long timestamp, String app) {
+        String msg = Constants.TIME_CONSUME_ALARM_TEMPLATE.replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_UNIQUENAME, uniqueName)
+                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_WINDOW, String.valueOf(window))
+                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_COST, cost)
+                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_THRESHOLD, String.valueOf(threshold * 100))
+                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_TOTAL, String.valueOf(total * 100))
+                .replace(Constants.TIME_CONSUME_ALARM_TEMPLATE_CNT, String.valueOf(cnt));
         AlertDto alertDto = new AlertDto();
         alertDto.setApp(app);
-        alertDto.setMsg(sb.toString());
+        alertDto.setMsg(msg);
         alertDto.setTime(new DateTime(timestamp).toString(DateUtil.YYYYMMDDHHMMSS));
         return alertDto.toString();
     }
 
     /**
-     * 根据时间、scope和响应时间限制构造sql
-     * @param template
-     * @param timestamp
-     * @param scope
-     * @param responseTime
+     * 对List进行转换
+     * @param nameInfos
      * @return
      */
-    private String buildSql(String template, long timestamp, String scope, String responseTime, EventType eventType) {
-        String sql = template.replace(EsSqlTemplate.EVENTTYPE, eventType.symbol())
-                .replace(EsSqlTemplate.BEGIN, this.getBegin(timestamp)).replace(EsSqlTemplate.END, this.getEnd(timestamp))
-                .replace(EsSqlTemplate.SCOPE, scope).replace(EsSqlTemplate.COST, responseTime);
-        return sql;
+    private Set<String> transform(List<NameInfo> nameInfos) {
+        Set<String> names = new HashSet<>();
+        for (NameInfo nameInfo : nameInfos) {
+            names.add(nameInfo.getNameInfoPK().getName());
+        }
+        return names;
     }
 
     /**
@@ -247,11 +214,12 @@ public class MonitorTask {
     /**
      * 根据时间戳获取开始时间
      * @param timestamp
+     * @param window
      * @return
      */
-    private String getBegin(long timestamp) {
+    private String getBegin(long timestamp, int window) {
         DateTime end = new DateTime(timestamp).minusSeconds(this.delay);
-        DateTime begin = end.minusMinutes(this.interval);
+        DateTime begin = end.minusMinutes(window);
         return begin.toString(DateUtil.YYYYMMDDHHMMSS);
     }
 
@@ -259,95 +227,44 @@ public class MonitorTask {
         return mail;
     }
 
-    public void setMail(String mail) {
+    public MonitorTask setMail(String mail) {
         this.mail = mail;
-    }
-
-    public int getInterval() {
-        return interval;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
+        return this;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public MonitorTask setUrl(String url) {
         this.url = url;
-    }
-
-    public String getMiddlewareResponseTime() {
-        return middlewareResponseTime;
-    }
-
-    public void setMiddlewareResponseTime(String middlewareResponseTime) {
-        this.middlewareResponseTime = middlewareResponseTime;
-    }
-
-    public double getMiddlewareThreshold() {
-        return middlewareThreshold;
-    }
-
-    public void setMiddlewareThreshold(double middlewareThreshold) {
-        this.middlewareThreshold = middlewareThreshold;
-    }
-
-    public String getThirdResponseTime() {
-        return thirdResponseTime;
-    }
-
-    public void setThirdResponseTime(String thirdResponseTime) {
-        this.thirdResponseTime = thirdResponseTime;
-    }
-
-    public double getThirdThreshold() {
-        return thirdThreshold;
-    }
-
-    public void setThirdThreshold(double thirdThreshold) {
-        this.thirdThreshold = thirdThreshold;
+        return this;
     }
 
     public String getTotalTemplate() {
         return totalTemplate;
     }
 
-    public void setTotalTemplate(String totalTemplate) {
+    public MonitorTask setTotalTemplate(String totalTemplate) {
         this.totalTemplate = totalTemplate;
+        return this;
     }
 
     public String getTemplate() {
         return template;
     }
 
-    public void setTemplate(String template) {
+    public MonitorTask setTemplate(String template) {
         this.template = template;
-    }
-
-    public String getApiResponseTime() {
-        return apiResponseTime;
-    }
-
-    public void setApiResponseTime(String apiResponseTime) {
-        this.apiResponseTime = apiResponseTime;
-    }
-
-    public double getApiThreshold() {
-        return apiThreshold;
-    }
-
-    public void setApiThreshold(double apiThreshold) {
-        this.apiThreshold = apiThreshold;
+        return this;
     }
 
     public int getDelay() {
         return delay;
     }
 
-    public void setDelay(int delay) {
+    public MonitorTask setDelay(int delay) {
         this.delay = delay;
+        return this;
     }
 }

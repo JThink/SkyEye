@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 dependencies {
   compile project(":dubbo-service-client")
-  compile "skyeye:skyeye-data-dubbox:$dataVersion"
+  compile "skyeye:skyeye-data-dubbo:$dataVersion"
   compile "org.springframework.boot:spring-boot-starter"
   compile "org.apache.zookeeper:zookeeper:$zookeeperVerison"
   compile "com.101tec:zkclient:$zkClientVersion"

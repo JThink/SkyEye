@@ -55,10 +55,9 @@ public class KafkaAppender extends AbstractAppender {
             @Required(message = "No mail provided for KafkaAppender") @PluginAttribute("mail") final String mail,
             @Required(message = "No rpc provided for KafkaAppender") @PluginAttribute("rpc") final String rpc,
             @Required(message = "No app provided for KafkaAppender") @PluginAttribute("app") final String app,
-            @Required(message = "No host provided for KafkaAppender") @PluginAttribute("host") final String host,
             @PluginElement("Properties") final Property[] properties,
             @PluginConfiguration final Configuration configuration) {
-        final KafkaManager kafkaManager = new KafkaManager(configuration.getLoggerContext(), name, topic, zkServers, mail, rpc, app, host, properties);
+        final KafkaManager kafkaManager = new KafkaManager(configuration.getLoggerContext(), name, topic, zkServers, mail, rpc, app, SysUtil.host, properties);
         return new KafkaAppender(name, layout, filter, kafkaManager);
     }
 
@@ -98,7 +97,8 @@ public class KafkaAppender extends AbstractAppender {
                 if (value.length() > 10000) {
                     return;
                 }
-                final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.manager.getTopic(), this.manager.getKey(), value.replaceFirst(this.manager.getOrginApp(), this.manager.getApp()));
+                final ProducerRecord<byte[], String> record = new ProducerRecord<>(this.manager.getTopic(), this.manager.getKey(),
+                        value.replaceFirst(this.manager.getOrginApp(), this.manager.getApp()).replaceFirst(Constants.HOSTNAME, this.manager.getHost()));
                 LazySingletonProducer.getInstance(this.manager.getConfig()).send(record, new Callback() {
                     @Override
                     public void onCompletion(RecordMetadata recordMetadata, Exception e) {

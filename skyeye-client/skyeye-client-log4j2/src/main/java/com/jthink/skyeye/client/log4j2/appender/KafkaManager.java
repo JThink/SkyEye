@@ -1,5 +1,6 @@
 package com.jthink.skyeye.client.log4j2.appender;
 
+import com.jthink.skyeye.base.constant.Constants;
 import com.jthink.skyeye.client.core.constant.KafkaConfig;
 import com.jthink.skyeye.client.core.kafka.partitioner.KeyModPartitioner;
 import com.jthink.skyeye.client.core.producer.LazySingletonProducer;
@@ -70,6 +71,8 @@ public class KafkaManager extends AbstractManager {
         for (final Property property : properties) {
             this.config.put(property.getName(), property.getValue());
         }
+        // 由于容器部署需要从外部获取host
+        this.config.put(ProducerConfig.CLIENT_ID_CONFIG, this.app + Constants.MIDDLE_LINE + this.host + Constants.MIDDLE_LINE + "log4j2");
     }
 
     /**

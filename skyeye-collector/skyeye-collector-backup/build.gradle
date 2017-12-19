@@ -1,6 +1,12 @@
 apply plugin: 'org.springframework.boot'
 apply plugin: 'application'
 
+repositories {
+  mavenLocal()
+  maven { url mavenClouderaUrl }
+  mavenCentral()
+}
+
 dependencies {
   compile project(':skyeye-collector:skyeye-collector-core')
 

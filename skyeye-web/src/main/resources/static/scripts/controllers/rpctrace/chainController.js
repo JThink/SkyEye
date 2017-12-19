@@ -81,7 +81,7 @@ define(['controllers/controllers', 'common/util', 'common/constant', 'jedate', '
             // 构建每一个 span
             for (var x = 0; x < spansArr.length; x++) {
               spans = spansArr[x];
-              buildSpan(spans, root, rule, 1, null);
+              buildSpan(spans, root, 0, rule, 1, null);
             }
           }
 
@@ -192,7 +192,7 @@ define(['controllers/controllers', 'common/util', 'common/constant', 'jedate', '
            * @param level
            * @param traceStart
            */
-          function buildSpan(spans, parentId, rule, level, traceStart) {
+          function buildSpan(spans, parentId, parentTimeShift, rule, level, traceStart) {
             var slSpans = spans[parentId]; // 同层级 span(sameLevelSpan)
             if (!$.isEmptyObject(slSpans)) {
               slSpans = sameLevelSort(slSpans);
@@ -207,20 +207,23 @@ define(['controllers/controllers', 'common/util', 'common/constant', 'jedate', '
                   var hasSon = !$.isEmptyObject(spans[id]);
 
                   traceStart = root === parentId ? c.annotations[0].timestamp : traceStart;
-                  var html = buildSpanHtml(c, s, parentId, rule, level, traceStart, hasSon);
+                  var html = buildSpanHtml(c, s, parentId, parentTimeShift, rule, level, traceStart, hasSon);
                   if (root === parentId) {
                     $(".trace-chain-panel-detail").append(html);
                   } else {
                     $("#" + parentId).after(html);
                     $("#" + id).hide();
                   }
-                  buildSpan(spans, id, rule, nextLevel, traceStart);
+                  // timeShift = parentTimeShift + cs - sr;
+                  // TODO: 计算偏移量，目前认为cs和sr时间趋于相等（忽略了网络传输时间, 防止多个节点部署的时候机器时钟没有完全同步）
+                  var timeShift = parentTimeShift + c.annotations[0].timestamp - s.annotations[0].timestamp;
+                  buildSpan(spans, id, timeShift, rule, nextLevel, traceStart);
                 }
               }
             }
           }
 
-          function buildSpanHtml(c, s, parentId, rule, level, minStartTime, hasSon) {
+          function buildSpanHtml(c, s, parentId, shift, rule, level, minStartTime, hasSon) {
             var can = c.annotations;
             var timeConsume = can ? can[1].timestamp - can[0].timestamp : "unknown";
             var ss = (c.serviceId || s.serviceId).split(".");
@@ -233,6 +236,7 @@ define(['controllers/controllers', 'common/util', 'common/constant', 'jedate', '
             msg = " " + timeConsume + "ms";
             detail = buildSpanDetail(c, s);
             start = can ? can[0].timestamp - minStartTime : 0;
+            start += shift;
             length = timeConsume;
             stats = level === 1 ? $scope.itemStats.close : hasSon ? $scope.itemStats.open : $scope.itemStats.end;
             return builder.buildItem(id, traceId, itemName, msg, detail, start, length, rule, level, stats);
@@ -402,8 +406,6 @@ define(['controllers/controllers', 'common/util', 'common/constant', 'jedate', '
           function loading() {
             $(".trace-chain-panel-detail").addClass("loading");
           }
-
-
           function loaded() {
             $(".trace-chain-panel-detail").removeClass("loading");
           }
@@ -539,6 +541,8 @@ define(['controllers/controllers', 'common/util', 'common/constant', 'jedate', '
             };
             DataService.getData(params, function (res) {
               if (res !== null && res.statCode === "00000") {
+                $scope.methodSelect = null;
+                $scope.methods = [];
                 $scope.methods = res.data;
               }
             });

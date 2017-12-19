@@ -52,7 +52,7 @@
   <appender name="kafkaAppender" class="com.jthink.skyeye.client.logback.appender.KafkaAppender">
     <encoder class="com.jthink.skyeye.client.logback.encoder.KafkaLayoutEncoder">
       <layout class="ch.qos.logback.classic.PatternLayout">
-        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};${HOSTNAME};%thread;%-5level;%logger{96};%line;%msg%n</pattern>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};HOSTNAME;%thread;%-5level;%logger{96};%line;%msg%n</pattern>
       </layout>
     </encoder>
     <topic>app-log</topic>
@@ -65,7 +65,6 @@
     <config>acks=0</config>
     <config>linger.ms=100</config>
     <config>max.block.ms=5000</config>
-    <config>client.id=${CONTEXT_NAME}-${HOSTNAME}-logback</config>
   </appender>
 
   <root level="INFO">
