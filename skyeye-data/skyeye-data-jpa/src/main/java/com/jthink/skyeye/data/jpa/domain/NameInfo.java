@@ -26,7 +26,7 @@ public class NameInfo {
     @Column(name = "app")
     private String app;
     // 属于哪个报警模板
-    @Column(name = "tid", nullable = false)
+    @Column(name = "tid")
     private Integer tid;
 
     public NameInfoPK getNameInfoPK() {

@@ -1,18 +1,18 @@
-drop database if exists `monitor-center`;
-create database `monitor-center`;
-use `monitor-center`;
+DROP DATABASE IF EXISTS `monitor-center`;
+CREATE DATABASE `monitor-center`;
+USE `monitor-center`;
 
 --
 -- table structure for table `app_info`
 --
 
-drop table if exists `app_info`;
+DROP TABLE IF EXISTS `app_info`;
 create table `app_info` (
-  `app` varchar(255) not null,
-  `host` varchar(255) not null,
-  `type` int(11) not null,
-  `deploy` varchar(255) not null,
-  `status` varchar(255) not null,
+  `app` varchar(255) NOT NULL,
+  `host` varchar(255) NOT NULL,
+  `type` int(11) NOT NULL,
+  `deploy` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL,
   primary key (`app`,`host`,`type`)
 ) engine=innodb default charset=utf8;
 
@@ -25,7 +25,7 @@ CREATE TABLE `name_info` (
   `name` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   `app` varchar(255) NOT NULL,
-  `tid` int(11) NOT NULL,
+  `tid` int(11),
   PRIMARY KEY (`name`, `type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
