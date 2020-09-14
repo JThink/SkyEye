@@ -10,10 +10,10 @@
   /*overflow-x: hidden;*/
   /*overflow-y: visible;*/
 }
-
 .row.trace-chain.ng-scope {
   /*overflow-x: hidden;*/
   /*overflow-y: visible;*/
+  overflow: hidden;
 }
 
 .trace-chain .input-group {
@@ -22,7 +22,8 @@
 .trace-chain .filter {
   background: #FFF none repeat scroll 0 0;
   border-bottom: 1px solid #E7E7E7;
-  padding: 10px 15px;
+  display: inline-block;
+  width: 100%;
   height: 53px;
 }
 
@@ -188,7 +189,7 @@
 }
 
 .trace-chain-item *::selection {
-  background: none;
+  /*background: none;*/
 }
 
 .scale-plate.plate > div > div {
@@ -198,7 +199,7 @@
 
 .trace-chain-item[level] > .title > div {
   color: #FFF;
-  background-color: #00A2E8;
+  /*background-color: #00A2E8;*/
   background-color: #0084B4;
 }
 
@@ -393,29 +394,77 @@ startTime {
   text-indent: 0;
 }
 
-#startTime {
-  width: 97px;
+.trace-chain #startTime {
+  width: 87px;
 }
 
-#endTime {
-  width: 97px;
+.trace-chain #endTime {
+  width: 87px;
 }
 
-.form-control.input-right[type='text'] {
+.trace-chain .form-control.input-right[type='text'] {
   border-radius: 0 4px 4px 0;
-  width: 80px;
+  width: 70px;
   display: inline-block;
   float: left;
 }
 
-.input-group-btn > btn.btn-default {
+.trace-chain .input-group-btn > btn.btn-default {
   display: inline-block;
 }
 
-.btn {
+.trace-chain .btn {
   border-radius: 0;
 }
 
-.control-label {
+.trace-chain .control-label {
   padding-bottom: 3px;
+}
+
+.trace-chain .form-group {
+  margin-bottom: 15px;
+  padding-left: 3px;
+  padding-top: 8px;
+}
+
+.trace-chain .form-group .form-group {
+  padding-left: 0;
+  padding-top: 0;
+}
+
+.trace-chain div.form-control {
+  padding: 0;
+}
+
+.trace-chain select.form-control {
+  padding: 6px;
+}
+
+.trace-chain input.form-control {
+  padding: 6px;
+}
+
+.trace-chain .pull-left.item {
+  padding: 0 15px 8px 12px;
+  width: 100%;
+}
+
+.trace-chain .pull-left.item .form-group label {
+  display: none;
+}
+
+.trace-chain .pull-left.item .form-group label[for='startTime'] {
+  display: inline-block;
+}
+
+.trace-chain .form-inline {
+  width: 100%;
+}
+
+.trace-chain .trace-chain-time-control {
+  float: right;
+}
+
+.trace-chain-time-control .btn {
+  padding-bottom: 7px;
 }

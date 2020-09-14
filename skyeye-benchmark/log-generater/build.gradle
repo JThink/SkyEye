@@ -15,8 +15,9 @@ buildDir = 'target'
 
 repositories {
   mavenLocal()
-  maven { url "http://192.168.88.8:8081/nexus/content/groups/public" }
-  maven { url "http://192.168.88.8:8081/nexus/content/repositories/releases" }
+  maven { url "http://nexus.5dg.co/repository/maven-public" }
+  maven { url "http://nexus.5dg.co/repository/maven-releases" }
+  maven { url "http://nexus.5dg.co/repository/maven-snapshots" }
   mavenCentral()
 }
 
@@ -25,7 +26,7 @@ ext {
 }
 
 dependencies {
-  compile "skyeye:skyeye-client-logback:$clientVersion"
+  compile "com.gravity.bigbrother:skyeye-client-logback:0.0.1"
   compile "org.springframework.boot:spring-boot-starter"
 
   testCompile "org.springframework.boot:spring-boot-starter-test"
@@ -46,7 +47,7 @@ buildscript {
 
   repositories {
     mavenLocal()
-    maven { url "http://192.168.88.8:8081/nexus/content/groups/public" }
+    maven { url "http://nexus.5dg.co/repository/maven-publics" }
     mavenCentral()
   }
 

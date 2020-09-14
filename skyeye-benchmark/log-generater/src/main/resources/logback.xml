@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xml>
 <configuration scan="false">
 
   <property name="APP_NAME" value="log-generater" />
@@ -50,19 +49,19 @@
   </appender>
 
   <!-- kafka appender -->
-  <appender name="kafkaAppender" class="com.jthink.skyeye.client.logback.appender.KafkaAppender">
-    <encoder class="com.jthink.skyeye.client.logback.encoder.KafkaLayoutEncoder">
+  <appender name="kafkaAppender" class="com.gravity.bigbrother.skyeye.client.logback.appender.KafkaAppender">
+    <encoder class="com.gravity.bigbrother.skyeye.client.logback.encoder.KafkaLayoutEncoder">
       <layout class="ch.qos.logback.classic.PatternLayout">
-        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};HOSTNAME;%thread;%-5level;%logger{96};%line;%msg%n</pattern>
+        <pattern>%X{TRACKID};%d{yyyy-MM-dd HH:mm:ss.SSS};${CONTEXT_NAME};HOSTNAME;%thread;%-5level;%logger{96};%line;%msg%n</pattern>
       </layout>
     </encoder>
     <topic>app-log</topic>
     <rpc>none</rpc>
-    <zkServers>riot01.jthink.com:2181,riot02.jthink.com:2181,riot03.jthink.com:2181</zkServers>
-    <mail>qianjc@unionpaysmart.com</mail>
-    <keyBuilder class="com.jthink.skyeye.client.logback.builder.AppHostKeyBuilder" />
+    <zkServers>riot01.5dgravity.com:2181,riot02.5dgravity.com:2181,riot03.5dgravity.com:2181</zkServers>
+    <mail>xxx@xxx.com</mail>
+    <keyBuilder class="com.gravity.bigbrother.skyeye.client.logback.builder.AppHostKeyBuilder" />
 
-    <config>bootstrap.servers=riot01.jthink.com:9092,riot02.jthink.com:9092,riot03.jthink.com:9092</config>
+    <config>bootstrap.servers=riot01.5dgravity.com:9092,riot02.5dgravity.com:9092,riot03.5dgravity.com:9092</config>
     <config>acks=0</config>
     <config>linger.ms=100</config>
     <config>max.block.ms=5000</config>

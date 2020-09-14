@@ -4,7 +4,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'skyeye'
-  version = '1.3.0'
+  version = '1.3.1'
   
   targetCompatibility = 1.8
   [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -12,9 +12,9 @@ allprojects {
 
   ext {
     mavenClouderaUrl = 'https://repository.cloudera.com/artifactory/cloudera-repos'
-    mavenPublicUrl = 'http://192.168.88.8:8081/nexus/content/repositories/public'
-    mavenReleaseUrl = 'http://192.168.88.8:8081/nexus/content/repositories/releases'
-    mavenSnapshotUrl = 'http://192.168.88.8:8081/nexus/content/repositories/snapshots'
+    mavenPublicUrl = 'http://xxx/nexus/content/repositories/public'
+    mavenReleaseUrl = 'http://xxx/nexus/content/repositories/releases'
+    mavenSnapshotUrl = 'http://xxx/nexus/content/repositories/snapshots'
   }
 
   repositories {

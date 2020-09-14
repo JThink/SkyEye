@@ -1,9 +1,9 @@
 package com.jthink.skyeye.benchmark.log.generater.service;
 
-import com.jthink.skyeye.base.constant.EventType;
-import com.jthink.skyeye.base.constant.MiddleWare;
-import com.jthink.skyeye.base.dto.ApiLog;
-import com.jthink.skyeye.base.dto.EventLog;
+import com.gravity.bigbrother.skyeye.base.constant.EventType;
+import com.gravity.bigbrother.skyeye.base.constant.MiddleWare;
+import com.gravity.bigbrother.skyeye.base.dto.EventLog;
+import com.gravity.bigbrother.skyeye.base.dto.ExtraLog;
 import com.jthink.skyeye.benchmark.log.generater.util.RandomSeed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +24,7 @@ public class GenerateLogService {
 
     private static String[] urls = new String[] {"/app/status", "/app/find", "/app/search"};
     private static String[] thirdpartys = new String[] {"第三方A", "第三方B", "第三方C"};
+    private static String[] thirdpartyIfaces = new String[] {"接口A", "接口B", "接口C"};
     private static String[] accounts = new String[] {"800001", "800002", "800003"};
 
     public void generateNormalLog() {
@@ -32,18 +33,18 @@ public class GenerateLogService {
 
     public void generateApiLog() {
         int urlIndex = RandomSeed.nextInt(3);
-        int time = RandomSeed.nextInt(1001);
+        int time = RandomSeed.nextInt(6000);
         int accountIndex = RandomSeed.nextInt(3);
         int success = RandomSeed.nextInt(2);
-        ApiLog log = ApiLog.buildApiLog(EventType.invoke_interface, urls[urlIndex], accounts[accountIndex], time, success == 0 ? EventLog.MONITOR_STATUS_SUCCESS : EventLog.MONITOR_STATUS_FAILED, "我是mock api日志");
+        ExtraLog log = ExtraLog.buildExtraLog(EventType.invoke_interface, urls[urlIndex], accounts[accountIndex], time, EventLog.MONITOR_STATUS_SUCCESS, "我是mock api日志");
         LOGGER.info(log.toString());
     }
 
     public void generateMiddleWareLog() {
         int middleware = RandomSeed.nextInt(2);
-        int time = RandomSeed.nextInt(1001);
+        int time = RandomSeed.nextInt(3000);
         int success = RandomSeed.nextInt(2);
-        EventLog log = EventLog.buildEventLog(EventType.middleware_opt, middleware == 0 ? MiddleWare.HBASE.symbol() : MiddleWare.MONGO.symbol(), time, success == 0 ? EventLog.MONITOR_STATUS_SUCCESS : EventLog.MONITOR_STATUS_FAILED, "我是mock middle ware日志");
+        EventLog log = EventLog.buildEventLog(EventType.middleware_opt, middleware == 0 ? MiddleWare.HBASE.symbol() : MiddleWare.MONGO.symbol(), time, EventLog.MONITOR_STATUS_SUCCESS, "我是mock middle ware日志");
         LOGGER.info(log.toString());
     }
 
@@ -51,15 +52,16 @@ public class GenerateLogService {
         int success = RandomSeed.nextInt(2);
         int time = RandomSeed.nextInt(100000);
         int jobId = RandomSeed.nextInt(10000);
-        EventLog log = EventLog.buildEventLog(EventType.job_execute, "application_" + jobId, time, success == 0 ? EventLog.MONITOR_STATUS_SUCCESS : EventLog.MONITOR_STATUS_FAILED, "我是mock job exec日志");
+        EventLog log = EventLog.buildEventLog(EventType.job_execute, "application_" + jobId, time, EventLog.MONITOR_STATUS_SUCCESS, "我是mock job exec日志");
         LOGGER.info(log.toString());
     }
 
     public void generateThirdLog() {
         int partyIndex = RandomSeed.nextInt(3);
-        int time = RandomSeed.nextInt(1001);
+        int ifaceIndex = RandomSeed.nextInt(3);
+        int time = RandomSeed.nextInt(4500);
         int success = RandomSeed.nextInt(2);
-        EventLog log = EventLog.buildEventLog(EventType.thirdparty_call, thirdpartys[partyIndex], time, success == 0 ? EventLog.MONITOR_STATUS_SUCCESS : EventLog.MONITOR_STATUS_FAILED, "我是mock third 日志");
+        ExtraLog log = ExtraLog.buildExtraLog(EventType.thirdparty_call, thirdpartys[partyIndex], thirdpartyIfaces[ifaceIndex], time, EventLog.MONITOR_STATUS_SUCCESS, "我是mock third 日志");
         LOGGER.info(log.toString());
     }
 
@@ -74,7 +76,7 @@ public class GenerateLogService {
         for (int i = 0; i < middlewareExecuteCnt; i++) {
             this.generateMiddleWareLog();
         }
-        this.generateJobExecLog();
+//        this.generateJobExecLog();
         int thirdExecuteCnt = RandomSeed.nextInt(10);
         for (int i = 0; i < thirdExecuteCnt; i++) {
             this.generateThirdLog();

@@ -216,7 +216,11 @@ define(['controllers/controllers', 'common/util', 'common/constant', 'jedate', '
                   }
                   // timeShift = parentTimeShift + cs - sr;
                   // TODO: 计算偏移量，目前认为cs和sr时间趋于相等（忽略了网络传输时间, 防止多个节点部署的时候机器时钟没有完全同步）
-                  var timeShift = parentTimeShift + c.annotations[0].timestamp - s.annotations[0].timestamp;
+                  var timeShift = parentTimeShift;
+                  if (!$.isEmptyObject(c.annotations) && !$.isEmptyObject(s.annotations)) {
+                    timeShift = parentTimeShift + c.annotations[0].timestamp - s.annotations[0].timestamp;
+
+                  }
                   buildSpan(spans, id, timeShift, rule, nextLevel, traceStart);
                 }
               }
